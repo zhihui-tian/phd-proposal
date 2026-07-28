@@ -174,60 +174,20 @@ The final abstract should be written only after the body is stable. At outline s
 
 ---
 
-# 4. Grain-Growth Modeling Background
-
-## 4.1 Physical description and validation scales
-
-- **Purpose:** Define the physical observables used throughout the proposal.
-- **Central argument:** Grain-growth models must be assessed at multiple scales: voxel/boundary motion, individual-grain volume change, topology, coarsening kinetics, inclination distributions, and grain-size statistics.
-- **Manuscript evidence:** Inclination and von Neumann-Mullins metrics; 3D coarsening and face-count metrics; experimental grain-level and distribution metrics. [Source: Neighborhood manuscript, §§2.3 and 6.3, PDF pp. 5 and 14-16; 3D-PRIMME manuscript, §2.3, PDF p. 5; Experimental surrogate manuscript, §4, PDF pp. 9-15]
-- **Proposed future content:** Define how each metric contributes to Aim 1 and Aim 2.
-- **Expected visual:** **Table 1**, validation scale, observable, physical meaning, source, and known limitation.
-- **Missing information:** External support for chosen metrics and any committee-required physical laws. `[NEEDS LITERATURE SUPPORT]`
-
-## 4.2 Stochastic grain-growth models
-
-- **Purpose:** Introduce MCP, MF, and the role of local neighborhoods.
-- **Central argument:** Stochastic models provide efficient label generation, but their local update rules and neighborhoods encode effective anisotropy and kinetic variability.
-- **Manuscript evidence:** MCP/MF formulation and N-MCP. [Source: Neighborhood manuscript, §§2-3, Eqs. 1-12, PDF pp. 4-7]
-- **Proposed future content:** Keep mathematical detail proportional; include only equations needed to explain neighborhood-controlled supervision.
-- **Expected visual:** **Figure 2A**, comparison of MCP, MF, and N-MCP local update rules.
-- **Missing information:** Decide whether the committee expects full Hamiltonian derivations. `[AUTHOR INPUT REQUIRED]`
-
-## 4.3 Machine-learning surrogates for microstructure evolution
-
-- **Purpose:** Position 3D-PRIMME relative to global-field and latent-space approaches.
-- **Central argument:** A local operator avoids global memory scaling and converts one 3D state pair into many local training examples.
-- **Manuscript evidence:** 3D-PRIMME Introduction and Methodology. [Source: 3D-PRIMME manuscript, §§1-2.2, PDF pp. 1-5]
-- **Proposed future content:** Broader comparison with graph, recurrent, operator-learning, and physics-informed approaches.
-- **Expected visual:** **Table 2**, surrogate families versus dimensionality, locality, data need, scaling, and experimental compatibility.
-- **Missing information:** Comprehensive and current literature review. `[NEEDS LITERATURE SUPPORT]`
-
-## 4.4 Four-dimensional experimental characterization
-
-- **Purpose:** Explain why DCT/HEDM-type data make direct 3D learning possible.
-- **Central argument:** Time-resolved diffraction imaging provides voxelized grain-ID maps at successive states, but temporal sparsity and measurement artifacts distinguish experimental supervision from simulation labels.
-- **Manuscript evidence:** Experimental dataset motivation and description. [Source: Experimental surrogate manuscript, §§1-2, PDF pp. 2-7]
-- **Proposed future content:** Briefly compare experimental modalities and define the lab-DCT confidence limits relevant to this dataset.
-- **Expected visual:** **Figure 2B**, 4D experimental sequence and derived training pairs.
-- **Missing information:** External characterization literature and instrument-specific resolution support. `[NEEDS LITERATURE SUPPORT]`
-
----
-
-# 5. Neighborhood-Dependent Simulation Physics
+# 4. Neighborhood-Dependent Simulation Physics
 
 **Section status: COMPLETED PRIOR WORK**
 
-## 5.1 Lattice pinning as a training-data problem
+## 4.1 Stochastic update rules and lattice pinning as a training-data problem
 
-- **Purpose:** Reframe lattice pinning from an isolated numerical issue into a label-quality issue for surrogate learning.
-- **Central argument:** Artificial inclination preference alters the rules presented to a surrogate and must be controlled before simulation training can be interpreted physically.
-- **Manuscript evidence:** Motivation and MCP pinning behavior. [Source: Neighborhood manuscript, §1 and §5.1, PDF pp. 3-4 and 10-11]
+- **Purpose:** Introduce MCP, MF, and N-MCP, then reframe lattice pinning from an isolated numerical issue into a label-quality issue for surrogate learning.
+- **Central argument:** Stochastic models provide efficient labels, but their local update rules and neighborhoods encode effective anisotropy and kinetic variability. Artificial inclination preference therefore alters the rules presented to a surrogate and must be controlled before simulation training can be interpreted physically.
+- **Manuscript evidence:** MCP/MF formulation, N-MCP, and lattice-pinning behavior. [Source: Neighborhood manuscript, §§1-3 and §5.1, Eqs. 1-12, PDF pp. 3-7 and 10-11]
 - **Proposed future content:** None; use as completed foundation.
 - **Expected visual:** **Figure 3A**, MCP versus Gaussian-neighborhood inclination distributions.
 - **Missing information:** Confirm which final figure panels are preferred for proposal reuse. `[AUTHOR INPUT REQUIRED]`
 
-## 5.2 Neighborhood-to-anisotropy framework
+## 4.2 Neighborhood-to-anisotropy framework
 
 - **Purpose:** Explain the physical mechanism by which a numerical neighborhood shapes effective interfacial behavior.
 - **Central argument:** The kernel's directional moments define an effective inclination-dependent interfacial energy and Wulff response; discrete sampling and stochasticity regulate how that response appears.
@@ -236,7 +196,7 @@ The final abstract should be written only after the body is stable. At outline s
 - **Expected visual:** **Figure 3B**, neighborhood shapes paired with theoretical and measured inclination distributions.
 - **Missing information:** Final equation/notation choices for consistency with the proposal. `[AUTHOR INPUT REQUIRED]`
 
-## 5.3 Completed results
+## 4.3 Completed results
 
 - **Purpose:** Summarize the evidence that neighborhood choice controls anisotropy.
 - **Central argument:** Gaussian sampling suppresses strong lattice-aligned preferences; reshaped, square, and star neighborhoods create graded anisotropy; rotating the neighborhood rotates the inclination response; MF sampling produces lower von Neumann-Mullins scatter than MCP/N-MCP in the reported comparison.
@@ -245,22 +205,22 @@ The final abstract should be written only after the body is stable. At outline s
 - **Expected visual:** **Figure 3C**, compact three-panel summary: isotropy, controlled anisotropy, rotation test. **Table 3**, method versus pinning, statistical scatter, and computational cost.
 - **Missing information:** Final figure selection and whether runtime belongs in the main proposal. `[AUTHOR INPUT REQUIRED]`
 
-## 5.4 Enabling role for 3D-PRIMME
+## 4.4 Enabling role for 3D-PRIMME
 
 - **Purpose:** Make the first causal transition explicit.
 - **Central argument:** The neighborhood study supplies the physical rationale for choosing and diagnosing the MF simulation teacher used by 3D-PRIMME; it does not directly compare surrogate performance across neighborhoods.
 - **Manuscript evidence:** MF kernel control in both manuscripts. [Source: Neighborhood manuscript, §§3-6, PDF pp. 6-16; 3D-PRIMME manuscript, §2.1, PDF pp. 2-3]
-- **Proposed future content:** A one-paragraph bridge into Section 6.
+- **Proposed future content:** A one-paragraph bridge into Section 5.
 - **Expected visual:** Reuse Figure 1C arrow from Foundation 1 to Foundation 2.
 - **Missing information:** None.
 
 ---
 
-# 6. Simulation-Based Surrogate Learning: 3D-PRIMME
+# 5. Simulation-Based Surrogate Learning: 3D-PRIMME
 
 **Section status: COMPLETED PRIOR WORK; MANUSCRIPT UNDER REVIEW**
 
-## 6.1 Local architecture and physics regulation
+## 5.1 Local architecture and physics regulation
 
 - **Purpose:** Describe how 3D-PRIMME converts grain-ID maps into a scalable local evolution operator.
 - **Central argument:** The interface-site representation, observation window, and action window remove arbitrary grain-ID meaning while constraining updates to local boundary geometry.
@@ -269,7 +229,7 @@ The final abstract should be written only after the body is stable. At outline s
 - **Expected visual:** **Figure 4A**, simplified 3D-PRIMME workflow adapted from manuscript Fig. 1.
 - **Missing information:** Confirm whether architecture details should be reproduced or referenced. `[AUTHOR INPUT REQUIRED]`
 
-## 6.2 Controlled simulation training data
+## 5.2 Controlled simulation training data
 
 - **Purpose:** Connect model learning to the simulation teacher.
 - **Central argument:** Isotropic and inclination-dependent MF data provide known local rules that test whether the architecture can recover kinetics and directional behavior.
@@ -278,7 +238,7 @@ The final abstract should be written only after the body is stable. At outline s
 - **Expected visual:** **Figure 4B**, isotropic versus anisotropic training-data construction.
 - **Missing information:** None.
 
-## 6.3 Completed performance results
+## 5.3 Completed performance results
 
 - **Purpose:** Establish feasibility for experimental learning.
 - **Central argument:** A local operator trained from minimal supervision reproduces major MF kinetics and topology, has low training-replicate variability, scales from \(100^3\) to \(1024^3\), and learns prescribed inclination dependence.
@@ -287,20 +247,20 @@ The final abstract should be written only after the body is stable. At outline s
 - **Expected visual:** **Figure 4C**, composite of scaling curves and inclination distributions. **Table 4**, training domain, largest test domain, supervision amount, rollout length, and metrics.
 - **Missing information:** Choose a small subset of results to avoid over-weighting completed work. `[AUTHOR INPUT REQUIRED]`
 
-## 6.4 Scientific lesson and limitation
+## 5.4 Scientific lesson and limitation
 
 - **Purpose:** Make the second causal transition.
 - **Central argument:** 3D-PRIMME demonstrates scalable recovery of the MF rule, not universal grain-growth physics; its geometry-only representation and simulation supervision define the ceiling that motivates experiment.
 - **Manuscript evidence:** Introduction, Discussion, and Conclusion. [Source: 3D-PRIMME manuscript, §1 and §§4-5, PDF pp. 1-2 and 13-15]
-- **Proposed future content:** Transition directly to Section 7.
+- **Proposed future content:** Transition directly to Section 6.
 - **Expected visual:** **Figure 4D**, "high fidelity to teacher does not imply high fidelity to experiment."
 - **Missing information:** None.
 
 ---
 
-# 7. Limitations of Simulation Supervision
+# 6. Limitations of Simulation Supervision
 
-## 7.1 The simulator ceiling
+## 6.1 The simulator ceiling
 
 - **Purpose:** State why the dissertation cannot stop at 3D-PRIMME.
 - **Central argument:** A surrogate cannot infer mechanisms absent from its labels; improving model accuracy against MF cannot establish fidelity to an experiment.
@@ -309,7 +269,7 @@ The final abstract should be written only after the body is stable. At outline s
 - **Expected visual:** **Figure 5A**, two error sources: simulator discrepancy and surrogate approximation.
 - **Missing information:** Literature examples and citations. `[NEEDS LITERATURE SUPPORT]`
 
-## 7.2 Distinguishing three kinds of agreement
+## 6.2 Distinguishing three kinds of agreement
 
 - **Purpose:** Prevent overclaiming.
 - **Central argument:** Voxel agreement, statistical agreement, and mechanistic agreement are different; a model can preserve grain-size statistics while diverging at topology or individual-grain level.
@@ -318,7 +278,7 @@ The final abstract should be written only after the body is stable. At outline s
 - **Expected visual:** **Table 5**, prediction level, metric, what it supports, and what it cannot establish.
 - **Missing information:** None.
 
-## 7.3 Why direct experimental training is the necessary next test
+## 6.3 Why direct experimental training is the necessary next test
 
 - **Purpose:** Complete the transition from completed foundations to ongoing work.
 - **Central argument:** Direct experimental supervision allows measured evolution to define the target, but only after coherent acquisition artifacts are removed and residual uncertainty is measured.
@@ -329,9 +289,9 @@ The final abstract should be written only after the body is stable. At outline s
 
 ---
 
-# 8. Challenges of Learning from Sparse 4D Experiments
+# 7. Challenges of Learning from Sparse 4D Experiments
 
-## 8.1 Temporally sparse but spatially rich data
+## 7.1 Temporally sparse but spatially rich data
 
 - **Purpose:** Explain why one scan pair may still support local learning.
 - **Central argument:** A 4D experiment contains few time intervals but many local boundary-centered training examples; these examples are spatially overlapping and cannot be treated as independent evidence of generalization.
@@ -340,7 +300,7 @@ The final abstract should be written only after the body is stable. At outline s
 - **Expected visual:** **Figure 5B**, few time states -> many local patches -> need group-level validation.
 - **Missing information:** Statistical treatment of overlapping samples. `[NEEDS LITERATURE SUPPORT]`
 
-## 8.2 Registration, distortion, linkage, and clipping
+## 7.2 Registration, distortion, linkage, and clipping
 
 - **Purpose:** Define experimental curation as part of the scientific method, not preprocessing detail.
 - **Central argument:** Voxel-level labels inherit coherent scan motion, residual distortion, identity mismatch, and surface clipping; these defects can be learned as spurious dynamics.
@@ -349,7 +309,7 @@ The final abstract should be written only after the body is stable. At outline s
 - **Expected visual:** **Figure 5C**, artifact pathway and curation gate.
 - **Missing information:** Final multi-window registration design. **ONGOING WORK**
 
-## 8.3 Detection limits and acquisition uncertainty
+## 7.3 Detection limits and acquisition uncertainty
 
 - **Purpose:** Explain why small-grain statistics and individual-grain validation require confidence-aware analysis.
 - **Central argument:** Detection limits, segmentation churn, unlinked grains, and unresolved porosity produce structured label uncertainty rather than simple independent noise.
@@ -358,7 +318,7 @@ The final abstract should be written only after the body is stable. At outline s
 - **Expected visual:** **Table 6**, experimental uncertainty source, affected label/metric, current mitigation, and future test.
 - **Missing information:** Instrument-specific confidence calibration. `[NEEDS LITERATURE SUPPORT]`
 
-## 8.4 Validation must be directional and multilevel
+## 7.4 Validation must be directional and multilevel
 
 - **Purpose:** Define the standard of evidence for experimental learning.
 - **Central argument:** Aggregate loss and grain-size statistics can miss coherent drift, topology error, or individual-grain underprediction; validation must span field, direction, topology, grain, and population levels.
@@ -369,11 +329,11 @@ The final abstract should be written only after the body is stable. At outline s
 
 ---
 
-# 9. Preliminary Experimental Work
+# 8. Preliminary Experimental Work
 
 **Section status: ONGOING WORK WITH STABLE PRELIMINARY RESULTS**
 
-## 9.1 Dataset and experimental window
+## 8.1 Dataset and experimental window
 
 - **Purpose:** Establish the measured training source.
 - **Central argument:** A five-state lab-DCT annealing series of undoped alumina provides voxelized grain-ID maps at uniform two-hour increments; one curated volume is used for training and held-out evaluation.
@@ -382,7 +342,7 @@ The final abstract should be written only after the body is stable. At outline s
 - **Expected visual:** **Figure 6A**, full specimen with selected and future candidate windows.
 - **Missing information:** Number and location of planned additional windows. `[AUTHOR INPUT REQUIRED]`
 
-## 9.2 Interpolation-free curation and label construction
+## 8.2 Interpolation-free curation and label construction
 
 - **Purpose:** Establish label fidelity.
 - **Central argument:** Residual-driven window selection, integer affine registration, in-place trimming, and overlap-based linkage remove major coherent artifacts without smoothing or synthesizing grain labels.
@@ -391,7 +351,7 @@ The final abstract should be written only after the body is stable. At outline s
 - **Expected visual:** **Figure 6B**, before/after boundary mismatch and rollout drift.
 - **Missing information:** Final multi-window registration acceptance criteria. `[NEEDS QUANTITATIVE CRITERION]`
 
-## 9.3 Direct experimental training
+## 8.3 Direct experimental training
 
 - **Purpose:** Demonstrate feasibility of the central experimental-learning step.
 - **Central argument:** The unmodified 3D-PRIMME architecture can be trained directly on T0 -> T1 experimental grain-ID maps using 797,712 boundary-centered samples and evaluated on later states.
@@ -400,7 +360,7 @@ The final abstract should be written only after the body is stable. At outline s
 - **Expected visual:** **Figure 6C**, experimental label construction and rollout.
 - **Missing information:** Whether future windows will be used for training, testing, or both. `[AUTHOR INPUT REQUIRED]`
 
-## 9.4 Stable preliminary results
+## 8.4 Stable preliminary results
 
 - **Purpose:** Establish feasibility while reporting limitations honestly.
 - **Central argument:** The model reproduces early coarsening and resolvable grain-size distribution shape with low drift across three replicates, but misses late slowdown and held-out topology at matched steps and underpredicts individual-grain change magnitudes.
@@ -409,7 +369,7 @@ The final abstract should be written only after the body is stable. At outline s
 - **Expected visual:** **Figure 7**, compact preliminary-results composite: trajectory, size distribution, topology, grain-level kinetics, and drift. **Table 7**, metric, favorable result, limitation, and implication for Aim 1.
 - **Missing information:** Select which panels fit the proposal page budget. `[AUTHOR INPUT REQUIRED]`
 
-## 9.5 Current limitations and ongoing multi-window extension
+## 8.5 Current limitations and ongoing multi-window extension
 
 - **Purpose:** Convert limitations into Aim 1 tasks.
 - **Central argument:** One material, one window, one training interval, geometry-only features, readout artifacts, and uncertain temporal mapping limit current generalization; multi-window analysis is the immediate ongoing extension.
@@ -420,9 +380,9 @@ The final abstract should be written only after the body is stable. At outline s
 
 ---
 
-# 10. Proposed Aims
+# 9. Proposed Aims
 
-## 10.1 Aims overview
+## 9.1 Aims overview
 
 - **Purpose:** Present the remaining research as a dependency chain.
 - **Central argument:** Aim 1 establishes trust; Aim 2 validates each learned operator against its own reference domain; Aim 3 interprets only relationships shown to be reliable in those paired comparisons.
@@ -431,7 +391,7 @@ The final abstract should be written only after the body is stable. At outline s
 - **Expected visual:** Fold the three-aim dependency diagram into **Core Figure 1**, the causal research roadmap.
 - **Missing information:** Aim 3 details. `[AUTHOR INPUT REQUIRED]`
 
-## 10.2 Aim 1 - Establish reliable and generalizable learning from sparse 4D experiments
+## 9.2 Aim 1 - Establish reliable and generalizable learning from sparse 4D experiments
 
 **Status:** Single-window results are stable preliminary evidence; multi-window analysis is ongoing; uncertainty/generalization components are proposed.
 
@@ -569,7 +529,7 @@ A validated protocol for converting sparse 4D grain-ID maps into direct supervis
 
 `[AUTHOR INPUT REQUIRED]` and `[NEEDS QUANTITATIVE CRITERION]`
 
-## 10.3 Aim 2 - Validate simulation-trained and experiment-trained surrogates against their respective reference domains
+## 9.3 Aim 2 - Validate simulation-trained and experiment-trained surrogates against their respective reference domains
 
 **Status:** PROPOSED FUTURE WORK
 
@@ -695,7 +655,7 @@ A paired fidelity map showing what the simulation-trained surrogate reproduces f
 
 `[AUTHOR INPUT REQUIRED]` and `[NEEDS QUANTITATIVE CRITERION]`
 
-## 10.4 Aim 3 - Interpret learned experimental evolution rules and test candidate physical mechanisms
+## 9.4 Aim 3 - Interpret learned experimental evolution rules and test candidate physical mechanisms
 
 **Status:** FORMAL PROPOSED AIM; DETAILS DEFERRED BY AUTHOR
 
@@ -785,9 +745,9 @@ To be refined after existing work is incorporated. A valid alternative outcome i
 
 ---
 
-# 11. Integration Across Aims
+# 10. Integration Across Aims
 
-## 11.1 Scientific dependency
+## 10.1 Scientific dependency
 
 - **Purpose:** Demonstrate that the aims are sequential rather than parallel.
 - **Central argument:** Aim 1 validates the experimental operator; Aim 2 evaluates \(S\) against \(\hat{S}\) and \(E\) against \(\hat{E}\); Aim 3 interprets only relationships that are reliable within the relevant pair.
@@ -799,7 +759,7 @@ To be refined after existing work is incorporated. A valid alternative outcome i
 - **Expected visual:** Reuse **Core Figure 1**.
 - **Missing information:** Numerical gate values. `[NEEDS QUANTITATIVE CRITERION]`
 
-## 11.2 Shared data, models, and metrics
+## 10.2 Shared data, models, and metrics
 
 - **Purpose:** Show efficiency and feasibility.
 - **Central argument:** The same curated experimental data, PRIMME architecture, replicate policy, and multilevel metrics support all three aims, reducing duplicated effort.
@@ -808,7 +768,7 @@ To be refined after existing work is incorporated. A valid alternative outcome i
 - **Expected visual:** Include shared resources in **Core Table 8**, core/optional scope and schedule.
 - **Missing information:** Compute and storage resources. `[AUTHOR INPUT REQUIRED]`
 
-## 11.3 Interpretation of positive and negative outcomes
+## 10.3 Interpretation of positive and negative outcomes
 
 - **Purpose:** Make the proposal robust to non-confirmatory results.
 - **Central argument:** Failure to generalize, failure of either paired reference-surrogate comparison, or non-identifiable attribution are scientifically informative outcomes that narrow the valid domain of the surrogate.
@@ -819,9 +779,9 @@ To be refined after existing work is incorporated. A valid alternative outcome i
 
 ---
 
-# 12. Expected Contributions
+# 11. Expected Contributions
 
-## 12.1 Simulation-physics contribution
+## 11.1 Simulation-physics contribution
 
 - **Purpose:** State the foundational physical contribution.
 - **Central argument:** Neighborhood design provides a controllable link between stochastic local rules and macroscopic inclination response, clarifying the physical content of simulation labels.
@@ -830,7 +790,7 @@ To be refined after existing work is incorporated. A valid alternative outcome i
 - **Expected visual:** None; reference Figure 3.
 - **Missing information:** None.
 
-## 12.2 Surrogate-model contribution
+## 11.2 Surrogate-model contribution
 
 - **Purpose:** State the computational contribution.
 - **Central argument:** Local 3D learning enables data-efficient, scale-independent surrogate prediction and provides an architecture compatible with both simulation and voxelized experiments.
@@ -839,7 +799,7 @@ To be refined after existing work is incorporated. A valid alternative outcome i
 - **Expected visual:** None; reference Core Figures 3 and 5.
 - **Missing information:** None.
 
-## 12.3 Experimental-learning contribution
+## 11.3 Experimental-learning contribution
 
 - **Purpose:** State the main proposed dissertation contribution.
 - **Central argument:** The project will define when sparse 4D grain-ID maps can serve as trustworthy supervision and how experimental reference behavior differs from simulation and surrogate predictions.
@@ -848,7 +808,7 @@ To be refined after existing work is incorporated. A valid alternative outcome i
 - **Expected visual:** None; reference Core Figures 5-6.
 - **Missing information:** Final number of windows; any metrics added beyond the two manuscripts are optional and can be supplied later. `[AUTHOR INPUT REQUIRED]`
 
-## 12.4 Physical-science contribution
+## 11.4 Physical-science contribution
 
 - **Purpose:** State the longer-term scientific value without overclaiming.
 - **Central argument:** Validated experimental operators and pair-specific fidelity analysis create a defensible basis for identifying physically meaningful dependencies in measured grain evolution.
@@ -859,9 +819,9 @@ To be refined after existing work is incorporated. A valid alternative outcome i
 
 ---
 
-# 13. Risks and Alternative Strategies
+# 12. Risks and Alternative Strategies
 
-## 13.1 Experimental-data risks
+## 12.1 Experimental-data risks
 
 - **Purpose:** Address the highest practical risk to Aim 1.
 - **Central argument:** Window-dependent distortion, linkage yield, detection limits, and limited temporal states may restrict generalization.
@@ -870,7 +830,7 @@ To be refined after existing work is incorporated. A valid alternative outcome i
 - **Expected visual:** **Core Table 7**, risk, likelihood, impact, detection, mitigation, fallback.
 - **Missing information:** Empirical quality of new windows. **ONGOING WORK**
 
-## 13.2 Model and uncertainty risks
+## 12.2 Model and uncertainty risks
 
 - **Purpose:** Address the risk of statistically plausible but locally incorrect rollouts.
 - **Central argument:** Aggregate agreement, replicate consistency, and numerical stability are insufficient unless topology, drift, grain kinetics, and empirical uncertainty/sensitivity are also tested.
@@ -879,7 +839,7 @@ To be refined after existing work is incorporated. A valid alternative outcome i
 - **Expected visual:** Core Table 7.
 - **Missing information:** Final empirical uncertainty score; formal calibration method is optional. `[NEEDS LITERATURE SUPPORT]`
 
-## 13.3 Paired-validation risks
+## 12.3 Paired-validation risks
 
 - **Purpose:** Protect Aim 2 from conflating within-domain fidelity with cross-domain physical comparison.
 - **Central argument:** \(S\) must be compared with \(\hat{S}\), and \(E\) with \(\hat{E}\); unequal metric support across the two pairs must not be hidden by a single combined score.
@@ -888,7 +848,7 @@ To be refined after existing work is incorporated. A valid alternative outcome i
 - **Expected visual:** Core Table 7.
 - **Missing information:** Final reference trajectories for each pair; the initial metrics are already fixed by the two manuscripts. `[AUTHOR INPUT REQUIRED]`
 
-## 13.4 Aim 3 and schedule risks
+## 12.4 Aim 3 and schedule risks
 
 - **Purpose:** Keep interpretation feasible before May 2027.
 - **Central argument:** Aim 3 must be scoped around existing evidence and outputs from Aims 1-2; it cannot depend on an open-ended new experimental campaign.
@@ -899,9 +859,9 @@ To be refined after existing work is incorporated. A valid alternative outcome i
 
 ---
 
-# 14. Timeline
+# 13. Timeline
 
-## 14.1 Planning assumptions
+## 13.1 Planning assumptions
 
 - **Purpose:** Demonstrate feasibility through May 2027.
 - **Central argument:** Work must be prioritized by dependency, with writing and analysis overlapping rather than occurring sequentially at the end.
@@ -910,7 +870,7 @@ To be refined after existing work is incorporated. A valid alternative outcome i
 - **Expected visual:** **Core Figure 8**, compact Gantt chart and chapter map.
 - **Missing information:** Exact proposal, dissertation, manuscript, and defense deadlines. `[AUTHOR INPUT REQUIRED]`
 
-## 14.2 Provisional schedule: August 2026-May 2027
+## 13.2 Provisional schedule: August 2026-May 2027
 
 | Period | Primary research activity | Writing/deliverable | Decision gate |
 |---|---|---|---|
@@ -925,7 +885,7 @@ To be refined after existing work is incorporated. A valid alternative outcome i
 
 This schedule is intentionally front-loaded toward Aim 1 because Aim 2 and Aim 3 depend on it.
 
-## 14.3 Scope-control rules
+## 13.3 Scope-control rules
 
 - **Purpose:** Protect completion against over-expansion.
 - **Central argument:** The minimum dissertation contribution should not depend on external datasets, new materials, or exhaustive simulator variants.
@@ -949,9 +909,9 @@ This schedule is intentionally front-loaded toward Aim 1 because Aim 2 and Aim 3
 
 ---
 
-# 15. Expected Dissertation Chapters
+# 14. Expected Dissertation Chapters
 
-## 15.1 Provisional chapter structure
+## 14.1 Provisional chapter structure
 
 | Chapter | Working title | Primary role | Maturity |
 |---|---|---|---|
@@ -970,7 +930,7 @@ This schedule is intentionally front-loaded toward Aim 1 because Aim 2 and Aim 3
 - **Expected visual:** Fold the chapter-to-research-question map into **Core Figure 8**.
 - **Missing information:** University dissertation format and whether manuscript-style chapters are permitted. `[AUTHOR INPUT REQUIRED]`
 
-## 15.2 Cross-chapter integration
+## 14.2 Cross-chapter integration
 
 - **Purpose:** Prevent a paper-compilation appearance.
 - **Central argument:** Every chapter should explicitly state:
@@ -984,9 +944,9 @@ This schedule is intentionally front-loaded toward Aim 1 because Aim 2 and Aim 3
 
 ---
 
-# 16. Conclusion
+# 15. Conclusion
 
-## 16.1 Proposal conclusion structure
+## 15.1 Proposal conclusion structure
 
 - **Purpose:** Close the proposal by answering why the full program is necessary.
 - **Central argument:** Reliable and interpretable learning requires more than a powerful neural architecture: the simulation teacher must be physically diagnosed, the experimental teacher must be curated and uncertainty-aware, and each learned operator must be validated against its own reference before physical interpretation.
@@ -995,7 +955,7 @@ This schedule is intentionally front-loaded toward Aim 1 because Aim 2 and Aim 3
 - **Expected visual:** None; optionally reuse the causal roadmap in miniature.
 - **Missing information:** Final achieved Aim 3 claim. `[AUTHOR INPUT REQUIRED]`
 
-## 16.2 Final dissertation-level contribution statement
+## 15.2 Final dissertation-level contribution statement
 
 - **Purpose:** Provide the sentence the committee should remember.
 - **Central argument:** The dissertation will establish a source-aware framework for learning mesoscale grain-growth dynamics that controls simulation-label physics, validates simulation-trained and experiment-trained operators against their respective references, and supports physically grounded interpretation.
@@ -1068,4 +1028,4 @@ The outline is complete enough to support drafting. The following inputs can be 
 - Schedule drop rules protect the May 2027 completion target.
 - The causal sequence is explicit throughout.
 - The schedule is backward-planned to May 2027.
-- No full proposal prose has been drafted.
+- The outline and full prose draft now use the same 15-section structure.

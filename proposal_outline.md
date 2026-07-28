@@ -246,7 +246,7 @@ The final abstract should be written only after the body is stable. At outline s
 - **Central argument:** A local operator trained from minimal supervision reproduces major MF kinetics and topology, has low training-replicate variability, scales from \(100^3\) to \(1024^3\), and learns prescribed inclination dependence.
 - **Manuscript evidence:** Window sensitivity, replicate uncertainty, spatial scaling, data efficiency, and anisotropy. [Source: 3D-PRIMME manuscript, §§3.1-3.5, Figs. 2-8, PDF pp. 6-13]
 - **Proposed future content:** None.
-- **Expected visual:** **Figure 4C**, composite of scaling curves and inclination distributions. **Table 4**, training domain, largest test domain, supervision amount, rollout length, and metrics.
+- **Expected visual:** **Figure 4C**, spatial-extrapolation morphology; **Figure 4D**, quantitative scaling curves; and **Figure 4E**, inclination distributions. **Table 4**, training domain, largest test domain, supervision amount, rollout length, and metrics.
 - **Missing information:** Choose a small subset of results to avoid over-weighting completed work. `[AUTHOR INPUT REQUIRED]`
 
 ### Scientific lesson and limitation
@@ -986,7 +986,7 @@ The outline is complete enough to support drafting. The following inputs can be 
 - Aim 2 no longer requires a common experimental \(T_0\) or a direct \(S\)-versus-\(E\) trajectory comparison.
 - Aim 3 remains a formal placeholder that can be completed later; its eventual testability requirements are recorded.
 - The chapter plan is consolidated from eight to seven chapters.
-- The current prose draft includes seven source-derived figures from the three manuscripts; additional original diagrams remain optional.
+- The current prose draft includes nine source-derived figures from the three manuscripts; additional original diagrams remain optional.
 - Schedule drop rules protect the May 2027 completion target.
 - The causal sequence is explicit throughout.
 - The schedule is backward-planned to May 2027.

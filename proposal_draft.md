@@ -225,9 +225,25 @@ Boundary-centered patches are extracted, and the trained network maps each local
 
 *3D-PRIMME workflow: local patch construction from the grain-ID field, learning of local evolution scores, and autoregressive reconstruction of the global predicted microstructure. Adapted from Fig. 1 of the 3D-PRIMME manuscript.*
 
-Training and evaluation use three-dimensional MF data. The reported dataset contains 200 isotropic sequences and a corresponding set of inclination-dependent sequences. Each sequence starts from a different 512-grain Voronoi structure in a \(100^3\)-voxel volume and evolves for 100 simulation steps. The anisotropic data use an off-diagonal covariance that biases evolution along the [111] direction. No experimental microstructure is used in this completed study. [Source: 3D-PRIMME manuscript, §2.1, Eqs. 1-4, PDF pp. 2-3]
+Training and evaluation use three-dimensional MF data. The reported dataset contains 200 isotropic sequences and a corresponding set of inclination-dependent sequences. Each sequence starts from a different 512-grain Voronoi structure in a \(100^3\)-voxel volume and evolves for 100 simulation steps, while a training set uses only two consecutive states from one or more sequences. For the inclination-dependent data, the Gaussian sampling covariance is
+
+\[
+\boldsymbol{\Sigma}
+=
+\begin{pmatrix}
+a & b & b\\
+b & a & b\\
+b & b & a
+\end{pmatrix},
+\qquad
+a=25,\quad b=20,
+\]
+
+which biases the MF neighborhood along \(\mathbf{u}_{111}=(1,1,1)/\sqrt{3}\). The isotropic and inclination-dependent datasets therefore provide controlled teachers for testing whether the learned local operator recovers both scalar coarsening behavior and a prescribed directional response. No experimental microstructure is used in this completed study. [Source: 3D-PRIMME manuscript, §2.1, Eqs. 1-4, PDF pp. 2-3]
 
 ### Completed performance
+
+#### Local-context sensitivity and training variability
 
 Window sensitivity tests show that all evaluated settings recover approximately linear coarsening, but the observation window affects the growth rate more strongly than the action window. The \(N_o=9\), \(N_a=9\) setting produces the smallest reported relative kinetic error, 2.85%, and is used as the default. Ten replicate models trained on one two-state sequence show small spread in squared mean radius, average face count, topology-size relation, and voxel accuracy, although uncertainty grows with rollout time. [Source: 3D-PRIMME manuscript, §§3.1-3.2, Figs. 2-3, PDF pp. 6-8]
 
@@ -248,13 +264,33 @@ Two of the quantitative readouts can be written as
 
 where the first relation is the parabolic coarsening diagnostic, \(K_g\) is the fitted growth-rate coefficient, and the second is voxel-wise agreement between predicted and reference grain labels. The coarsening relation is used as a kinetic diagnostic rather than a claim of universal continuous-time calibration.
 
-The local operator scales well beyond its training volume. A model trained on \(100^3\) volumes is applied without retraining to \(256^3\), \(512^3\), and \(1024^3\) domains containing approximately 8,600, 68,700, and 550,000 initial grains. The tested scales exhibit closely overlapping coarsening kinetics, topological evolution, and normalized radius distributions at matched coarsening states. A \(1024^3\) rollout remains statistically stable for 100 steps, by which point 41,674 grains, or 7.6% of the initial population, remain. [Source: 3D-PRIMME manuscript, §3.3, Figs. 4-5, PDF pp. 7-10]
+#### Spatial and temporal extrapolation
+
+The distinction between training support and inference scale is central to 3D-PRIMME. The network is trained from local patches extracted from \(100^3\)-voxel volumes and requires only one transition between two consecutive states. During inference, the same fixed local operator is applied repeatedly and independently of the global domain dimensions. A model trained at \(100^3\) is therefore applied without retraining to \(256^3\), \(512^3\), and \(1024^3\) domains containing approximately 8,600, 68,700, and 550,000 initial grains, respectively. [Source: 3D-PRIMME manuscript, §3.3, Fig. 4, PDF pp. 7-9]
+
+![3D-PRIMME extrapolation to larger spatial domains](figures/primme_spatial_extrapolation.png)
+
+*Visual evidence of spatial and temporal extrapolation by 3D-PRIMME. Representative \(256^3\), \(512^3\), and \(1024^3\) domains are shown at rollout steps 0, 19, and 39; the later states correspond approximately to one-half and one-quarter of the initial grain populations. The model was trained on \(100^3\) volumes and applied to all three larger domains without retraining. The cubes are displayed at a common visual size; row labels give the actual domain sizes. Adapted from Fig. 4 of the 3D-PRIMME manuscript.*
+
+The visual coarsening is accompanied by quantitative collapse across domain sizes. The tested scales exhibit closely overlapping squared-mean-radius trajectories, topological evolution, and normalized radius distributions at matched coarsening states. A \(1024^3\) rollout remains statistically stable for 100 steps, by which point 41,674 grains, or 7.6% of the initial population, remain. [Source: 3D-PRIMME manuscript, §3.3, Figs. 4-5, PDF pp. 7-10]
 
 ![3D-PRIMME spatial scaling results](figures/primme_spatial_scaling.png)
 
 *Statistical consistency of 3D-PRIMME rollouts across \(256^3\), \(512^3\), and \(1024^3\) domains, including coarsening kinetics, topology, grain-count decay, and normalized grain-size distributions. Adapted from Fig. 5 of the 3D-PRIMME manuscript.*
 
-Data-efficiency tests show that one, ten, or fifty two-state sequences can preserve major coarsening and face-count behavior under the reported training design. Ten sequences give the highest voxel accuracy in that comparison. Finally, the anisotropically trained model qualitatively reproduces direction-dependent morphology and remains close to the MF inclination distributions in the XY, XZ, and YZ projections over the tested rollout. [Source: 3D-PRIMME manuscript, §§3.4-3.5, Figs. 6-8, PDF pp. 8-13]
+Together, the morphology and statistical figures distinguish two levels of evidence: the first shows plausible three-dimensional evolution over increasing domain size, while the second shows that kinetic, topological, and distributional observables remain consistent. The demonstrated "temporal extrapolation" is autoregressive deployment beyond the two-state training interval within the MF setting; it is not a claim of calibrated physical-time prediction for an unseen material.
+
+#### Data efficiency under limited temporal supervision
+
+Models trained on 1, 10, or 50 two-state sequences are evaluated against an independent set of ten MF simulations under a fixed number of optimizer updates. All three training-set sizes preserve approximately linear coarsening and similar face-count behavior. Ten sequences give the highest voxel accuracy and smallest replicate spread in that comparison, whereas the 50-sequence case coarsens more slowly and shows larger variability. The latter observation is treated as a training-design result—possibly reflecting redundancy, stochastic diversity, or insufficient optimization under the fixed update budget—rather than evidence that additional data are intrinsically harmful. [Source: 3D-PRIMME manuscript, §3.4, Fig. 6, PDF pp. 8-11]
+
+#### Recovery of prescribed inclination dependence
+
+The inclination-dependent test asks for more than recovery of scalar coarsening statistics. The anisotropic MF kernel produces an evolving directional signature, but boundary inclination is not supplied to 3D-PRIMME as an explicit input feature. Nevertheless, the initially near-circular distributions develop the expected elongated response, and the 3D-PRIMME curves remain close to the MF reference in the XY, XZ, and YZ projection planes through rollout step 50. This agreement indicates that the interface-site representation retains sufficient local geometry for the network to infer the teacher's direction-dependent update rule. [Source: 3D-PRIMME manuscript, §3.5, Figs. 7-8, PDF pp. 10-13]
+
+![MF and 3D-PRIMME inclination distributions](figures/primme_inclination_distributions.png)
+
+*Recovery of prescribed inclination dependence. MF reference distributions (blue) and 3D-PRIMME predictions (orange) are compared in the XY, XZ, and YZ projection planes at rollout steps 0, 1, 10, and 50. Agreement across the three projections shows that the model reproduces the directional response encoded by the anisotropic MF teacher even though inclination is not provided explicitly as an input. Adapted from Fig. 8 of the 3D-PRIMME manuscript.*
 
 ### Scientific lesson and limitation
 

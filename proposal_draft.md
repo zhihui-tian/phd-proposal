@@ -723,19 +723,19 @@ The program is efficient because the same local architecture, data representatio
 
 # 5. Expected Outcomes, Contributions, and Scientific Impact
 
-## 5.1 Simulation-physics contribution
+## 5.1 Simulation-physics and surrogate-model foundations
 
 The completed neighborhood work establishes a controllable link between stochastic neighborhood geometry and effective inclination response. It provides a framework for diagnosing lattice pinning and for generating simulation labels controlled with respect to selected inclination-dependent artifacts. The contribution is specific: it improves understanding and control of the simulation teacher without claiming universal material fidelity.
 
-## 5.2 Computational contribution
-
 3D-PRIMME establishes that a local three-dimensional neural operator can learn major features of controlled MF evolution from limited temporal supervision and apply the learned rule across substantially larger spatial domains and long rollouts. The completed work provides an architecture and validation framework that can be reused with both simulation and experimental grain-ID maps.
 
-## 5.3 Experimentally grounded learning contribution
+Together, these completed studies establish a coupled physical and computational foundation: neighborhood analysis identifies and controls the evolution rules encoded by the simulation teacher, and 3D-PRIMME demonstrates that a local operator can learn and scale those rules. This combined foundation enables the proposal's transition from simulation supervision to direct experimental learning.
+
+## 5.2 Experimentally grounded learning contribution
 
 The ongoing and proposed work will define when sparse 4D experimental maps can serve as trustworthy supervision. The contribution includes label-preserving curation, grouped experimental validation, empirical uncertainty and sensitivity assessment, and an explicit domain of applicability. This shifts the focus from whether a model can fit one experimental transition to when its rollouts can be used scientifically.
 
-## 5.4 Source-aware validation contribution
+## 5.3 Source-aware validation contribution
 
 Aim 2 will formalize two distinct validation statements:
 
@@ -744,7 +744,7 @@ Aim 2 will formalize two distinct validation statements:
 
 This paired structure prevents performance in one domain from being used as evidence in another and avoids conflating direct simulation-experiment differences with surrogate approximation.
 
-## 5.5 Physical-science contribution
+## 5.4 Physical-science contribution
 
 After Aim 3 material is incorporated, the final contribution will be stated at the strongest level justified by the evidence: stable model interpretation, physical attribution, or candidate mechanism testing. The proposal will not equate local architecture with interpretability or predictive agreement with mechanism discovery.
 

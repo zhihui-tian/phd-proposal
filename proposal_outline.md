@@ -783,25 +783,16 @@ To be refined after existing work is incorporated. A valid alternative outcome i
 
 # 5. Expected Outcomes, Contributions, and Scientific Impact
 
-## 5.1 Simulation-physics contribution
+## 5.1 Simulation-physics and surrogate-model foundations
 
-- **Purpose:** State the foundational physical contribution.
-- **Central argument:** Neighborhood design provides a controllable link between stochastic local rules and macroscopic inclination response, clarifying the physical content of simulation labels.
-- **Manuscript evidence:** Neighborhood manuscript. [Source: Neighborhood manuscript, §§3-7, PDF pp. 6-17]
-- **Proposed future content:** Use this as a completed contribution, not an Aim 1 deliverable.
-- **Expected visual:** None; reference Figure 3.
+- **Purpose:** State the coupled physical and computational foundation established by the completed work.
+- **Central argument:** Neighborhood design clarifies and controls the physical content of stochastic simulation labels, while local 3D learning demonstrates that those controlled rules can be learned efficiently and applied across larger spatial and temporal domains.
+- **Manuscript evidence:** Neighborhood and 3D-PRIMME manuscripts. [Source: Neighborhood manuscript, §§3-7, PDF pp. 6-17; 3D-PRIMME manuscript, §§2-5, PDF pp. 2-15]
+- **Proposed future content:** Present both studies as one completed enabling foundation rather than separate future aims.
+- **Expected visual:** None; reference the completed-foundation figures in Section 2.
 - **Missing information:** None.
 
-## 5.2 Surrogate-model contribution
-
-- **Purpose:** State the computational contribution.
-- **Central argument:** Local 3D learning enables data-efficient, scale-independent surrogate prediction and provides an architecture compatible with both simulation and voxelized experiments.
-- **Manuscript evidence:** 3D-PRIMME and experimental training. [Source: 3D-PRIMME manuscript, §§2-5, PDF pp. 2-15; Experimental surrogate manuscript, §3, PDF pp. 8-9]
-- **Proposed future content:** Reliability/uncertainty framework from Aim 1.
-- **Expected visual:** None; reference Core Figures 3 and 5.
-- **Missing information:** None.
-
-## 5.3 Experimental-learning contribution
+## 5.2 Experimental-learning contribution
 
 - **Purpose:** State the main proposed dissertation contribution.
 - **Central argument:** The project will define when sparse 4D grain-ID maps can serve as trustworthy supervision and how experimental reference behavior differs from simulation and surrogate predictions.
@@ -809,6 +800,15 @@ To be refined after existing work is incorporated. A valid alternative outcome i
 - **Proposed future content:** Multi-window Aim 1 and the two paired Aim 2 validations.
 - **Expected visual:** None; reference Core Figures 5-6.
 - **Missing information:** Final number of windows; any metrics added beyond the two manuscripts are optional and can be supplied later. `[AUTHOR INPUT REQUIRED]`
+
+## 5.3 Source-aware validation contribution
+
+- **Purpose:** Separate validation claims by supervision and reference domain.
+- **Central argument:** The simulation-trained operator must be evaluated against simulation, while the experiment-trained operator must be evaluated against experiment; success in one pair cannot substitute for evidence in the other.
+- **Manuscript evidence:** 3D-PRIMME and experimental surrogate metrics. [Source: 3D-PRIMME manuscript, §§2.3 and 3, PDF pp. 5-13; Experimental surrogate manuscript, §4, PDF pp. 9-15]
+- **Proposed future content:** Complete the paired Aim 2 validation and assign metric-specific pass, partial-pass, or fail interpretations.
+- **Expected visual:** None; reference the paired-comparison figure in Aim 2.
+- **Missing information:** Final quantitative criteria. `[NEEDS QUANTITATIVE CRITERION]`
 
 ## 5.4 Physical-science contribution
 

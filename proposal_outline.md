@@ -819,49 +819,9 @@ To be refined after existing work is incorporated. A valid alternative outcome i
 
 ---
 
-# 12. Risks and Alternative Strategies
+# 12. Timeline
 
-## 12.1 Experimental-data risks
-
-- **Purpose:** Address the highest practical risk to Aim 1.
-- **Central argument:** Window-dependent distortion, linkage yield, detection limits, and limited temporal states may restrict generalization.
-- **Manuscript evidence:** Experimental limitations. [Source: Experimental surrogate manuscript, §5, PDF pp. 15-17]
-- **Proposed future content:** Cross-window validation, high-confidence masks, identity-agnostic metrics, threshold sensitivity.
-- **Expected visual:** **Core Table 7**, risk, likelihood, impact, detection, mitigation, fallback.
-- **Missing information:** Empirical quality of new windows. **ONGOING WORK**
-
-## 12.2 Model and uncertainty risks
-
-- **Purpose:** Address the risk of statistically plausible but locally incorrect rollouts.
-- **Central argument:** Aggregate agreement, replicate consistency, and numerical stability are insufficient unless topology, drift, grain kinetics, and empirical uncertainty/sensitivity are also tested.
-- **Manuscript evidence:** Current metric-dependent successes and failures. [Source: Experimental surrogate manuscript, §4, PDF pp. 9-15]
-- **Proposed future content:** Multilevel acceptance matrix and abstention.
-- **Expected visual:** Core Table 7.
-- **Missing information:** Final empirical uncertainty score; formal calibration method is optional. `[NEEDS LITERATURE SUPPORT]`
-
-## 12.3 Paired-validation risks
-
-- **Purpose:** Protect Aim 2 from conflating within-domain fidelity with cross-domain physical comparison.
-- **Central argument:** \(S\) must be compared with \(\hat{S}\), and \(E\) with \(\hat{E}\); unequal metric support across the two pairs must not be hidden by a single combined score.
-- **Manuscript evidence:** Simulation-trained validation and experimental fixed-interval limitations. [Source: 3D-PRIMME manuscript, §§3-4, PDF pp. 6-14; Experimental surrogate manuscript, §§4-5, PDF pp. 9-17]
-- **Proposed future content:** Pair-specific criteria, uncertainty, and failure modes; cross-pair synthesis only for commensurate metrics.
-- **Expected visual:** Core Table 7.
-- **Missing information:** Final reference trajectories for each pair; the initial metrics are already fixed by the two manuscripts. `[AUTHOR INPUT REQUIRED]`
-
-## 12.4 Aim 3 and schedule risks
-
-- **Purpose:** Keep interpretation feasible before May 2027.
-- **Central argument:** Aim 3 must be scoped around existing evidence and outputs from Aims 1-2; it cannot depend on an open-ended new experimental campaign.
-- **Manuscript evidence:** None yet beyond foundations.
-- **Proposed future content:** Define a minimum viable Aim 3 after the additional material is reviewed.
-- **Expected visual:** Core Table 7 and timeline decision gate.
-- **Missing information:** Aim 3 maturity and remaining work. `[AUTHOR INPUT REQUIRED]`
-
----
-
-# 13. Timeline
-
-## 13.1 Planning assumptions
+## 12.1 Planning assumptions
 
 - **Purpose:** Demonstrate feasibility through May 2027.
 - **Central argument:** Work must be prioritized by dependency, with writing and analysis overlapping rather than occurring sequentially at the end.
@@ -870,7 +830,7 @@ To be refined after existing work is incorporated. A valid alternative outcome i
 - **Expected visual:** **Core Figure 8**, compact Gantt chart and chapter map.
 - **Missing information:** Exact proposal, dissertation, manuscript, and defense deadlines. `[AUTHOR INPUT REQUIRED]`
 
-## 13.2 Provisional schedule: August 2026-May 2027
+## 12.2 Provisional schedule: August 2026-May 2027
 
 | Period | Primary research activity | Writing/deliverable | Decision gate |
 |---|---|---|---|
@@ -885,7 +845,7 @@ To be refined after existing work is incorporated. A valid alternative outcome i
 
 This schedule is intentionally front-loaded toward Aim 1 because Aim 2 and Aim 3 depend on it.
 
-## 13.3 Scope-control rules
+## 12.3 Scope-control rules
 
 - **Purpose:** Protect completion against over-expansion.
 - **Central argument:** The minimum dissertation contribution should not depend on external datasets, new materials, or exhaustive simulator variants.
@@ -909,9 +869,9 @@ This schedule is intentionally front-loaded toward Aim 1 because Aim 2 and Aim 3
 
 ---
 
-# 14. Expected Dissertation Chapters
+# 13. Expected Dissertation Chapters
 
-## 14.1 Provisional chapter structure
+## 13.1 Provisional chapter structure
 
 | Chapter | Working title | Primary role | Maturity |
 |---|---|---|---|
@@ -930,7 +890,7 @@ This schedule is intentionally front-loaded toward Aim 1 because Aim 2 and Aim 3
 - **Expected visual:** Fold the chapter-to-research-question map into **Core Figure 8**.
 - **Missing information:** University dissertation format and whether manuscript-style chapters are permitted. `[AUTHOR INPUT REQUIRED]`
 
-## 14.2 Cross-chapter integration
+## 13.2 Cross-chapter integration
 
 - **Purpose:** Prevent a paper-compilation appearance.
 - **Central argument:** Every chapter should explicitly state:
@@ -944,9 +904,9 @@ This schedule is intentionally front-loaded toward Aim 1 because Aim 2 and Aim 3
 
 ---
 
-# 15. Conclusion
+# 14. Conclusion
 
-## 15.1 Proposal conclusion structure
+## 14.1 Proposal conclusion structure
 
 - **Purpose:** Close the proposal by answering why the full program is necessary.
 - **Central argument:** Reliable and interpretable learning requires more than a powerful neural architecture: the simulation teacher must be physically diagnosed, the experimental teacher must be curated and uncertainty-aware, and each learned operator must be validated against its own reference before physical interpretation.
@@ -955,7 +915,7 @@ This schedule is intentionally front-loaded toward Aim 1 because Aim 2 and Aim 3
 - **Expected visual:** None; optionally reuse the causal roadmap in miniature.
 - **Missing information:** Final achieved Aim 3 claim. `[AUTHOR INPUT REQUIRED]`
 
-## 15.2 Final dissertation-level contribution statement
+## 14.2 Final dissertation-level contribution statement
 
 - **Purpose:** Provide the sentence the committee should remember.
 - **Central argument:** The dissertation will establish a source-aware framework for learning mesoscale grain-growth dynamics that controls simulation-label physics, validates simulation-trained and experiment-trained operators against their respective references, and supports physically grounded interpretation.

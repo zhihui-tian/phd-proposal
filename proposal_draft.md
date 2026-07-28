@@ -726,40 +726,11 @@ After Aim 3 material is incorporated, the final contribution will be stated at t
 
 ---
 
-# 12. Risks and Alternative Strategies
-
-## 12.1 Experimental-data risk
-
-The highest practical risk is that additional windows contain strong non-rigid distortion, low linkage yield, or insufficient measurable evolution. The mitigation is to prespecify quality diagnostics, retain whole-label registration, use an interior common volume, and report how many candidates fail each criterion. If few windows remain, the scope will be limited to cross-window evidence within the current volume rather than cross-material generalization.
-
-## 12.2 Validation and uncertainty risk
-
-Aggregate agreement may hide local or topological failure, while small training-replicate spread may understate systematic measurement uncertainty. The response is to preserve the multilevel metric matrix, resample at meaningful experimental units, and distinguish model variability from curation and window sensitivity. Full probabilistic calibration is optional; empirical variability and domain-of-applicability assessment constitute the core deliverable.
-
-## 12.3 Paired-comparison risk
-
-The simulation and experimental papers do not support identical metric sets or equally precise reference data. Aim 2 therefore avoids a forced single score. Each pair will be evaluated independently with its manuscript-defined metrics, and only naturally commensurate metrics will be compared across pairs. Failure within either pair will be reported directly.
-
-## 12.4 Interpretation risk
-
-Aim 3 may reveal correlations that are not unique physical explanations. Geometry-only inputs may combine the effects of curvature, topology, crystallography, energy, mobility, and unresolved porosity. The final Aim 3 claim will therefore be limited to the evidentiary level supported by controlled perturbation, reproducibility, and independent tests. Existing interpretation work will determine the feasible scope.
-
-## 12.5 Schedule risk and scope control
-
-The following rules protect completion by May 2027:
-
-1. prioritize the minimum multi-window Aim 1 analysis;
-2. preserve both Aim 2 paired validations;
-3. drop external datasets, new materials, and broad architecture sweeps before reducing the core analyses;
-4. use empirical sensitivity and domain of applicability if full probabilistic calibration is underdetermined;
-5. retain pair-specific Aim 2 results if a shared metric synthesis is not defensible;
-6. base Aim 3 on existing work and validated outputs rather than a new open-ended experimental campaign.
-
----
-
-# 13. Timeline
+# 12. Timeline
 
 The schedule is planned backward from the May 2027 completion target. Research and writing overlap so that the dissertation is not postponed until all analysis is complete.
+
+To protect the core scope, the schedule prioritizes the minimum multi-window Aim 1 analysis, preserves both Aim 2 paired validations, and bases Aim 3 on existing work and validated outputs. External datasets, new materials, broad architecture sweeps, and full probabilistic calibration remain optional and will be deferred before any core analysis is reduced.
 
 | Period | Primary research activity | Writing and deliverable | Decision point |
 |---|---|---|---|
@@ -774,7 +745,7 @@ The schedule is planned backward from the May 2027 completion target. Research a
 
 ---
 
-# 14. Expected Dissertation Chapters
+# 13. Expected Dissertation Chapters
 
 The dissertation will use a seven-chapter structure that follows the causal program while avoiding unnecessary separation of the current experimental manuscript from its multi-window extension.
 
@@ -792,7 +763,7 @@ Each chapter will state the assumption it controls or removes, the evidence it c
 
 ---
 
-# 15. Conclusion
+# 14. Conclusion
 
 Reliable learning of grain-growth dynamics requires more than a high-capacity model. The physical content of simulation labels must first be understood; a simulation-trained surrogate must be evaluated as a representation of its simulation teacher; experimental labels must be curated without erasing their uncertainty; and an experiment-trained operator must be validated across meaningful data partitions before its responses are interpreted physically.
 

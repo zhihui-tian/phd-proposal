@@ -1024,7 +1024,7 @@ The outline is complete enough to support drafting. The following inputs can be 
 - Aim 2 no longer requires a common experimental \(T_0\) or a direct \(S\)-versus-\(E\) trajectory comparison.
 - Aim 3 remains a formal placeholder that can be completed later; its eventual testability requirements are recorded.
 - The chapter plan is consolidated from eight to seven chapters.
-- The visual plan is consolidated from sixteen candidate figures to eight core figures.
+- The current prose draft includes seven source-derived figures from the three manuscripts; additional original diagrams remain optional.
 - Schedule drop rules protect the May 2027 completion target.
 - The causal sequence is explicit throughout.
 - The schedule is backward-planned to May 2027.

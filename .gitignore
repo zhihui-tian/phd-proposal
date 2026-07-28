@@ -1,0 +1,20 @@
+.DS_Store
+.obsidian/
+
+# LaTeX build artifacts
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.run.xml
+*.synctex.gz
+*.toc
+
+# Source manuscripts remain local
+3D_PRIMME_submission.pdf
+Letter_draft__superset____Scripta_Materialia_target.pdf
+Neighborhood_Driven_Anisotropy_and_Lattice_Pinning_in_Stochastic_Grain_Growth_Models.pdf

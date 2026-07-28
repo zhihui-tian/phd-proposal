@@ -378,7 +378,7 @@ where \(\widehat{F}_{E}\) and \(\widehat{F}_{\widehat{E}}\) are the empirical cu
 
 Topology reveals a clear current limitation. At rollout steps paired with the held-out states, predicted face counts remain above the experimental band. The draft associates this difference with the transient arg-max speckle and sensitivity to small grains. Individual-grain analysis is feasible only where identity linkage remains sufficiently reliable: growth/shrinkage sign accuracy is 72-73% on the training interval and 62-63% on the usable T2-to-T3 held-out interval, with regression slopes of 0.78 and 0.57, respectively. The model therefore captures part of the direction of grain evolution while underpredicting its magnitude. [Source: Experimental surrogate manuscript, §4, Figs. 5-6, PDF pp. 11-14]
 
-![Multilevel experimental metrics](figures/experiment_metrics_summary.png)
+![Multilevel experimental metrics](figures/experiment_metrics_summary_relayout.png)
 
 *Multilevel experimental evaluation: (a) coarsening trajectory, (b) normalized grain-size distributions, (c) faces per grain, and (d) linked grain-by-grain volume change. The panels retain both favorable results and current limitations. Adapted from Figs. 3–6 of the Experimental surrogate manuscript.*
 

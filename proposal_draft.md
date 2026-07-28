@@ -12,15 +12,7 @@ Bracketed source notes identify the supporting manuscript, section, figure, and 
 
 ---
 
-# 1. Title
-
-**From Controlled Simulations to 4D Experiments: Local Machine Learning of Grain-Growth Dynamics**
-
-This title emphasizes the dissertation's causal progression: first control the local rules that generate simulation data, then learn and scale those rules with a three-dimensional surrogate, and finally transfer local learning to experimentally measured evolution. “Physical interpretation” is not included in the title at this stage because the detailed Aim 3 work will be incorporated later.
-
----
-
-# 2. Abstract
+# Abstract
 
 Predicting three-dimensional grain growth requires connecting local grain-boundary evolution to long-time changes in grain size, topology, and morphology. Physics-based simulations can generate the large datasets needed to train machine-learning surrogates, but a surrogate inherits both the intended dynamics and the numerical artifacts of its training source. This dissertation develops a source-aware local-learning framework that progresses from physically controlled stochastic simulations to direct learning from sparse four-dimensional experiments.
 
@@ -34,15 +26,15 @@ The proposed research has three aims. Aim 1 will establish reliability across mu
 
 ---
 
-# 3. Introduction and Motivation
+# 1. Introduction and Research Vision
 
-## 3.1 Mesoscale prediction as a local-to-global problem
+## 1.1 Mesoscale prediction as a local-to-global problem
 
 Grain growth is expressed macroscopically through changes in grain size, size distribution, topology, and morphology, but these observables emerge from local motion and rearrangement near grain boundaries. Predictive modeling must therefore bridge two scales: the local neighborhood in which an interface update occurs and the large spatial and temporal domain over which those updates accumulate into measurable microstructural evolution. Direct three-dimensional simulation over experimentally relevant volumes and long time horizons is computationally demanding, motivating learned surrogates that can reproduce local updates more efficiently. [Source: 3D-PRIMME manuscript, §1, PDF pp. 1-2]
 
 Machine learning does not remove the need to define physical content. A supervised model learns the relationships contained in its labels. When the labels come from simulation, the learned operator is limited by the simulator's assumptions, discretization, stochastic policy, and numerical artifacts. When the labels come from experiment, the model may also learn acquisition motion, reconstruction errors, segmentation changes, clipping, and identity-linkage failures as if they were physical boundary motion. The central problem is therefore not merely whether a network can fit voxel transitions, but whether the entire path from data source to local operator to long rollout is physically and statistically trustworthy.
 
-## 3.2 Overarching research question
+## 1.2 Overarching research question
 
 This dissertation asks:
 
@@ -56,7 +48,7 @@ The question is addressed through a sequence of progressively removed assumption
 4. determine whether each learned operator reproduces its own reference domain;
 5. interpret only those experimentally learned relationships that pass the relevant reliability tests.
 
-## 3.3 Central hypothesis
+## 1.3 Central hypothesis
 
 The central hypothesis is:
 
@@ -64,7 +56,7 @@ The central hypothesis is:
 
 This hypothesis does not assume that agreement with a simulator proves agreement with nature, that one selected experimental window establishes generalization, or that accurate prediction automatically identifies a mechanism. Instead, it makes reliability conditional on the data source, validation level, and domain of applicability.
 
-## 3.4 Dissertation logic and significance
+## 1.4 Dissertation logic and significance
 
 The dissertation follows the causal chain:
 
@@ -78,11 +70,13 @@ The first two stages are completed foundations. They establish that local simula
 
 ---
 
-# 4. Neighborhood-Dependent Simulation Physics
+# 2. Completed Foundations: From Simulation Physics to 3D Surrogate Learning
 
 **Research status: COMPLETED PRIOR WORK**
 
-## 4.1 Stochastic update rules and neighborhood geometry
+## 2.1 Neighborhood-dependent simulation physics
+
+### Stochastic update rules and neighborhood geometry
 
 Stochastic lattice and voxel models represent a microstructure through discrete grain identities and update those identities according to local rules. Their computational accessibility makes them useful for generating long sequences and large training sets, but their effective behavior depends on more than the nominal physical objective. Neighborhood shape, lattice discretization, sampling count, pseudo-temperature, and update acceptance can alter inclination preference, pinning, morphology, and grain-level statistical scatter. [Source: Neighborhood manuscript, §§1-3 and §§5-6, PDF pp. 3-7 and 10-16]
 
@@ -148,11 +142,11 @@ These relations make the causal chain explicit: changing \(K\) changes \(\gamma(
 
 For surrogate learning, this result reframes simulator design as training-data governance. A neural operator trained on simulation does not see an abstract law; it sees updates generated by a particular kernel and update policy. Artificial directional preference in the simulator becomes an artificial directional preference available for learning. Conversely, a deliberately anisotropic neighborhood can provide controlled labels for testing whether a model recovers a prescribed response.
 
-## 4.2 Methods
+### Methods
 
 The completed study compares MCP, N-MCP, and MF evolution in \(2400\times2400\)-pixel domains initialized from a common 20,000-grain Voronoi tessellation. Comparisons are performed at matched grain counts because neighborhood choice changes the evolution rate. Gaussian, reshaped-Gaussian, square, and star-shaped sampling neighborhoods are used to vary inclination dependence systematically. The analysis evaluates theoretical and simulated inclination distributions, aggregate anisotropy magnitude, equilibrium morphology, rotation of the imposed anisotropy, von Neumann-Mullins behavior, statistical scatter, and computational cost. [Source: Neighborhood manuscript, §4, PDF pp. 7-9; §§5-6 and Supplementary materials, PDF pp. 10-21]
 
-## 4.3 Completed results
+### Completed results
 
 Conventional zero-temperature MCP exhibits strong lattice-aligned boundary populations. Increasing pseudo-temperature softens this response, while N-MCP with Gaussian sampling yields an approximately circular inclination distribution in the tested conditions. Progressing from Gaussian to reshaped Gaussian, square, and star neighborhoods produces progressively stronger directional preferences. MF exhibits the same qualitative dependence: the Gaussian case is nearly isotropic, while non-circular neighborhoods generate stronger anisotropy. [Source: Neighborhood manuscript, §§5.1-5.3, Figs. 2-4, PDF pp. 10-13]
 
@@ -162,7 +156,7 @@ The rotation test provides the clearest causal evidence. Rotating reshaped-Gauss
 
 *Measured inclination distributions after rotating reshaped-Gaussian and uniform MF neighborhoods by \(0^\circ\), \(30^\circ\), and \(60^\circ\). The response rotates with the neighborhood, providing a causal separation from the fixed pixel lattice. Adapted from Fig. 6 of the Neighborhood manuscript.*
 
-## 4.4 Role and claim boundary
+### Role and claim boundary
 
 This work establishes control with respect to lattice pinning, artificial inclination preference, and selected topological/statistical behavior. It does not establish correct material-specific mobility, misorientation dependence, boundary energy, or agreement with experimental alumina. The defensible dissertation claim is therefore:
 
@@ -170,9 +164,7 @@ This work establishes control with respect to lattice pinning, artificial inclin
 
 It should not be claimed that the study directly proved improved 3D-PRIMME accuracy, because no surrogate was trained on paired “poor” and “improved” neighborhood datasets. Its enabling role is conceptual and methodological: it identifies which local rules are present in the simulation labels and provides controlled isotropic and anisotropic teachers for the next stage.
 
----
-
-# 5. Simulation-Based Surrogate Learning: 3D-PRIMME
+## 2.2 Simulation-trained 3D-PRIMME
 
 **Research status: COMPLETED PRIOR WORK; MANUSCRIPT UNDER REVIEW**
 
@@ -190,7 +182,7 @@ Validation must therefore occur at several levels:
 
 Agreement at one level does not imply agreement at another. A rollout may reproduce a size distribution while making incorrect individual updates or retaining the wrong topology. [Source: 3D-PRIMME manuscript, §§2.3-3.5, PDF pp. 5-13; Experimental surrogate manuscript, §4, PDF pp. 9-15]
 
-## 5.1 Architecture and simulation supervision
+### Architecture and simulation supervision
 
 3D-PRIMME learns three-dimensional grain evolution from local boundary geometry. Grain identities are transformed into an interface-site representation that counts unlike neighbors in a local observation window. At site \(i\) and time \(t\), the representation and the candidate-update target are
 
@@ -235,7 +227,7 @@ Boundary-centered patches are extracted, and the trained network maps each local
 
 Training and evaluation use three-dimensional MF data. The reported dataset contains 200 isotropic sequences and a corresponding set of inclination-dependent sequences. Each sequence starts from a different 512-grain Voronoi structure in a \(100^3\)-voxel volume and evolves for 100 simulation steps. The anisotropic data use an off-diagonal covariance that biases evolution along the [111] direction. No experimental microstructure is used in this completed study. [Source: 3D-PRIMME manuscript, §2.1, Eqs. 1-4, PDF pp. 2-3]
 
-## 5.2 Completed performance
+### Completed performance
 
 Window sensitivity tests show that all evaluated settings recover approximately linear coarsening, but the observation window affects the growth rate more strongly than the action window. The \(N_o=9\), \(N_a=9\) setting produces the smallest reported relative kinetic error, 2.85%, and is used as the default. Ten replicate models trained on one two-state sequence show small spread in squared mean radius, average face count, topology-size relation, and voxel accuracy, although uncertainty grows with rollout time. [Source: 3D-PRIMME manuscript, §§3.1-3.2, Figs. 2-3, PDF pp. 6-8]
 
@@ -264,7 +256,7 @@ The local operator scales well beyond its training volume. A model trained on \(
 
 Data-efficiency tests show that one, ten, or fifty two-state sequences can preserve major coarsening and face-count behavior under the reported training design. Ten sequences give the highest voxel accuracy in that comparison. Finally, the anisotropically trained model qualitatively reproduces direction-dependent morphology and remains close to the MF inclination distributions in the XY, XZ, and YZ projections over the tested rollout. [Source: 3D-PRIMME manuscript, §§3.4-3.5, Figs. 6-8, PDF pp. 8-13]
 
-## 5.3 Scientific lesson and limitation
+### Scientific lesson and limitation
 
 The completed study demonstrates that a compact local representation contains sufficient information to reproduce major kinetic, topological, and inclination-dependent features of the MF teacher over spatial and temporal scales larger than those used for training. It also establishes that local context must be selected carefully: locality does not mean that an arbitrarily small or large neighborhood is equally informative.
 
@@ -272,9 +264,7 @@ The claim is nevertheless bounded by the supervision source. The model learns MF
 
 These limitations motivate the next stage. Once scalable local learning is technically feasible, the central question becomes whether the operator can be trained directly from measured evolution, where relevant behavior is not prescribed by a simulator.
 
----
-
-# 6. Limitations of Simulation Supervision
+## 2.3 What the completed foundations establish—and what they cannot establish
 
 A simulation-trained surrogate is constrained twice: first by the simulator's representation of the material and then by the approximation error of the learned model. Improving agreement between 3D-PRIMME and MF reduces the second error but cannot remove the first. A high-fidelity surrogate of an idealized simulator remains an idealized model.
 
@@ -292,9 +282,11 @@ Success at one level is necessary but not sufficient for the next.
 
 ---
 
-# 7. Challenges of Learning from Sparse 4D Experiments
+# 3. Experimental Foundation and Remaining Research Gap
 
-## 7.1 Structured label uncertainty
+## 3.1 Challenges of learning from sparse 4D experiments
+
+### Structured label uncertainty
 
 Experimental grain-ID maps are not automatically valid training pairs. Rigid translation and rotation produce apparent boundary displacement. Residual non-rigid distortion can create a spatially varying update field. Surface recession changes the common material volume. Grain identities can be lost or incorrectly linked between scans. Small grains may fall below detection thresholds, and segmentation churn can create or remove apparent grains. If these effects are passed directly to an autoregressive model, the network can learn them as spurious dynamics. [Source: Experimental surrogate manuscript, §§1-3 and §5, PDF pp. 1-9 and 15-17]
 
@@ -306,25 +298,23 @@ Unlike independent label noise, these effects can produce a spatially organized 
 
 *Experimental-label curation and its diagnostics: residual-driven training-window selection, boundary mismatch before and after integer registration, and the reduction in learned rollout drift after curation. Adapted from Fig. 1 of the Experimental surrogate manuscript.*
 
-## 7.2 Spatial abundance and temporal scarcity
+### Spatial abundance and temporal scarcity
 
 Laboratory diffraction-contrast tomography supplies voxelized three-dimensional grain maps at a small number of successive states. The present dataset is spatially rich but temporally sparse: one pair of volumes contains hundreds of thousands of local boundary-centered patches, but the dataset contains only five independent time states. This asymmetry makes local learning feasible while limiting claims of generalization. Overlapping patches from one transition increase the optimization sample count, but they do not replace independent experimental windows or time intervals. Random voxel-level train/validation splits test whether the architecture fits the selected pair; they do not demonstrate cross-window or cross-material transfer. [Source: Experimental surrogate manuscript, §§1-3, PDF pp. 1-9]
 
 The correct unit of future validation is therefore the experimental partition—window, time pair, spatial block, or linked grain—not the individual overlapping voxel alone. Aim 1 is designed around this principle.
 
-## 7.3 Multilevel validation
+### Multilevel validation
 
 Experimental reliability cannot be decided with one scalar score. The current study shows why. Grain-size distributions can agree while topology remains biased; an apparently stable rollout can miss late experimental slowdown; aggregate coarsening can be plausible while individual-grain magnitude is underpredicted. Directional drift can reveal registration artifacts that distribution metrics miss. The proposed work will therefore preserve a multilevel evaluation matrix rather than collapse all outcomes into a single accuracy number.
 
 Broader background on curvature-driven growth, diffraction imaging, uncertainty calibration, and scientific machine learning will be added with external literature in the next revision. `[NEEDS LITERATURE SUPPORT]`
 
----
-
-# 8. Preliminary Experimental Work
+## 3.2 Experimental data curation and direct training
 
 **Research status: ONGOING WORK WITH STABLE PRELIMINARY RESULTS**
 
-## 8.1 Experimental data and curation
+### Experimental data and curation
 
 The ongoing study uses a five-state laboratory DCT grain-growth dataset. The full reconstruction contains \(549\times149\times211\) voxels. A candidate \(100^3\) analysis window is selected through a residual-driven search and then trimmed in place to \(100\times95\times84\) voxels so that all registered states remain inside the material. The window contains 1,757 grains initially and 1,345 grains after four intervals, while the reported mean radius increases by approximately 10%. [Source: Experimental surrogate manuscript, §2, PDF pp. 3-7]
 
@@ -346,15 +336,15 @@ where \(\boldsymbol{\phi}\) is the remeasured fractional offset, \(\mathbf{G}\) 
 
 Grain identities are linked between full-volume frames before registration using greedy one-to-one maximum-overlap matching. For the training pair, 90.4% of T1 grains and 97.4% of T1 voxels inherit T0 identities. The remaining 2.6% of T1 voxels generate all-zero target maps rather than fabricated identity assignments. [Source: Experimental surrogate manuscript, §§2-3, PDF pp. 7-8]
 
-## 8.2 Direct experimental training
+### Direct experimental training
 
 The unmodified 3D-PRIMME architecture is trained on the T0-to-T1 transition. A \(9^3\) observation and \(9^3\) action neighborhood yield 729 input/output features per boundary-centered sample. The training pair supplies 797,712 local samples, split randomly 80/20 for optimization monitoring, and three independent models are trained from different initializations. T2-T4 are held out from fitting, although all five frames are used to define the common interior field of view. [Source: Experimental surrogate manuscript, §3, PDF pp. 8-9]
 
-The experiment-trained model uses the same interface representation, candidate-update target, and squared-error loss defined in Section 5.1; for this training pair, \(t=0\) and \(t+1=1\) correspond to T0 and T1. The mathematical operator is unchanged, while the grain-ID fields supplying \(S_i^{(t)}\) and \(y_{ij}^{(t)}\) now come from curated measurements rather than MF simulation.
+The experiment-trained model uses the same interface representation, candidate-update target, and squared-error loss defined in the simulation-trained 3D-PRIMME formulation above; for this training pair, \(t=0\) and \(t+1=1\) correspond to T0 and T1. The mathematical operator is unchanged, while the grain-ID fields supplying \(S_i^{(t)}\) and \(y_{ij}^{(t)}\) now come from curated measurements rather than MF simulation.
 
 This design establishes direct-training feasibility. It does not yet establish spatial generalization because all fitting samples come from one window, nor complete temporal independence because later frames contribute to the common-volume definition.
 
-## 8.3 Stable preliminary results
+## 3.3 Stable preliminary results
 
 The learned rollouts remain visually coherent over the experimental window. Large grains grow, small grains disappear, boundaries flatten, and only a short-lived single-voxel speckle artifact is reported. Early aggregate coarsening is also reproduced: after one rollout step, the representative prediction retains 1,624 grains compared with 1,609 in experiment. The prediction then diverges as the experiment slows between T3 and T4 while the fixed two-hour learned operator maintains a steadier rate. The manuscript does not establish a continuous-time calibration. [Source: Experimental surrogate manuscript, §4, Figs. 2-3, PDF pp. 9-11]
 
@@ -384,7 +374,7 @@ Topology reveals a clear current limitation. At rollout steps paired with the he
 
 Curation strongly suppresses artificial translation. Mean per-step drift across the three models is approximately \((-0.02,+0.13,-0.09)\) voxels along \((x,y,z)\), compared with approximately 3.5 voxels per step for uncurated labels. The residual direction is consistent with the known rotational shear, which demonstrates why directional diagnostics must accompany aggregate accuracy. A 100-step extrapolation remains numerically stable and decreases monotonically to 38 grains, but this long rollout has no experimental reference and is not treated as physical validation. [Source: Experimental surrogate manuscript, §4, Table 1, PDF pp. 14-15]
 
-## 8.4 What the preliminary work establishes
+## 3.4 Remaining gap motivating the proposed aims
 
 The stable results establish that:
 
@@ -407,11 +397,11 @@ These limitations directly define Aim 1.
 
 ---
 
-# 9. Proposed Aims
+# 4. Proposed Research: Specific Aims
 
 The remaining research is organized by scientific dependency rather than by manuscript. Aim 1 establishes when experimental learning is trustworthy. Aim 2 evaluates each learned operator against its own reference domain. Aim 3 will interpret only relationships that survive those reliability tests.
 
-## 9.1 Aim 1: Establish reliable and generalizable learning from sparse 4D experiments
+## 4.1 Aim 1: Establish reliable and generalizable learning from sparse 4D experiments
 
 **Status:** Single-window results are stable preliminary evidence; multi-window analysis is ongoing; core reliability and empirical uncertainty analysis are proposed.
 
@@ -507,7 +497,7 @@ If only a small number of windows passes the curation criteria, claims will be l
 
 ---
 
-## 9.2 Aim 2: Validate simulation-trained and experiment-trained surrogates against their respective reference domains
+## 4.2 Aim 2: Validate simulation-trained and experiment-trained surrogates against their respective reference domains
 
 **Status:** PROPOSED FUTURE WORK
 
@@ -620,7 +610,7 @@ If cross-pair synthesis is not defensible, the two validation conclusions will b
 
 ---
 
-## 9.3 Aim 3: Interpret experimentally learned evolution rules and test candidate physical mechanisms
+## 4.3 Aim 3: Interpret experimentally learned evolution rules and test candidate physical mechanisms
 
 **Status:** FORMAL PROPOSED AIM; DETAILS DEFERRED BY AUTHOR
 
@@ -678,9 +668,7 @@ If a unique physical attribution cannot be supported, Aim 3 will report stable m
 
 Until the existing Aim 3 material is supplied, these subsections remain intentional placeholders. Drafting of the rest of the proposal may proceed, but detailed methods and mechanism claims will be completed before final proposal submission or defense.
 
----
-
-# 10. Integration Across Aims
+## 4.4 Dependency and integration across aims
 
 The three aims form a dependency chain rather than three parallel projects.
 
@@ -697,21 +685,21 @@ The program is efficient because the same local architecture, data representatio
 
 ---
 
-# 11. Expected Contributions
+# 5. Expected Outcomes, Contributions, and Scientific Impact
 
-## 11.1 Simulation-physics contribution
+## 5.1 Simulation-physics contribution
 
 The completed neighborhood work establishes a controllable link between stochastic neighborhood geometry and effective inclination response. It provides a framework for diagnosing lattice pinning and for generating simulation labels controlled with respect to selected inclination-dependent artifacts. The contribution is specific: it improves understanding and control of the simulation teacher without claiming universal material fidelity.
 
-## 11.2 Computational contribution
+## 5.2 Computational contribution
 
 3D-PRIMME establishes that a local three-dimensional neural operator can learn major features of controlled MF evolution from limited temporal supervision and apply the learned rule across substantially larger spatial domains and long rollouts. The completed work provides an architecture and validation framework that can be reused with both simulation and experimental grain-ID maps.
 
-## 11.3 Experimentally grounded learning contribution
+## 5.3 Experimentally grounded learning contribution
 
 The ongoing and proposed work will define when sparse 4D experimental maps can serve as trustworthy supervision. The contribution includes label-preserving curation, grouped experimental validation, empirical uncertainty and sensitivity assessment, and an explicit domain of applicability. This shifts the focus from whether a model can fit one experimental transition to when its rollouts can be used scientifically.
 
-## 11.4 Source-aware validation contribution
+## 5.4 Source-aware validation contribution
 
 Aim 2 will formalize two distinct validation statements:
 
@@ -720,13 +708,15 @@ Aim 2 will formalize two distinct validation statements:
 
 This paired structure prevents performance in one domain from being used as evidence in another and avoids conflating direct simulation-experiment differences with surrogate approximation.
 
-## 11.5 Physical-science contribution
+## 5.5 Physical-science contribution
 
 After Aim 3 material is incorporated, the final contribution will be stated at the strongest level justified by the evidence: stable model interpretation, physical attribution, or candidate mechanism testing. The proposal will not equate local architecture with interpretability or predictive agreement with mechanism discovery.
 
 ---
 
-# 12. Timeline
+# 6. Research Timeline and Dissertation Plan
+
+## 6.1 Research timeline and scope control
 
 The schedule is planned backward from the May 2027 completion target. Research and writing overlap so that the dissertation is not postponed until all analysis is complete.
 
@@ -745,9 +735,7 @@ To protect the core scope, the schedule prioritizes the minimum multi-window Aim
 | April 2027 | Integrate aims, limitations, contributions, and conclusions | Full revision and committee feedback | Are all claims consistent with achieved evidence? |
 | May 2027 | Complete final analyses, formatting, submission, and defense preparation | Final dissertation and manuscript package | Completion |
 
----
-
-# 13. Expected Dissertation Chapters
+## 6.2 Expected dissertation chapters
 
 The dissertation will use a seven-chapter structure that follows the causal program while avoiding unnecessary separation of the current experimental manuscript from its multi-window extension.
 
@@ -767,7 +755,7 @@ Each chapter will state the assumption it controls or removes, the evidence it c
 
 ---
 
-# 14. Conclusion
+# 7. Conclusion
 
 Reliable learning of grain-growth dynamics requires more than a high-capacity model. The physical content of simulation labels must first be understood; a simulation-trained surrogate must be evaluated as a representation of its simulation teacher; experimental labels must be curated without erasing their uncertainty; and an experiment-trained operator must be validated across meaningful data partitions before its responses are interpreted physically.
 
@@ -779,7 +767,7 @@ The dissertation's central contribution will be a source-aware framework for mes
 
 ---
 
-# Items to resolve during revision
+## Working notes: Items to resolve during revision
 
 1. Proposal format, page limit, required headings, and citation style. `[AUTHOR INPUT REQUIRED]`
 2. External literature for grain-growth physics, diffraction imaging, uncertainty calibration, and scientific interpretability. `[NEEDS LITERATURE SUPPORT]`
@@ -791,7 +779,7 @@ The dissertation's central contribution will be a source-aware framework for mes
 
 ---
 
-# Source Manuscripts Used in This Draft
+## Working notes: Source manuscripts used in this draft
 
 1. *Neighborhood-Driven Anisotropy and Lattice Pinning in Stochastic Grain-Growth Models* — completed prior work.
 2. *A Physics-Regulated Neural Framework for Learning 3D Grain Growth Dynamics* (3D-PRIMME) — completed prior work; manuscript under review.

@@ -732,6 +732,8 @@ The schedule is planned backward from the May 2027 completion target. Research a
 
 To protect the core scope, the schedule prioritizes the minimum multi-window Aim 1 analysis, preserves both Aim 2 paired validations, and bases Aim 3 on existing work and validated outputs. External datasets, new materials, broad architecture sweeps, and full probabilistic calibration remain optional and will be deferred before any core analysis is reduced.
 
+*Proposed research, writing, and decision timeline toward the May 2027 completion target.*
+
 | Period | Primary research activity | Writing and deliverable | Decision point |
 |---|---|---|---|
 | August-September 2026 | Complete multi-window selection, curation, registration, linkage, and Aim 1 partition design | Draft introduction, background, and completed foundations | Are enough windows of acceptable quality available? |
@@ -748,6 +750,8 @@ To protect the core scope, the schedule prioritizes the minimum multi-window Aim
 # 13. Expected Dissertation Chapters
 
 The dissertation will use a seven-chapter structure that follows the causal program while avoiding unnecessary separation of the current experimental manuscript from its multi-window extension.
+
+*Provisional dissertation chapter structure, scientific role, and current maturity.*
 
 | Chapter | Working title | Role | Maturity |
 |---|---|---|---|

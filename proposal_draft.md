@@ -668,9 +668,21 @@ Prediction alone does not establish physical understanding. The neighborhood stu
 
 Multiscale 3D-PRIMME models with observation windows \(7^3\), \(9^3\), and \(11^3\) were compared with matched single-scale models across ten training seeds. The multiscale model produced the lowest error in the simulated mean-squared grain-radius trajectory (\(11.76\pm1.93\), compared with \(13.39\)--\(22.19\) for the single-scale models) while matching the best voxel-level accuracy (\(0.842\pm0.015\)). Relative \(L_1\) norms of the learned scale-mixing blocks consistently assigned greater weight to smaller observation windows, with diminishing contributions from larger and closely spaced windows. Increasing the prediction gap from one to four frames shifted weight slightly toward larger windows, but the change was less than three percentage points. These results support the feasibility of scale attribution while also showing that raw mixer weights must be paired with functional ablations before they are interpreted physically.
 
+![Multiscale r-squared trajectories](figures/aim3_multiscale_r2_vs_step.png)
+
+![Learned scale-mixer weights](figures/aim3_scale_mixer_weights.png)
+
+*Existing simulation-domain results used directly for input-side interpretability. The trajectory figure compares the MF reference with single- and multiscale model ensembles over 100 rollout steps. The mixer-weight figure shows relative \(L_1\) attribution across two multiscale configurations. Mixer norms are not treated as physical causal effects without functional ablation.*
+
 #### Output-side response probing
 
 Exploratory analyses of the simulation-trained operator provide three complementary response measurements. First, model confidence exhibits a U-shaped association with a local curvature proxy at two-grain boundaries: confidence is lowest near a locally flat interface and increases for more strongly concave or convex configurations. This pattern is obscured when triple-junction voxels are pooled with two-grain boundaries, demonstrating that topology must be explicitly stratified. Second, the mean \(9^3\) action-likelihood field is compact, centered to within \(0.16\) voxel, and accurately summarized by a three-dimensional Gaussian with per-voxel fitting error below \(0.01\). Third, a full input–output Jacobian pipeline was verified against an analytic symmetric function to machine precision. The analysis exposed a storage-axis bias introduced by the padding implementation; assigning each training sample a uniformly selected cubic-group transformation removed the systematic bias without changing validation loss. In the symmetry-controlled model, the aggregate sensitivity contains a center dip, a nearest-neighbor ring, and an approximately isotropic decay, while each directional output preferentially responds to the input in its own direction. These findings are physically suggestive response signatures, not proof that a unique physical mechanism has been recovered.
+
+![Central slices of total full-Jacobian input sensitivity](figures/aim3_total_input_sensitivity_slices.png)
+
+![Shell-averaged radial Jacobian profile and candidate fits](figures/aim3_jacobian_radial_fit.png)
+
+*Existing full-Jacobian results used directly for output-side response probing. The central slices show approximately symmetric sensitivity with a center dip and stronger nearest-neighbor response. The radial plot compares exploratory candidate fits; no fitted form is treated as a finalized physical law.*
 
 ### Proposed methodology
 
@@ -847,7 +859,7 @@ The dissertation's central contribution will be a source-aware framework for mes
 3. Exact number and placement of additional experimental windows. `[AUTHOR INPUT REQUIRED]`
 4. Aim 1 partition design, replicate budget, and prospective pass/fail thresholds. `[AUTHOR INPUT REQUIRED]` `[NEEDS QUANTITATIVE CRITERION]`
 5. Final Aim 2 reference trajectories, replicate policy, and any supplemental metrics. `[AUTHOR INPUT REQUIRED]`
-6. Final selection and proposal-quality re-layout of the Aim 3 preliminary figures, including the multiscale attribution and Jacobian-response results.
+6. Final Aim 3 experimental-transfer dataset, descriptor availability, and prespecified map-similarity and attribution thresholds.
 7. Exact proposal, committee, dissertation, and defense deadlines within the May 2027 target. `[AUTHOR INPUT REQUIRED]`
 
 ---

@@ -739,6 +739,8 @@ A scale-resolved and spatially resolved account of how reliable experiment-train
 
 ### Aim 3 visual and table plan
 
+- **Aim 3 preliminary figure A:** Existing input-side results: multiscale \(\langle r^2\rangle\) trajectories and learned scale-mixer weights.
+- **Aim 3 preliminary figure B:** Existing output-side results: full-Jacobian central slices and the shell-averaged radial sensitivity profile.
 - **Core Figure 7:** Two-branch interpretation workflow: multiscale inputs \(\rightarrow\) scale attribution; local outputs \(\rightarrow\) action field and Jacobian; both converge on geometry-controlled testing.
 - **Core Table 6:** Interpretation evidence matrix listing response, physical descriptor, reproducibility check, independent test, and claim ceiling.
 
@@ -983,7 +985,7 @@ The outline is complete enough to support drafting. The following inputs can be 
 - Aim 2 no longer requires a common experimental \(T_0\) or a direct \(S\)-versus-\(E\) trajectory comparison.
 - Aim 3 transfers the audited interpretation methods to reliable experiment-trained models and records explicit evidence gates.
 - The chapter plan is consolidated from eight to seven chapters.
-- The current prose draft includes nine source-derived figures from the three manuscripts; additional original diagrams remain optional.
+- The current prose draft includes nine source-derived figures from the three manuscripts plus four original synthesis or preliminary-result figures, including the two Aim 3 interpretation figures.
 - Schedule drop rules protect the May 2027 completion target.
 - The causal sequence is explicit throughout.
 - The schedule is backward-planned to May 2027.

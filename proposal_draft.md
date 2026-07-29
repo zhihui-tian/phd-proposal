@@ -676,7 +676,26 @@ Multiscale 3D-PRIMME models with observation windows \(7^3\), \(9^3\), and \(11^
 
 #### Output-side response probing
 
-Exploratory analyses of the simulation-trained operator provide three complementary response measurements. First, model confidence exhibits a U-shaped association with a local curvature proxy at two-grain boundaries: confidence is lowest near a locally flat interface and increases for more strongly concave or convex configurations. This pattern is obscured when triple-junction voxels are pooled with two-grain boundaries, demonstrating that topology must be explicitly stratified. Second, the mean \(9^3\) action-likelihood field is compact, centered to within \(0.16\) voxel, and accurately summarized by a three-dimensional Gaussian with per-voxel fitting error below \(0.01\). Third, a full input–output Jacobian pipeline was verified against an analytic symmetric function to machine precision. The analysis exposed a storage-axis bias introduced by the padding implementation; assigning each training sample a uniformly selected cubic-group transformation removed the systematic bias without changing validation loss. In the symmetry-controlled model, the aggregate sensitivity contains a center dip, a nearest-neighbor ring, and an approximately isotropic decay, while each directional output preferentially responds to the input in its own direction. These findings are physically suggestive response signatures, not proof that a unique physical mechanism has been recovered.
+Exploratory analyses of the simulation-trained operator provide three complementary response measurements: curvature-conditioned confidence, the spatial distribution of action likelihood, and full-Jacobian sensitivity.
+
+##### Curvature-conditioned confidence
+
+For boundary voxel \(i\), the current local curvature proxy is
+
+\[
+c_i=\sum_{j\in\mathcal{N}_{3\times3\times3}(i)\setminus i}
+\mathbb{I}\!\left[g_j\neq g_i\right],
+\]
+
+the number of neighboring voxels whose grain identity differs from the center. The model response is summarized by the maximum predicted transition score \(q_i=\max_m p_i(m)\) and by output entropy. For neighborhoods containing exactly two grain identities, \(q_i\) decreases toward the locally flat-interface proxy \(c_i\approx13\) and increases again for more strongly concave or convex configurations. Entropy shows the complementary trend. Including or excluding the center action makes no visible difference because \(99.97\%\) of sampled boundary voxels select a neighboring identity. Pooling two-grain boundaries with higher-order junctions obscures the U-shaped response; junction neighborhoods constitute approximately \(65\%\) of boundary voxels in this test. This supports a topology-conditioned association with a discrete curvature proxy, not direct recovery of a continuum curvature law.
+
+![Working curvature-response placeholder](figures/aim3_curvature_response_placeholder.png)
+
+*Working placeholder. The plotted Setting 2 analysis uses two-grain-boundary neighborhoods. The stored image header incorrectly says “all boundary voxels” and will be replaced. Shading denotes voxel-level standard deviation, not uncertainty of the mean.*
+
+##### Action-field and full-Jacobian structure
+
+The mean \(9^3\) action-likelihood field is compact, centered to within \(0.16\) voxel, and accurately summarized by a three-dimensional Gaussian with per-voxel fitting error below \(0.01\). A full input–output Jacobian pipeline was verified against an analytic symmetric function to machine precision. The analysis exposed a storage-axis bias introduced by the padding implementation; assigning each training sample a uniformly selected cubic-group transformation removed the systematic bias without changing validation loss. In the symmetry-controlled model, the aggregate sensitivity contains a center dip, a nearest-neighbor ring, and an approximately isotropic decay, while each directional output preferentially responds to the input in its own direction. These findings are physically suggestive response signatures, not proof that a unique physical mechanism has been recovered.
 
 ![Central slices of total full-Jacobian input sensitivity](figures/aim3_total_input_sensitivity_slices.png)
 
@@ -860,7 +879,8 @@ The dissertation's central contribution will be a source-aware framework for mes
 4. Aim 1 partition design, replicate budget, and prospective pass/fail thresholds. `[AUTHOR INPUT REQUIRED]` `[NEEDS QUANTITATIVE CRITERION]`
 5. Final Aim 2 reference trajectories, replicate policy, and any supplemental metrics. `[AUTHOR INPUT REQUIRED]`
 6. Final Aim 3 experimental-transfer dataset, descriptor availability, and prespecified map-similarity and attribution thresholds.
-7. Exact proposal, committee, dissertation, and defense deadlines within the May 2027 target. `[AUTHOR INPUT REQUIRED]`
+7. Replacement of the Aim 3 curvature-response placeholder with the corrected two-grain-boundary figure and final uncertainty/count annotations.
+8. Exact proposal, committee, dissertation, and defense deadlines within the May 2027 target. `[AUTHOR INPUT REQUIRED]`
 
 ---
 

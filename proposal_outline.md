@@ -740,7 +740,8 @@ A scale-resolved and spatially resolved account of how reliable experiment-train
 ### Aim 3 visual and table plan
 
 - **Aim 3 preliminary figure A:** Existing input-side results: multiscale \(\langle r^2\rangle\) trajectories and learned scale-mixer weights.
-- **Aim 3 preliminary figure B:** Existing output-side results: full-Jacobian central slices and the shell-averaged radial sensitivity profile.
+- **Aim 3 preliminary figure B:** Working curvature-conditioned confidence placeholder; replace the incorrect ``all boundary voxels'' header with the final two-grain-boundary version.
+- **Aim 3 preliminary figure C:** Existing output-side results: full-Jacobian central slices and the shell-averaged radial sensitivity profile.
 - **Core Figure 7:** Two-branch interpretation workflow: multiscale inputs \(\rightarrow\) scale attribution; local outputs \(\rightarrow\) action field and Jacobian; both converge on geometry-controlled testing.
 - **Core Table 6:** Interpretation evidence matrix listing response, physical descriptor, reproducibility check, independent test, and claim ceiling.
 

@@ -41,7 +41,7 @@ The proposal must present this as one causal research program. It must not read 
 |---|---|---|
 | Aim 1. Reliable and generalizable learning from sparse 4D experiments | Under what data-curation, training, and validation conditions can an experiment-trained surrogate be trusted? | Stable single-window preliminary results; multi-window analysis ongoing; core empirical uncertainty/generalization work proposed |
 | Aim 2. Paired validation in simulation and experiment | How faithfully does each surrogate reproduce its own reference domain: \(S\) versus \(\hat{S}\), and \(E\) versus \(\hat{E}\)? | Proposed future work |
-| Aim 3. Interpretation of experimentally learned evolution rules | Which reliable learned relationships have physical meaning and can support candidate mechanism claims? | Formal proposed aim; detailed content deferred until existing Aim 3 work is supplied |
+| Aim 3. Input- and output-side interpretation of experimentally learned evolution rules | Which spatial information does the reliable experiment-trained operator use, and how is it converted into local evolution decisions? | Simulation-domain method development and preliminary evidence completed; experimental transfer proposed |
 
 ## Recommended narrative balance
 
@@ -75,11 +75,11 @@ Exact page allocations depend on the program's proposal format. `[AUTHOR INPUT R
 4. **Learning Mesoscale Grain-Growth Rules Across Simulation and Experiment**
 
 - **Purpose:** Provide title options with different emphasis.
-- **Central argument:** Titles 2-4 emphasize the established simulation-to-experiment sequence; Title 1 should be selected only after Aim 3 evidence is incorporated.
+- **Central argument:** Titles 2-4 emphasize the established simulation-to-experiment sequence; Title 1 is now supported by the incorporated Aim 3 method-development evidence.
 - **Manuscript evidence:** Same cross-manuscript sequence as §1.1.
-- **Proposed future content:** Update the preferred title after Aim 3 materials are reviewed.
+- **Proposed future content:** Revisit the preferred title after the Aim 3 experimental transfer determines the final claim level.
 - **Expected visual:** None.
-- **Missing information:** Final emphasis of Aim 3. `[AUTHOR INPUT REQUIRED]`
+- **Missing information:** Final achieved Aim 3 claim level after experimental validation.
 
 ---
 
@@ -121,7 +121,7 @@ The final abstract should be written only after the body is stable. At outline s
 - **Manuscript evidence:** Curation, direct training, replicate results, held-out distributions, topology, grain kinetics, and drift. [Source: Experimental surrogate manuscript, §§2-5, Figs. 1-6 and Table 1, PDF pp. 3-17]
 - **Proposed future content:** One sentence per aim.
 - **Expected visual:** None.
-- **Missing information:** Aim 3-specific language after new materials are supplied. `[AUTHOR INPUT REQUIRED]`
+- **Proposed future content:** Input-side scale attribution, output-side response probing, and the evidence ladder from model interpretation to physical attribution.
 
 ## Expected contribution
 
@@ -130,7 +130,7 @@ The final abstract should be written only after the body is stable. At outline s
 - **Manuscript evidence:** Cross-manuscript synthesis.
 - **Proposed future content:** Final phrasing should match achieved Aim 3 scope.
 - **Expected visual:** None.
-- **Missing information:** Final Aim 3 deliverables. `[AUTHOR INPUT REQUIRED]`
+- **Proposed future content:** State the final Aim 3 claim at the strongest evidentiary level supported by the experimental transfer.
 
 ---
 
@@ -161,7 +161,7 @@ The final abstract should be written only after the body is stable. At outline s
 - **Manuscript evidence:** Full cross-manuscript sequence. [Source: Neighborhood manuscript, Conclusions, PDF pp. 15-17; 3D-PRIMME manuscript, Conclusion, PDF p. 15; Experimental surrogate manuscript, Introduction and Discussion, PDF pp. 1-3 and 15-17]
 - **Proposed future content:** Aims 1-3.
 - **Expected visual:** **Figure 1C**, the proposal's main causal roadmap.
-- **Missing information:** Aim 3 evidence to complete the last arrow. `[AUTHOR INPUT REQUIRED]`
+- **Proposed future content:** Use the multiscale attribution and full-Jacobian studies to complete the final interpretation arrow.
 
 ## 1.4 Overarching question and central hypothesis
 
@@ -391,7 +391,7 @@ The final abstract should be written only after the body is stable. At outline s
 - **Manuscript evidence:** Cross-manuscript synthesis and experimental limitations.
 - **Proposed future content:** Aims 1-3 below.
 - **Expected visual:** Fold the three-aim dependency diagram into **Core Figure 1**, the causal research roadmap.
-- **Missing information:** Aim 3 details. `[AUTHOR INPUT REQUIRED]`
+- **Proposed future content:** Input-side scale attribution and output-side response/Jacobian probing, applied only after the Aim 1-2 reliability gates.
 
 ## 4.1 Aim 1 - Establish reliable and generalizable learning from sparse 4D experiments
 
@@ -657,93 +657,90 @@ A paired fidelity map showing what the simulation-trained surrogate reproduces f
 
 `[AUTHOR INPUT REQUIRED]` and `[NEEDS QUANTITATIVE CRITERION]`
 
-## 4.3 Aim 3 - Interpret learned experimental evolution rules and test candidate physical mechanisms
+## 4.3 Aim 3 - Interpret experimentally learned evolution rules through input- and output-side probing
 
-**Status:** FORMAL PROPOSED AIM; DETAILS DEFERRED BY AUTHOR
+**Status:** PROPOSED AIM WITH COMPLETED SIMULATION-DOMAIN METHOD DEVELOPMENT
 
 ### Scientific question
 
-Which physically meaningful factors are represented in experimentally learned local evolution rules, and how can those relationships be distinguished from model- or dataset-specific correlations?
+Which spatial information does a reliable experiment-trained operator use, how is that information transformed into local evolution decisions, and which response signatures can be related reproducibly to measurable grain-boundary geometry?
 
-### Provisional hypothesis
+### Hypothesis
 
-Reliable differences and dependencies identified in the experimentally trained operator can be related to measurable microstructural factors and tested as candidate explanations for experimentally observed grain-growth dynamics.
+Reliable local operators will exhibit a reproducible hierarchy of spatial information and a localized, symmetry-consistent response structure. Short-range neighborhoods will carry the dominant transition information, while additional spatial scales will improve trajectory-level fidelity. After numerical artifacts are controlled, scale dependence and output sensitivities that reproduce across experimental windows will be associated with curvature, topology, and inclination descriptors.
 
 ### Rationale
 
-Aim 1 establishes that the experimental operator is trustworthy within a defined domain. Aim 2 determines which behaviors the simulation-trained and experiment-trained operators reproduce from their respective reference domains. Only relationships that pass the relevant paired validation can then be interpreted as potentially physical.
+Aim 1 establishes the domain in which the experiment-trained operator is trustworthy, and Aim 2 determines which behaviors it reproduces from experiment. Aim 3 then interrogates that validated operator from two complementary directions: input-side analysis asks which spatial scales are used, and output-side analysis asks how perturbations of those inputs change the predicted transition field. Simulation-trained models provide controlled method-development and bias-detection cases rather than substitutes for experimental interpretation.
 
-### Current evidence
+### Completed preliminary evidence
 
-- local neighborhood changes produce measurable macroscopic anisotropy in controlled simulation; [Source: Neighborhood manuscript, §§5-6, PDF pp. 10-16]
-- 3D-PRIMME learns prescribed inclination dependence; [Source: 3D-PRIMME manuscript, §3.5, PDF pp. 10-13]
-- experiment-trained models provide a measured-data operator for interrogation. [Source: Experimental surrogate manuscript, §§3-5, PDF pp. 8-17]
-- additional Aim 3 work exists but has not yet been supplied. `[AUTHOR INPUT REQUIRED]`
+- **Input side:** Across ten seeds, a multiscale \(7^3/9^3/11^3\) model improves the simulated grain-radius trajectory relative to matched single-scale models while preserving voxel accuracy. Scale-mixer norms emphasize smaller windows, with diminishing contributions from larger and closely spaced windows. A longer prediction gap produces a small shift toward larger scales.
+- **Output side:** Model confidence has a U-shaped association with a curvature proxy at two-grain boundaries but not when triple junctions are pooled into the same population. Mean action fields are compact and centered. A full \(729\times729\) input–output Jacobian pipeline is verified against an analytic symmetric function to machine precision.
+- **Interpretability audit:** Jacobian probing revealed a storage-axis bias caused by the padding implementation. Cubic-group sample symmetrization removes the systematic bias without changing validation loss. The corrected model exhibits a center dip, a nearest-neighbor sensitivity ring, approximately isotropic decay, and direction-specific input–output routing.
+- These results establish feasible interpretation tools and physically suggestive signatures; they do not yet establish an experimental mechanism.
 
 ### Proposed methodology
 
-To be specified after the existing Aim 3 work is reviewed. The final design must keep three evidentiary levels separate:
+#### Aim 3A: Input-side scale attribution
 
-1. model interpretation;
-2. physical attribution;
-3. candidate mechanism testing.
+- Train matched single-scale and multiscale experiment-based models for Aim 1-eligible windows.
+- Summarize scale-mixer importance by \(I_s=\lVert W_s\rVert_1/\sum_r\lVert W_r\rVert_1\).
+- Test parameter-based rankings through scale removal, scale masking, and matched single-scale performance.
+- Evaluate stability across model initializations, experimental windows, and prediction horizons.
 
-When Aim 3 is expanded for the final proposal, the supplied materials should make the following items explicit:
+#### Aim 3B: Output-side response probing
 
-| Required item | Question that must be answerable |
-|---|---|
-| Model response | What output, sensitivity, latent quantity, or learned relationship is being interpreted? |
-| Physical variable(s) | Which measurable descriptors are proposed to explain that response? |
-| Unit of analysis | Is the test conducted at voxel, boundary, grain, neighborhood, window, or trajectory level? |
-| Intervention/comparison | What controlled perturbation, matched group, ablation, or counterfactual distinguishes explanation from correlation? |
-| Reproducibility | Does the result persist across model replicates, windows, thresholds, or relevant data splits? |
-| Independent test | Which held-out data, simulation control, or prospective comparison can falsify the interpretation? |
-| Claim ceiling | Does the evidence support model interpretation, physical attribution, or only a candidate mechanism? |
+- Compute confidence and entropy as functions of curvature proxy and boundary topology, separating two-grain boundaries from higher-order junctions.
+- Summarize mean action-likelihood fields to measure response center, width, and anisotropy.
+- Compute the full Jacobian \(J_i(m,n)=\partial p_i(m)/\partial K_i(n)\), ensemble absolute sensitivity, total input sensitivity, signed means, and sign agreement.
+- Quantify spatial range, symmetry, center-versus-neighbor structure, and directional routing.
 
-Until these questions can be answered, Aim 3 remains in the dissertation architecture as a high-level placeholder without detailed methods or mechanism claims.
+#### Aim 3C: Evidence control and physical attribution
+
+- Reproduce the pipeline on controlled isotropic and prescribed-anisotropy simulations.
+- Audit cubic rotations/reflections, axis permutations, padding choices, sample size, and model replicates before interpreting experimental asymmetry.
+- Apply the audited pipeline to reliable experiment-trained models.
+- Advance a signature from model interpretation to physical attribution only when it reproduces across eligible windows and models, aligns with a measurable descriptor after appropriate geometric stratification, and survives a held-out or controlled test.
+- Require an additional falsifiable prediction or intervention before making a candidate mechanism claim.
 
 ### Required data
 
-Validated outputs from Aims 1-2 plus the author's existing Aim 3 analyses and any required microstructural descriptors. `[AUTHOR INPUT REQUIRED]`
+- existing multiscale and Jacobian simulation studies;
+- symmetry-controlled simulation checkpoints;
+- reliable experiment-trained checkpoints and held-out predictions from Aims 1-2;
+- local neighborhood, curvature-proxy, topology, and inclination descriptors derived from registered grain-ID volumes.
 
-### Quantitative validation criteria
+### Validation criteria
 
-To be defined after the Aim 3 evidence and available validation data are reviewed. `[NEEDS QUANTITATIVE CRITERION]`
+- report replicate- or bootstrap-based uncertainty for all interpretation summaries;
+- require agreement between scale-mixer ranking and at least one functional scale ablation;
+- require output signatures to be stable to sample size, aggregation choice, cubic coordinate transformations, and eligible-window partition;
+- require consistent effect direction and held-out or controlled replication for physical attribution;
+- freeze exact map-similarity and descriptor-effect tolerances after Aim 1 defines the eligible windows and before the final Aim 3 comparison.
 
 ### Expected outcome
 
-A defensible physical interpretation of experimentally learned evolution rules and a set of testable candidate explanations for observed grain-growth behavior.
+A scale-resolved and spatially resolved account of how reliable experiment-trained models convert local microstructure into evolution decisions, with each finding assigned explicitly to model interpretation, physical attribution, or candidate mechanism testing.
 
-### Risks
+### Risks and alternatives
 
-To be refined after existing work is incorporated. At a minimum, the outline should consider non-unique attribution, measurement resolution, correlation among physical descriptors, and sensitivity to model/data choices. `[AUTHOR INPUT REQUIRED]`
-
-### Alternative strategies
-
-To be refined after existing work is incorporated. A valid alternative outcome is to establish stable model interpretation without escalating to a mechanism claim.
+- If mixer weights are unstable, use scale ablation and matched single-scale performance as the primary input-side evidence.
+- If voxel-level Jacobians are noisy, aggregate by radial shell, direction, boundary class, or grain.
+- If experimental curvature or inclination is resolution-limited, use controlled simulation tests to establish the claim ceiling.
+- If no unique physical attribution survives, report validated model interpretation without escalating to mechanism discovery.
 
 ### Deliverables
 
-- validated interpretation framework;
-- physically grounded analysis of learned experimental rules;
+- reproducible scale-attribution results for simulation- and experiment-trained operators;
+- symmetry-audited action-field and full-Jacobian maps;
+- an evidence matrix separating interpretation, attribution, and mechanism testing;
 - dissertation chapter/manuscript on interpretable experimental grain-growth learning.
 
 ### Aim 3 visual and table plan
 
-- **Core Figure 7:** Provisional interpretation ladder and outcome decision tree: model response -> physical attribution -> candidate mechanism test.
-- **Core Table 6:** Aim 3 testability and evidence matrix, to be completed after the existing work is reviewed.
-
-### Missing information
-
-- existing Aim 3 data, analyses, figures, and conclusions;
-- physical variables available in the experimental dataset;
-- controlled validation strategy;
-- quantitative attribution/mechanism criteria;
-- realistic Aim 3 scope before May 2027.
-
-`[AUTHOR INPUT REQUIRED]`
-
-**Deferral rule:** Drafting of the other proposal sections may proceed now. Aim 3 should remain a concise placeholder and should be expanded after the author supplies the existing work; its detailed methods and mechanism claims must be resolved before the final proposal is submitted or defended.
+- **Core Figure 7:** Two-branch interpretation workflow: multiscale inputs \(\rightarrow\) scale attribution; local outputs \(\rightarrow\) action field and Jacobian; both converge on geometry-controlled testing.
+- **Core Table 6:** Interpretation evidence matrix listing response, physical descriptor, reproducibility check, independent test, and claim ceiling.
 
 ---
 
@@ -814,10 +811,10 @@ To be refined after existing work is incorporated. A valid alternative outcome i
 
 - **Purpose:** State the longer-term scientific value without overclaiming.
 - **Central argument:** Validated experimental operators and pair-specific fidelity analysis create a defensible basis for identifying physically meaningful dependencies in measured grain evolution.
-- **Manuscript evidence:** Foundations only; detailed support pending Aim 3 material.
+- **Manuscript evidence:** Controlled simulation foundations plus the completed multiscale and full-Jacobian method-development studies.
 - **Proposed future content:** Aim 3.
 - **Expected visual:** Reference Core Figure 7.
-- **Missing information:** Aim 3 evidence. `[AUTHOR INPUT REQUIRED]`
+- **Proposed future content:** Transfer the audited interpretation pipeline to Aim 1-eligible experiment-trained models.
 
 ---
 
@@ -841,7 +838,7 @@ To be refined after existing work is incorporated. A valid alternative outcome i
 | Dec 2026 | Complete Aim 1 uncertainty/domain-of-applicability analysis; freeze evaluation pipeline | Finalize Aim 1 figures/tables and manuscript outline | Is the experimental operator reliable enough for paired Aim 2 validation? |
 | Jan-Feb 2027 | Assemble \(S\)-\(\hat{S}\) and \(E\)-\(\hat{E}\) trajectories and freeze pair-specific metrics | Draft Aim 2 methods and paired benchmark section | Are both comparisons defined against their respective references? |
 | Mar 2027 | Complete both paired fidelity analyses | Finalize Aim 2 figures/tables; draft chapter/manuscript | Which metrics pass or fail in each pair? |
-| Feb-Apr 2027, overlapping | Incorporate existing Aim 3 work; complete minimum viable interpretation analysis | Draft Aim 3 chapter and synthesis | Is the attribution claim supported at model, physical, or mechanism level? |
+| Feb-Apr 2027, overlapping | Transfer input-side scale attribution and output-side response probing to reliable experiment-trained models | Complete Aim 3 figures, evidence matrix, and synthesis | Which signatures support model interpretation, physical attribution, or a candidate mechanism? |
 | Apr 2027 | Integrate aims, limitations, contributions, and conclusions | Full dissertation/proposal revision; committee feedback | Are all claims consistent with achieved evidence? |
 | May 2027 | Final analyses, formatting, submission, and defense preparation | Final dissertation/manuscript package | Completion |
 
@@ -855,10 +852,10 @@ This schedule is intentionally front-loaded toward Aim 1 because Aim 2 and Aim 3
 - **Proposed future content:**
   - Core Aim 1: multiple windows within the current volume.
   - Core Aim 2: one documented simulation-reference pair and one documented experimental-reference pair.
-  - Core Aim 3: use existing work plus validated outputs from Aims 1-2.
+  - Core Aim 3: transfer the existing multiscale and Jacobian methods to validated outputs from Aims 1-2.
   - Optional extensions: external dataset, additional materials, extensive neighborhood sweeps.
 - **Expected visual:** **Core Table 8**, core versus optional work, shared resources, and schedule protection.
-- **Missing information:** Minimum number of windows and Aim 3 minimum viable deliverable. `[AUTHOR INPUT REQUIRED]`
+- **Missing information:** Minimum number of experimental windows and model replicates that will constitute the Aim 3 eligible set. `[AUTHOR INPUT REQUIRED]`
 
 ### Schedule drop rules
 
@@ -867,7 +864,7 @@ This schedule is intentionally front-loaded toward Aim 1 because Aim 2 and Aim 3
 3. If full probabilistic uncertainty calibration is not supported, report empirical variability, sensitivity, and a domain-of-applicability rule.
 4. If the two pairs do not support the same metrics, preserve the strongest valid pair-specific assessments and limit cross-pair synthesis to the common subset.
 5. If either surrogate fails its prespecified within-domain criteria, report that failure and do not substitute the other pair's performance.
-6. Restrict Aim 3 to the author's existing work and validated outputs from Aims 1-2; do not make completion depend on a new experimental campaign.
+6. Restrict Aim 3 to the existing multiscale/Jacobian methods and validated outputs from Aims 1-2; do not make completion depend on a new experimental campaign.
 
 ---
 
@@ -882,7 +879,7 @@ This schedule is intentionally front-loaded toward Aim 1 because Aim 2 and Aim 3
 | 3 | A Physics-Regulated Neural Framework for Learning 3D Grain-Growth Dynamics | Establish scalable local surrogate learning | Completed prior work; under review |
 | 4 | Experimentally Grounded Learning: Curation, Direct Training, and Cross-Window Reliability | Stable single-window evidence plus Aim 1 multi-window reliability | Ongoing work; stable preliminary results and proposed extensions |
 | 5 | Domain-Specific Validation of Simulation-Trained and Experiment-Trained Surrogates | Aim 2 paired comparisons | Proposed |
-| 6 | Physical Interpretation of Experimentally Learned Evolution Rules | Aim 3 | Formal placeholder; details to be supplied later |
+| 6 | Input- and Output-Side Interpretation of Experimentally Learned Evolution Rules | Aim 3 | Method development completed; experimental application proposed |
 | 7 | Integrated Conclusions and Future Directions | Cross-aim synthesis and limitations | To be written |
 
 - **Purpose:** Show how manuscripts and aims become one dissertation.
@@ -915,7 +912,7 @@ This schedule is intentionally front-loaded toward Aim 1 because Aim 2 and Aim 3
 - **Manuscript evidence:** Neighborhood control, 3D-PRIMME scalability, and stable direct experimental training. [Source: Neighborhood manuscript, Conclusions, PDF pp. 15-17; 3D-PRIMME manuscript, Conclusion, PDF p. 15; Experimental surrogate manuscript, §5, PDF pp. 15-17]
 - **Proposed future content:** Summarize expected Aim 1 reliability, Aim 2 paired validation, and Aim 3 interpretation.
 - **Expected visual:** None; optionally reuse the causal roadmap in miniature.
-- **Missing information:** Final achieved Aim 3 claim. `[AUTHOR INPUT REQUIRED]`
+- **Proposed future content:** Revise the final claim to the achieved level: model interpretation, physical attribution, or candidate mechanism.
 
 ## 7.2 Final dissertation-level contribution statement
 
@@ -958,7 +955,7 @@ The earlier section-level visual labels are panel candidates, not separate requi
 
 # Author Inputs Required During Drafting and Before Finalization
 
-The outline is complete enough to support drafting. The following inputs can be resolved during drafting; Aim 3 details and final claim thresholds must be completed before submission or defense:
+The outline is complete enough to support drafting. The following inputs can be resolved during drafting; final claim thresholds must be completed before submission or defense:
 
 1. Proposal format, page limit, and required headings.
 2. Preferred title and application emphasis.
@@ -967,7 +964,7 @@ The outline is complete enough to support drafting. The following inputs can be 
 5. Aim 1 train/test partition across windows and time pairs.
 6. Compute budget for replicate models.
 7. Final Aim 2 simulation and experimental reference trajectories and replicate policy; any supplemental metrics may be added later.
-8. Existing Aim 3 manuscript, analyses, figures, conclusions, and independent validation design.
+8. Final Aim 3 figure selection, experimental descriptor availability, and exact independent-validation tolerances.
 9. Exact dissertation, manuscript, committee, and defense deadlines before May 2027.
 10. Prospective quantitative success thresholds.
 
@@ -981,10 +978,10 @@ The outline is complete enough to support drafting. The following inputs can be 
 - Multi-window analysis is identified as ongoing work in Aim 1.
 - Generalization and uncertainty are integrated into Aim 1.
 - Aim 2 uses the locked pairing: \(S\) versus \(\hat{S}\), and \(E\) versus \(\hat{E}\).
-- Aim 3 remains a formal aim without invented details.
+- Aim 3 incorporates the supplied multiscale input-side and Jacobian/output-side studies as simulation-domain preliminary evidence.
 - Aim 1 is separated into core empirical reliability work and optional probabilistic/external extensions.
 - Aim 2 no longer requires a common experimental \(T_0\) or a direct \(S\)-versus-\(E\) trajectory comparison.
-- Aim 3 remains a formal placeholder that can be completed later; its eventual testability requirements are recorded.
+- Aim 3 transfers the audited interpretation methods to reliable experiment-trained models and records explicit evidence gates.
 - The chapter plan is consolidated from eight to seven chapters.
 - The current prose draft includes nine source-derived figures from the three manuscripts; additional original diagrams remain optional.
 - Schedule drop rules protect the May 2027 completion target.

@@ -523,6 +523,13 @@ The learned rollouts remain visually coherent over the experimental window. Larg
 \label{fig:experimental-rollout}
 \end{figure}
 
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.98\textwidth]{figures/experiment_metric_coarsening.pdf}
+\caption{Experimental and experiment-trained coarsening trajectories. Left: mean squared grain radius. Right: number of grains larger than eight voxels. Three independently trained replicates are compared with experimental states T0--T4. Extracted as vector artwork from Fig.~3 of the Experimental surrogate manuscript.}
+\label{fig:experimental-coarsening}
+\end{figure}
+
 Normalized grain-size distributions show encouraging held-out agreement. For normalized radius \(z=R/\langle R\rangle\), the reported two-sample Kolmogorov-Smirnov statistic is
 
 \begin{equation}
@@ -538,13 +545,27 @@ D_{\mathrm{KS}}
 
 where \(\widehat{F}_{E}\) and \(\widehat{F}_{\widehat{E}}\) are the empirical cumulative distributions for the experimental reference and the experiment-trained rollout at matched grain count. Across three later states and three model replicates, reported \(D_{\mathrm{KS}}\) values range from 0.071 to 0.095. When analysis is restricted to grains larger than the approximately \(20\,\mu\text{m}\) experimental confidence limit, the values decrease to 0.025-0.059. Because the experiment slows, all later frames are paired with rollout step 2 under the matched-grain-count analysis. These comparisons support distribution-shape consistency but do not identify a unique local rule~\cite{tian2026experiment}.
 
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.98\textwidth]{figures/experiment_metric_size_distribution.pdf}
+\caption{Normalized grain-size distributions at matched grain count. Left: the trained state T1. Right: the T2 held-out state with the largest reported Kolmogorov--Smirnov distance. The experimental distribution is compared with three independent model replicates. Extracted as vector artwork from Fig.~4 of the Experimental surrogate manuscript.}
+\label{fig:experimental-size-distribution}
+\end{figure}
+
 Topology reveals a clear current limitation. At rollout steps paired with the held-out states, predicted face counts remain above the experimental band. The draft associates this difference with the transient arg-max speckle and sensitivity to small grains. Individual-grain analysis is feasible only where identity linkage remains sufficiently reliable: growth/shrinkage sign accuracy is 72-73\% on the training interval and 62-63\% on the usable T2-to-T3 held-out interval, with regression slopes of 0.78 and 0.57, respectively. The model therefore captures part of the direction of grain evolution while underpredicting its magnitude~\cite{tian2026experiment}.
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=0.98\textwidth]{figures/experiment_metrics_summary_relayout.png}
-\caption{Multilevel experimental evaluation: (a) coarsening trajectory, (b) normalized grain-size distributions, (c) faces per grain, and (d) linked grain-by-grain volume change. The panels retain both favorable results and current limitations. Adapted from Figs.~3--6 of the Experimental surrogate manuscript.}
-\label{fig:experimental-metrics}
+\includegraphics[width=0.98\textwidth]{figures/experiment_metric_topology.pdf}
+\caption{Mean faces per grain during the experiment-trained rollout. The gray band gives the range across the five experimental states; all three predicted trajectories remain above this range at the steps paired with held-out measurements. Extracted as vector artwork from Fig.~5 of the Experimental surrogate manuscript.}
+\label{fig:experimental-topology}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.98\textwidth]{figures/experiment_metric_grain_response.pdf}
+\caption{Linked grain-by-grain volume change for the T0-to-T1 training interval (left) and the usable T2-to-T3 held-out interval (right). Shaded quadrants indicate correct growth/shrinkage sign; dashed lines show ideal agreement and red lines show least-squares fits. Extracted as vector artwork from Fig.~6 of the Experimental surrogate manuscript.}
+\label{fig:experimental-grain-response}
 \end{figure}
 
 Curation strongly suppresses artificial translation. Mean per-step drift across the three models is approximately \((-0.02,+0.13,-0.09)\) voxels along \((x,y,z)\), compared with approximately 3.5 voxels per step for uncurated labels. The residual direction is consistent with the known rotational shear, which demonstrates why directional diagnostics must accompany aggregate accuracy. A 100-step extrapolation remains numerically stable and decreases monotonically to 38 grains, but this long rollout has no experimental reference and is not treated as physical validation~\cite{tian2026experiment}.

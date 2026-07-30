@@ -9,10 +9,15 @@
 *.fdb_latexmk
 *.fls
 *.log
+*.lof
+*.lot
+*.loa
 *.out
 *.run.xml
 *.synctex.gz
 *.toc
+main.pdf
+proposal_draft.pdf
 
 # Source manuscripts remain local
 3D_PRIMME_submission.pdf

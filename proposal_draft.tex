@@ -953,7 +953,7 @@ where \(g_i\) is the grain identity at the center voxel. The model response is s
 \end{figure}
 
 \paragraph{Action-field and full-Jacobian structure.}
-The mean \(9^3\) action-likelihood field is compact, centered to within \(0.16\) voxel, and accurately summarized by a three-dimensional Gaussian with per-voxel fitting error below \(0.01\). A full input--output Jacobian pipeline was then verified against an analytic symmetric function to machine precision. The analysis exposed a storage-axis bias introduced by the padding implementation; assigning each training sample a uniformly selected cubic-group transformation removed the systematic bias without changing validation loss. In the symmetry-controlled model, the aggregate sensitivity contains a center dip, a nearest-neighbor ring, and an approximately isotropic decay (Figure~\ref{fig:aim3-output-prelim}), while each directional output preferentially responds to the input in its own direction.
+The mean \(9^3\) action-likelihood field is compact, centered to within \(0.16\) voxel, and accurately summarized by a three-dimensional Gaussian with per-voxel fitting error below \(0.01\). A full input--output Jacobian pipeline was then verified against an analytic symmetric function to machine precision. The analysis exposed a storage-axis bias introduced by the padding implementation; assigning each training sample a uniformly selected cubic-group transformation removed the systematic bias without changing validation loss. In the symmetry-controlled model, the aggregate sensitivity contains a center dip, a nearest-neighbor ring, and an approximately isotropic decay (Figures~\ref{fig:aim3-jacobian-render} and~\ref{fig:aim3-output-prelim}), while each directional output preferentially responds to the input in its own direction.
 
 Let \(S(r)\) denote the shell mean of the voxelwise total sensitivity \(S(n)\) at distance \(r\) from the neighborhood center. This radial sensitivity is currently represented by a Shell-Gauss+\(C\) candidate model,
 \[
@@ -975,7 +975,26 @@ S(r)=
 \exp\!\left[-\frac{r^2}{2(1.75)^2}\right]
 +0.011.
 \]
-The first term describes a sensitivity shell centered at approximately one voxel, the second describes a broader short-range background, and \(C\) represents the nonzero long-range tail. The fit uses shell means over the radial domain while excluding the eight corner voxels at \(r\approx6.93\). It is treated as the latest candidate summary of the learned response, not as a finalized physical law. Collectively, these findings are physically suggestive response signatures, not proof that a unique physical mechanism has been recovered.
+The first term describes a sensitivity shell centered at approximately one voxel, the second describes a broader short-range background, and \(C\) represents the nonzero long-range tail. The fit uses shell means over the radial domain while excluding the eight corner voxels at \(r\approx6.93\). Figure~\ref{fig:aim3-jacobian-render} keeps the distinction between the measured aggregate Jacobian and its radial approximation explicit: the former is computed directly from network derivatives, whereas the latter is a smooth post-hoc representation of that response. The fit is treated as the latest candidate summary of the learned response, not as an independently learned kernel or a finalized physical law. Collectively, these findings are physically suggestive response signatures, not proof that a unique physical mechanism has been recovered.
+
+\begin{figure}[htbp]
+\centering
+\begin{minipage}[t]{0.49\textwidth}
+\centering
+\includegraphics[width=\linewidth,trim=250 0 250 0,clip]{figures/aim3_jacobian_actual_render.png}
+
+\small (a) Network-derived aggregate Jacobian sensitivity
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.49\textwidth}
+\centering
+\includegraphics[width=\linewidth,trim=250 0 250 0,clip]{figures/aim3_jacobian_shellgauss_c_render.png}
+
+\small (b) Radial Shell-Gauss+\(C\) approximation
+\end{minipage}
+\caption{Three-dimensional comparison of the learned operator's output-side response and its compact radial approximation. (a) The aggregate sensitivity is computed directly from the mean absolute full Jacobian and summed over all 729 output positions; it retains voxel-scale deviations from perfect radial symmetry. (b) The Shell-Gauss+\(C\) function is fitted to radial shell means and evaluated on the same \(9^3\) grid; it enforces a smooth isotropic response while preserving the nearest-neighbor shell, broader short-range component, and nonzero tail. The right panel is a post-hoc summary of the left panel, not a second independently learned kernel.}
+\label{fig:aim3-jacobian-render}
+\end{figure}
 
 \begin{figure}[htbp]
 \centering

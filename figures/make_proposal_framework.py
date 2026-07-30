@@ -306,7 +306,7 @@ def build():
         132,
         "Aim 1",
         "Establish reliable experimental learning",
-        "Cross-window generalization, uncertainty, and applicability limits",
+        "Spatial reproducibility, baselines, and applicability limits",
     )
     draw_aim_gate(c, 119)
 
@@ -316,8 +316,8 @@ def build():
         160,
         72,
         "Aim 2",
-        "Quantify domain-specific surrogate fidelity",
-        "Paired reference and trained evolution within each domain",
+        "Establish source-aware metric comparability",
+        "Paired fidelity within simulation and experiment",
     )
     draw_aim_gate(c, 59)
 
@@ -327,8 +327,8 @@ def build():
         160,
         12,
         "Aim 3",
-        "Interpret learned evolution mechanisms",
-        "Robust rules tested against independent physical evidence",
+        "Interpret experimentally learned evolution rules",
+        "Validated responses advance toward physical attribution",
     )
 
     c.showPage()

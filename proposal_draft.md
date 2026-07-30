@@ -695,7 +695,33 @@ the number of neighboring voxels whose grain identity differs from the center. T
 
 ##### Action-field and full-Jacobian structure
 
-The mean \(9^3\) action-likelihood field is compact, centered to within \(0.16\) voxel, and accurately summarized by a three-dimensional Gaussian with per-voxel fitting error below \(0.01\). A full input–output Jacobian pipeline was verified against an analytic symmetric function to machine precision. The analysis exposed a storage-axis bias introduced by the padding implementation; assigning each training sample a uniformly selected cubic-group transformation removed the systematic bias without changing validation loss. In the symmetry-controlled model, the aggregate sensitivity contains a center dip, a nearest-neighbor ring, and an approximately isotropic decay, while each directional output preferentially responds to the input in its own direction. These findings are physically suggestive response signatures, not proof that a unique physical mechanism has been recovered.
+The mean \(9^3\) action-likelihood field is compact, centered to within \(0.16\) voxel, and accurately summarized by a three-dimensional Gaussian with per-voxel fitting error below \(0.01\). A full input–output Jacobian pipeline was verified against an analytic symmetric function to machine precision. The analysis exposed a storage-axis bias introduced by the padding implementation; assigning each training sample a uniformly selected cubic-group transformation removed the systematic bias without changing validation loss. In the symmetry-controlled model, the aggregate sensitivity contains a center dip, a nearest-neighbor ring, and an approximately isotropic decay, while each directional output preferentially responds to the input in its own direction.
+
+Let \(S(r)\) denote the shell mean of the voxelwise total sensitivity \(S(n)\) at distance \(r\) from the neighborhood center. This radial sensitivity is currently represented by the Shell-Gauss+\(C\) candidate model
+
+\[
+S(r)=
+A_{\mathrm{shell}}
+\exp\!\left[-\frac{(r-r_0)^2}{2\sigma_{\mathrm{shell}}^2}\right]
++
+A_{\mathrm{bg}}
+\exp\!\left[-\frac{r^2}{2\sigma_{\mathrm{bg}}^2}\right]
++C.
+\]
+
+The fitted expression is
+
+\[
+S(r)=
+0.032
+\exp\!\left[-\frac{(r-0.98)^2}{2(0.67)^2}\right]
++
+0.022
+\exp\!\left[-\frac{r^2}{2(1.75)^2}\right]
++0.011.
+\]
+
+The first term describes a sensitivity shell centered at approximately one voxel, the second describes a broader short-range background, and \(C\) represents the nonzero long-range tail. The fit uses shell means while excluding the eight corner voxels at \(r\approx6.93\). It is treated as the latest candidate summary of the learned response, not as a finalized physical law. These findings are physically suggestive response signatures, not proof that a unique physical mechanism has been recovered.
 
 ![Central slices of total full-Jacobian input sensitivity](figures/aim3_total_input_sensitivity_slices.png)
 

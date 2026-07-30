@@ -12,6 +12,7 @@
 \usepackage{enumitem}
 \usepackage{microtype}
 \usepackage{bookmark}
+\usepackage{rotating}
 \usepackage{xurl}
 \makeatletter
 % The UF class reads the main auxiliary file before bookmark activates its
@@ -313,12 +314,12 @@ Y_\vartheta\!\left(S_i^{(t)},S_j^{(t)}\right)
 
 Boundary-centered patches are extracted, and the trained network maps each local representation to candidate grain-identity update scores within the action window. Local predictions are assembled into the next global grain-ID map, and the operator is then applied autoregressively. Because the observation and action windows have fixed size, the learned operator is not tied to the global training-volume dimensions~\cite{tian2026threeDprimme}.
 
-\begin{figure}[htbp]
+\begin{sidewaysfigure}[p]
 \centering
-\includegraphics[alt={3D-PRIMME workflow from local grain-ID patches to autoregressive microstructure prediction},width=\textwidth]{figures/primme_workflow.png}
+\includegraphics[alt={3D-PRIMME workflow from local grain-ID patches to autoregressive microstructure prediction},width=0.96\textheight]{figures/primme_workflow.png}
 \caption{3D-PRIMME workflow: local patch construction from the grain-ID field, learning of local evolution scores, and autoregressive reconstruction of the global predicted microstructure. Adapted from Fig.~1 of the 3D-PRIMME manuscript.}
 \label{fig:primme-workflow}
-\end{figure}
+\end{sidewaysfigure}
 
 Training and evaluation use three-dimensional MF data. The reported dataset contains 200 isotropic sequences and a corresponding set of inclination-dependent sequences. Each sequence starts from a different 512-grain Voronoi structure in a \(100^3\)-voxel volume and evolves for 100 simulation steps, while a training set uses only two consecutive states from one or more sequences. For the inclination-dependent data, the Gaussian sampling covariance is
 

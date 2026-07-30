@@ -374,9 +374,14 @@ The distinction between training support and inference scale is central to 3D-PR
 
 The visual coarsening in Fig.~\ref{fig:primme-extrapolation} is accompanied by quantitative collapse across domain sizes. The tested scales exhibit closely overlapping squared-mean-radius trajectories, topological evolution, and normalized radius distributions at matched coarsening states. A \(1024^3\) rollout remains statistically stable for 100 steps, by which point 41,674 grains, or 7.6\% of the initial population, remain~\cite{tian2026threeDprimme}.
 
-\begin{figure}[htbp]
+\begin{figure}[p]
 \centering
-\includegraphics[alt={Kinetic, topological, grain-count, and grain-size statistics across three simulation domain sizes},width=0.78\textwidth]{figures/primme_spatial_scaling.png}
+\includegraphics[
+  alt={Kinetic, topological, grain-count, and grain-size statistics across three simulation domain sizes},
+  width=\textwidth,
+  height=0.80\textheight,
+  keepaspectratio
+]{figures/primme_spatial_scaling.png}
 \caption{Statistical consistency of 3D-PRIMME rollouts across \(256^3\), \(512^3\), and \(1024^3\) domains, including coarsening kinetics, topology, grain-count decay, and normalized grain-size distributions. Adapted from Fig.~5 of the 3D-PRIMME manuscript.}
 \label{fig:primme-scaling}
 \end{figure}

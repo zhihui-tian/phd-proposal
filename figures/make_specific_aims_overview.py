@@ -106,27 +106,22 @@ def draw_aim2_schematic(c, x, y):
     c.setFillColor(INK)
     c.setFont("Helvetica-Bold", 8.5)
 
-    c.drawCentredString(x + 6, y + 33, "S")
-    draw_hat_label(c, x + 90, y + 33, "S", TEAL)
-    draw_arrow(c, x + 16, y + 36, x + 79, TEAL)
-
-    c.drawCentredString(x + 6, y + 7, "E")
-    draw_hat_label(c, x + 90, y + 7, "E", TEAL)
-    draw_arrow(c, x + 16, y + 10, x + 79, TEAL)
+    c.drawCentredString(x + 6, y + 24, "E")
+    draw_hat_label(c, x + 90, y + 24, "E", TEAL)
+    draw_arrow(c, x + 16, y + 27, x + 79, TEAL)
 
     c.setStrokeColor(LINE)
     c.setLineWidth(0.55)
-    c.line(x + 22, y + 29, x + 22, y + 43)
-    c.line(x + 22, y + 29, x + 72, y + 29)
-    c.line(x + 22, y + 3, x + 22, y + 17)
-    c.line(x + 22, y + 3, x + 72, y + 3)
-
-    c.setStrokeColor(BLUE)
-    c.setLineWidth(1.0)
-    c.bezier(x + 24, y + 33, x + 38, y + 48, x + 54, y + 25, x + 70, y + 39)
+    c.line(x + 22, y + 20, x + 22, y + 34)
+    c.line(x + 22, y + 20, x + 72, y + 20)
 
     c.setStrokeColor(TEAL)
-    c.bezier(x + 24, y + 7, x + 39, y + 20, x + 53, y - 1, x + 70, y + 12)
+    c.setLineWidth(1.0)
+    c.bezier(x + 24, y + 24, x + 39, y + 37, x + 53, y + 16, x + 70, y + 29)
+
+    c.setFont("Helvetica", 6.2)
+    c.setFillColor(MUTED)
+    c.drawCentredString(x + 48, y + 7, "training-blind partition")
 
 
 def draw_aim3_schematic(c, x, y):
@@ -196,8 +191,8 @@ def build():
         text_x,
         row_y[1],
         "Aim 2",
-        "Establish source-aware metric comparability",
-        "Observation-rule perturbations and paired-fidelity synthesis",
+        "Validate rollout on unseen experimental partitions",
+        "Frozen definitions, null baselines, pass/partial/fail adjudication",
     )
 
     draw_gate(c, 93)
@@ -208,7 +203,7 @@ def build():
         text_x,
         row_y[2],
         "Aim 3",
-        "Interpret experimentally learned evolution rules",
+        "Interpretability and physics learning",
         "Validated responses advance toward physical attribution",
     )
 

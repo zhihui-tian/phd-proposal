@@ -782,7 +782,14 @@ Scientific claim & Feasibility of direct experimental training & Spatial reprodu
 
 \subsection{Proposed methodology}
 
-\textbf{1. Quantify window feasibility before model comparison.} The full reconstruction is \(549\times149\times211\) voxels and candidate windows are selected at \(100^3\) voxels before trimming. Table~\ref{tab:window-geometry} gives the geometric support available for window placement. Because the \(y\) extent is only 149 voxels, any two \(100\)-voxel candidate windows must overlap by at least 51 voxels in \(y\). The absolute packing bound is ten mutually non-overlapping \(100^3\) windows, and no partition can be described as independent merely because it contains a different window origin. The actual candidate stride, overlap graph, quality distribution, and admissible-window count will be recorded before the partition design is frozen.
+\textbf{1. Quantify window feasibility before model comparison.} The full reconstruction is \(549\times149\times211\) voxels and candidate windows are selected at \(100^3\) voxels before trimming. Figure~\ref{fig:aim1-support} shows the resulting support, spatial and temporal, and Table~\ref{tab:window-geometry} gives the per-axis arithmetic behind it. Because the \(y\) extent is only 149 voxels, any two \(100\)-voxel candidate windows must overlap by at least 51 voxels in \(y\). The absolute packing bound is ten mutually non-overlapping \(100^3\) windows, and no partition can be described as independent merely because it contains a different window origin. The actual candidate stride, overlap graph, quality distribution, and admissible-window count will be recorded before the partition design is frozen.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[alt={Spatial packing limit and temporal state sequence available in the single reconstructed volume},width=\textwidth]{figures/aim1_support.png}
+\caption{Support available in the one reconstructed volume, which bounds what Aim 1 can claim. Left: the \(x\)--\(z\) face admits at most ten mutually non-overlapping candidate windows, and the 149-voxel \(y\) extent admits only one, so no two candidate windows can be independent along that axis. The currently curated window, trimmed in place to \(100\times95\times84\) voxels, ranked 15th among 831 candidate placements under the residual-driven objective. Right: five measured states give four two-hour intervals, of which one supplied every training sample and the remainder were held out. Aim 1 is the work of extending beyond that single field of view and single interval.}
+\label{fig:aim1-support}
+\end{figure}
 
 \begin{table}[htbp]
 \centering
@@ -1230,9 +1237,9 @@ Several decisions are deliberately left open until the underlying measurement is
 
 \item \textbf{Window admissibility.} The candidate-window stride, overlap graph, and quality distribution will determine how many windows survive curation, and therefore what spatial design Aim 1 can support. Is a within-volume reproducibility result acceptable if only three or four windows qualify?
 
-\item \textbf{Aim 1 thresholds.} Partition design, replicate budget, and prospective pass/fail thresholds will be fixed once the admissible-window count is known. \texttt{[NEEDS QUANTITATIVE CRITERION]}
+\item \textbf{Aim 1 thresholds.} Partition design, replicate budget, and prospective pass/fail thresholds will be fixed once the admissible-window count is known.
 
-\item \textbf{Aim 2 freeze.} The evaluated partition, per-family tolerances, uncertainty estimator, effective-time policy, and the protocol-freeze date all need to be recorded before unblinding. \texttt{[NEEDS QUANTITATIVE CRITERION]}
+\item \textbf{Aim 2 freeze.} The evaluated partition, per-family tolerances, uncertainty estimator, effective-time policy, and the protocol-freeze date all need to be recorded before unblinding.
 
 \item \textbf{Aim 3 escalation.} What evidence would the committee require before a reproducible response signature is reported as physical attribution rather than model behavior?
 

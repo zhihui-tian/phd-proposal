@@ -816,22 +816,31 @@ Scientific claim & Feasibility of direct experimental training & Spatial reprodu
 
 \textbf{5. Train replicate local operators under fixed definitions.} The core architecture, observation/action windows, optimizer settings, readout, and replicate policy will be held fixed for the primary comparison. Broad architecture or hyperparameter sweeps are optional and will not displace the multi-window analysis.
 
-\textbf{6. Establish the experimental Level 1--2 reliability matrix.} Aim 1 owns the experimental evidence gates at both levels of Table~\ref{tab:evidence-ladder}. The canonical metric families are defined once in Table~\ref{tab:aim1-reliability-matrix}; Aim 2 imports it without rebuilding it.
+\textbf{6. Establish the experimental Level 1--2 reliability matrix.} Aim 1 owns the experimental evidence gates at both levels of Table~\ref{tab:evidence-ladder}. The canonical metric families, their evidence levels, and their null baselines are defined once in Table~\ref{tab:aim1-reliability-matrix} and are not redefined anywhere else in this proposal.
+
+The matrix separates two kinds of evidence. Five families are stated as one measured quantity against one frozen null, which is what a single-shot adjudication requires, and these are the families Aim 2 carries into the training-blind test. Two further blocks, curation integrity and reproducibility, are established in Aim 1 alone. Both are estimated by examining the same data repeatedly, across curation choices, windows, and model replicates, so neither can be adjudicated by a test that permits one look. They gate which operators and partitions become eligible for Aim 2 instead of being scored by it.
 
 \begin{table}[htbp]
 \centering
-\caption{Canonical experimental reliability matrix established in Aim 1.}
+\caption{Canonical experimental reliability matrix established in Aim 1. The five adjudicable families are carried unchanged into the Aim 2 training-blind evaluation together with the null baselines listed here. The two Aim 1-only blocks require repeated examination of the same data, so they gate eligibility for Aim 2 instead of being adjudicated by it.}
 \label{tab:aim1-reliability-matrix}
 \small
-\begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}p{0.11\textwidth}>{\raggedright\arraybackslash}p{0.24\textwidth}>{\raggedright\arraybackslash}X@{}}
+\begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}p{0.17\textwidth}>{\raggedright\arraybackslash}p{0.06\textwidth}X>{\raggedright\arraybackslash}p{0.24\textwidth}@{}}
 \toprule
-\textbf{Level} & \textbf{Evidence block} & \textbf{Outputs} \\
+\textbf{Family} & \textbf{Level} & \textbf{Measured quantity} & \textbf{Frozen null baseline} \\
 \midrule
-1 & Label and field integrity & registration residual, rigid drift, visual morphology, and coherent-artifact diagnostics \\
-2 & Population evolution & grain count and \(\langle R\rangle^2\) trajectories; normalized grain-size distributions with detection-limit sensitivity \\
-2 & Topology/morphology & face-count behavior, boundary morphology, and sensitivity to readout, speckle, and small-grain definitions \\
-2 & Individual-grain response & growth/shrinkage sign and magnitude where linkage supports identities \\
-1--2 & Reproducibility & between-model, between-window, and grouped-block variability across spatial and temporal partitions \\
+\multicolumn{4}{@{}l}{\emph{Adjudicable in Aim 2}}\\
+\addlinespace[2pt]
+Morphology & 1--2 & voxel overlap and boundary discrepancy against the measured state; coherent-artifact diagnostics & no-change persistence rollout \\
+Kinetics & 2 & grain count and \(\langle R\rangle^2\) trajectories; directional rigid drift & persistence rollout; uncurated-drift reference \\
+Size distribution & 2 & normalized grain-size distribution discrepancy, with detection-limit sensitivity & unchanged empirical distribution \\
+Topology & 2 & average face count and linkage-consistent neighbor change & readout-, speckle-, and small-grain-perturbed recomputation \\
+Individual-grain response & 2 & growth/shrinkage sign and magnitude where linkage supports identities & majority growth/shrinkage class \\
+\addlinespace[3pt]
+\multicolumn{4}{@{}l}{\emph{Aim 1 only}}\\
+\addlinespace[2pt]
+Curation integrity & 1 & registration residual by axis, unmatched boundary fraction, linkage yield, retained volume & curated versus uncurated comparison \\
+Reproducibility & 1--2 & between-model, between-window, and grouped-block variability across spatial and temporal partitions & not applicable \\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -846,7 +855,7 @@ Scientific claim & Feasibility of direct experimental training & Spatial reprodu
 
 \subsection{Validation criteria and expected outcome}
 
-The primary success criterion is reproducibility across prespecified experimental partitions, not performance in one favorable window. The metric families are those in Table~\ref{tab:aim1-reliability-matrix}; validation applies the following cross-cutting rules without introducing a second metric catalogue:
+The primary success criterion is reproducibility across prespecified experimental partitions, not performance in one favorable window. The metric families and their nulls are those of Table~\ref{tab:aim1-reliability-matrix}; validation applies the following cross-cutting rules without introducing a second catalogue:
 
 \begin{itemize}
 
@@ -893,29 +902,11 @@ The preliminary evidence listed under Aim 1 already exercises every step this ev
 
 Aim 1 and Aim 2 evaluate the same metric families but occupy different evidentiary roles, and that separation is what allows an Aim 2 outcome to be reported as system validation instead of one more diagnostic. Aim 1 is exploratory and definitional. It may examine the available volume repeatedly in order to establish Level 1--2 integrity, quantify variability across windows, model initializations, and curation choices, select null and readout baselines, and fix tolerances. Its product is the frozen reliability matrix of Table~\ref{tab:aim1-reliability-matrix}, together with the set of experimental partitions and metric families that are eligible to support a formal claim.
 
-Aim 2 is confirmatory. It imports those definitions without modification and applies them once to a prespecified partition that has contributed to neither training nor model selection. After that partition is examined, no threshold, null, readout rule, metric definition, or model choice may be revised. Aim 2 does not construct a second metric catalogue and does not re-adjudicate the Aim 1 evidence gates; it determines only whether an eligible operator survives a single training-blind test.
+Aim 2 is confirmatory. It imports those definitions without modification and applies them once to a prespecified partition that has contributed to neither training nor model selection. After that partition is examined, no threshold, null, readout rule, metric definition, or model choice may be revised. Aim 2 constructs no second metric catalogue and does not re-adjudicate the Aim 1 evidence gates; it determines only whether an eligible operator survives a single training-blind test.
 
 \subsection{Proposed methodology}
 
-The five metric families in Table~\ref{tab:aim2-validation-protocol} are those already defined in Table~\ref{tab:aim1-reliability-matrix}. Each is carried into Aim 2 together with the null baseline frozen for it in Aim 1.
-
-\begin{table}[htbp]
-\centering
-\caption{Aim 2 validation protocol. Metric families and null baselines are imported from the Aim 1 reliability matrix without modification and applied once to a training-blind experimental partition.}
-\label{tab:aim2-validation-protocol}
-\small
-\begin{tabularx}{\textwidth}{@{}*{3}{>{\raggedright\arraybackslash}X}@{}}
-\toprule
-\textbf{Metric family} & \textbf{Held-out evidence} & \textbf{Frozen null baseline} \\
-\midrule
-Morphology & voxel overlap and boundary discrepancy against the measured state & no-change persistence rollout \\
-Kinetics & grain count, \(\langle R\rangle^2\), and directional rollout drift & persistence rollout; uncurated-drift reference \\
-Size distributions & normalized grain-radius distribution discrepancy & unchanged empirical distribution \\
-Topology & average face count and linkage-consistent neighbor change & readout-, speckle-, and small-grain-perturbed recomputation \\
-Local behavior & individual-grain transition consistency where linkage permits & majority growth/shrinkage class \\
-\bottomrule
-\end{tabularx}
-\end{table}
+Aim 2 evaluates the five adjudicable families of Table~\ref{tab:aim1-reliability-matrix}, each with the measured quantity and the null baseline already frozen for it in Aim 1. No family is added, split, renamed, or given a second definition here; the two Aim 1-only blocks, curation integrity and reproducibility, are excluded for the reason given when the matrix was defined. Reproducing that table in this section would invite exactly the drift the freeze is meant to prevent, so it is referenced instead.
 
 \textbf{1. Freeze the evaluation protocol.} Before any held-out partition is examined, the metric definitions, null baselines, readout and linkage conventions, uncertainty estimator, per-family tolerance, and the identity of the evaluated partition will be recorded in a fixed protocol document together with the eligible operators carried forward from Aim 1. Model selection, including replicate selection and any stopping rule, will be completed using Aim 1 material only.
 
@@ -951,9 +942,9 @@ The most likely result is a partial pass in which field morphology, early kineti
 
 \subsection{Risks, alternatives, and deliverables}
 
-\textbf{Risks.} The available volume may not support a partition that is simultaneously training blind and large enough for stable statistics. Aggregate metrics may conceal local failure. The five experimental states may be insufficient for a stable effective-time mapping. Grain linkage may be inadequate for the local-behavior family. Because the evaluation is deliberately single shot, an implementation error discovered after unblinding cannot simply be corrected and re-run without downgrading the claim.
+\textbf{Risks.} The available volume may not support a partition that is simultaneously training blind and large enough for stable statistics. Aggregate metrics may conceal local failure. The five experimental states may be insufficient for a stable effective-time mapping. Grain linkage may be inadequate for the individual-grain response family. Because the evaluation is deliberately single shot, an implementation error discovered after unblinding cannot simply be corrected and re-run without downgrading the claim.
 
-\textbf{Alternative strategies.} If no partition is both training blind and adequately supported, the evaluation will be reported as a blocked within-volume test accompanied by an explicit statement that it is not independent validation. If grain linkage is inadequate, identity-agnostic metrics will replace individual-grain metrics for the local-behavior family. If a family fails, it will be reported as a failure and excluded from Aim 3; no more favorable substitute will take its place.
+\textbf{Alternative strategies.} If no partition is both training blind and adequately supported, the evaluation will be reported as a blocked within-volume test accompanied by an explicit statement that it is not independent validation. If grain linkage is inadequate, identity-agnostic metrics will replace individual-grain metrics for that family. If a family fails, it will be reported as a failure and excluded from Aim 3; no more favorable substitute will take its place.
 
 \textbf{Deliverables.} A prospectively recorded, frozen evaluation protocol; a training-blind validation of experiment-trained rollout across the five metric families, each with its null comparison, uncertainty, and replicate spread; an effective-time support, marker-consistency, and interpolation-sensitivity analysis; a validation matrix recording pass, partial-pass, and fail outcomes with their failure modes; and a dissertation chapter and manuscript on system validation of experiment-trained local grain-growth operators.
 

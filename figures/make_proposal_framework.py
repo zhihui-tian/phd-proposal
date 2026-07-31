@@ -191,43 +191,44 @@ def draw_aim1_schematic(c, x, y):
         c.circle(left + 15, y + 11, 1.4, fill=1, stroke=0)
 
 
-def draw_hat_label(c, x, y, label, color):
-    c.setFillColor(color)
-    c.setFont("Helvetica-Bold", 8.2)
-    c.drawCentredString(x, y, label)
-    c.setStrokeColor(color)
-    c.setLineWidth(0.7)
-    c.line(x - 3, y + 9, x, y + 12)
-    c.line(x, y + 12, x + 3, y + 9)
-
-
 def draw_aim2_schematic(c, x, y):
-    c.setFillColor(INK)
-    c.setFont("Helvetica-Bold", 8.2)
-    c.drawCentredString(x + 4, y + 29, "S")
-    c.drawCentredString(x + 4, y + 5, "E")
-    draw_hat_label(c, x + 80, y + 29, "S", TEAL)
-    draw_hat_label(c, x + 80, y + 5, "E", TEAL)
-
+    # Frozen evaluation protocol: a sealed sheet of metric definitions.
+    c.setFillColor(SOFT_BLUE)
     c.setStrokeColor(LINE)
-    c.setLineWidth(0.55)
-    c.line(x + 16, y + 25, x + 16, y + 38)
-    c.line(x + 16, y + 25, x + 64, y + 25)
-    c.line(x + 16, y + 1, x + 16, y + 14)
-    c.line(x + 16, y + 1, x + 64, y + 1)
+    c.setLineWidth(0.65)
+    c.rect(x, y + 5, 27, 31, fill=1, stroke=1)
+    c.setStrokeColor(MUTED)
+    c.setLineWidth(0.5)
+    for row in (30, 26, 22):
+        c.line(x + 5, y + row, x + 22, y + row)
     c.setStrokeColor(BLUE)
-    c.setLineWidth(1.0)
-    c.bezier(x + 18, y + 29, x + 31, y + 42, x + 45, y + 21, x + 62, y + 34)
-    c.setStrokeColor(TEAL)
-    c.bezier(x + 18, y + 5, x + 31, y + 18, x + 45, y - 3, x + 62, y + 10)
-
-    c.setStrokeColor(LINE)
-    c.line(x + 92, y + 2, x + 92, y + 38)
-    c.line(x + 92, y + 2, x + 115, y + 2)
+    c.setLineWidth(0.8)
+    c.arc(x + 10, y + 13, x + 17, y + 20, 0, 180)
     c.setFillColor(BLUE)
-    c.circle(x + 100, y + 12, 1.6, fill=1, stroke=0)
-    c.setFillColor(TEAL)
-    c.circle(x + 108, y + 22, 1.6, fill=1, stroke=0)
+    c.rect(x + 9, y + 9, 9, 6, fill=1, stroke=0)
+
+    draw_right_arrow(c, x + 33, y + 21, x + 48)
+
+    # Training-blind partition: never seen during training or model selection.
+    c.setStrokeColor(MUTED)
+    c.setLineWidth(0.7)
+    c.setDash(2, 2)
+    c.rect(x + 55, y + 5, 31, 31, fill=0, stroke=1)
+    c.setDash()
+    c.setStrokeColor(LINE)
+    c.setLineWidth(0.5)
+    c.line(x + 55, y + 23, x + 66, y + 16)
+    c.line(x + 66, y + 16, x + 76, y + 20)
+    c.line(x + 76, y + 20, x + 86, y + 10)
+    c.line(x + 66, y + 16, x + 64, y + 5)
+    c.line(x + 76, y + 20, x + 78, y + 36)
+
+    draw_right_arrow(c, x + 92, y + 21, x + 105, TEAL)
+
+    # Single adjudication: pass, partial pass, or fail.
+    for row, width, color in ((30, 14, TEAL), (22, 9, BLUE), (14, 4, LINE)):
+        c.setFillColor(color)
+        c.rect(x + 111, y + row, width, 3.4, fill=1, stroke=0)
 
 
 def draw_aim3_schematic(c, x, y):
@@ -316,8 +317,8 @@ def build():
         160,
         72,
         "Aim 2",
-        "Establish source-aware metric comparability",
-        "Observation-rule perturbations and paired-fidelity synthesis",
+        "Validate rollout on unseen experimental partitions",
+        "Frozen protocol, training-blind test, and per-family adjudication",
     )
     draw_aim_gate(c, 59)
 
@@ -327,7 +328,7 @@ def build():
         160,
         12,
         "Aim 3",
-        "Interpret experimentally learned evolution rules",
+        "Interpretability and physics learning",
         "Validated responses advance toward physical attribution",
     )
 

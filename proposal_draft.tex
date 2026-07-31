@@ -82,7 +82,7 @@ Machine learning does not remove the need to define physical content. A supervis
 
 Physics-based grain-growth models and learned surrogates answer different parts of the local-to-global problem. Monte Carlo and mode-filter methods provide efficient stochastic evolution with explicit control over the local update policy; phase-field methods resolve diffuse-interface evolution from prescribed free-energy and kinetic models; and geometric or topological descriptions expose relations among boundary motion, grain size, and connectivity~\cite{anderson1984kinetics,chen2002phasefield,krill2002phasefield,macpherson2007vonneumann,melville2024modefilter}. These approaches remain essential reference models, but applying them directly to a sparse sequence of categorical experimental grain maps still requires assumptions about constitutive parameters, temporal calibration, boundary conditions, and measurement uncertainty.
 
-Existing machine-learning approaches span phase-field-trained surrogates, local physics-regularized update models, dynamic graph models for three-dimensional microstructures, and high-fidelity deep-learning accelerators~\cite{montes2021surrogate,yan2022primme,qin2024graingnn,tep2025grain}. Their representations offer different tradeoffs. Global fields and graph descriptions can retain broad spatial or grain-level context, whereas a fixed local operator decouples the learned input size from the global inference volume and turns one three-dimensional microstructure into many boundary-centered training examples. The completed 3D-PRIMME work tests this latter hypothesis explicitly through rollout, spatial scaling, topology, and prescribed-anisotropy experiments.
+Existing machine-learning approaches span phase-field-trained surrogates, local physics-regularized update models, dynamic graph models for three-dimensional microstructures, and high-fidelity deep-learning accelerators~\cite{montes2021surrogate,yan2022primme,qin2024graingnn,tep2025grain}. Their representations, supervision, and validation targets differ in concrete ways. The phase-field surrogate of Montes de Oca Zapiain \emph{et al.} evolves a global low-dimensional representation of simulated two-phase spinodal decomposition. The original PRIMME learns two-dimensional Monte-Carlo-Potts neighbor transitions, whereas GrainGNN uses phase-field-labeled, hand-crafted grain/junction graphs to predict three-dimensional epitaxial grain formation. The autoencoder--ConvLSTM model of Tep and Bernacki operates on simulator-generated two-dimensional image sequences and emphasizes image similarity, mean size, distributions, and computational acceleration. In contrast, a fixed three-dimensional local operator decouples the learned input size from the global inference volume, turns one volume into many boundary-centered examples, and can be evaluated through categorical voxel transitions as well as kinetics, topology, morphology, and inclination response. The completed 3D-PRIMME work tests this latter hypothesis explicitly through rollout, spatial scaling, topology, and prescribed-anisotropy experiments.
 
 The dissertation's distinction is therefore not a claim that local learning replaces phase-field, graph, or other surrogate formulations. It is a source-aware program that asks which local rule is present in the labels, whether that rule can be learned and scaled, and what additional evidence is required when the teacher changes from a controlled simulator to sparse 4D measurement. In the experimental setting, curation, grouped validation, null models, and field-level artifact diagnostics become part of the scientific method rather than auxiliary preprocessing.
 
@@ -106,7 +106,7 @@ The question is addressed through a sequence of progressively removed assumption
 
 \item replace simulation labels with curated experimental evolution;
 
-\item determine which observables are comparable across sources and whether each learned operator reproduces its own reference domain;
+\item quantify how experimental observation rules affect comparability and synthesize the two reference-domain fidelity profiles;
 
 \item interpret only those experimentally learned relationships that pass the relevant reliability tests.
 
@@ -159,7 +159,7 @@ The dissertation uses one evidence ladder throughout (Table~\ref{tab:evidence-la
 \textbf{Level} & \textbf{Evidence required} & \textbf{Role in this dissertation} \\
 \midrule
 1 & \textbf{Label and field integrity:} registration, linkage, boundary updates, drift, and coherent-artifact checks & established in curation; extended in Aim 1 \\
-2 & \textbf{Mesoscale predictive fidelity:} kinetics, distributions, topology, morphology, and grain-level response relative to the appropriate reference & established for key simulation outputs; tested for experiment in Aims 1--2 \\
+2 & \textbf{Mesoscale predictive fidelity:} kinetics, distributions, topology, morphology, and grain-level response relative to the appropriate reference & established for key simulation outputs; established for experiment in Aim 1; audited for comparability and synthesized in Aim 2 \\
 3 & \textbf{Stable model interpretation:} reproducible scale attribution and input--output response structure & simulation-domain methods completed; experimental transfer in Aim 3 \\
 4 & \textbf{Physical attribution:} stable model responses associated with measurable physical descriptors under controls & conditional Aim 3 outcome \\
 5 & \textbf{Candidate mechanism:} falsifiable prediction or intervention beyond pattern agreement & enabled but not guaranteed \\
@@ -629,7 +629,7 @@ The stable results establish direct-training feasibility and Level 1 evidence in
 
 \item \textbf{Meaningful experimental baselines and topology diagnostics (Aim 1):} compare model performance with persistence and majority-class nulls and test whether readout, speckle, and small-grain sensitivity account for the observed topology bias.
 
-\item \textbf{Source-aware fidelity and metric comparability (Aim 2):} determine which simulation and experimental observables are directly commensurate, quantify each surrogate relative to its own reference, and test effective-time reparameterization without presenting it as physical-time calibration.
+\item \textbf{Source-aware fidelity and metric comparability (Aim 2):} measure how experimental observation rules alter nominally common metrics, consolidate simulation fidelity, synthesize the Aim 1 experimental profile, and test effective-time reparameterization without presenting it as physical-time calibration.
 
 \item \textbf{Interpretation of reliable learned responses (Aim 3):} transfer symmetry-audited scale and Jacobian analyses to experiment-trained models that pass the preceding evidence gates.
 
@@ -653,7 +653,7 @@ The stable results establish direct-training feasibility and Level 1 evidence in
 
 \chapter{Proposed Research: Specific Aims}
 
-The remaining research is organized by scientific dependency rather than by manuscript. Aim 1 establishes when experimental learning is trustworthy within the available volume. Aim 2 determines which metrics can be compared across sources and evaluates each learned operator against its own reference domain. Aim 3 will interpret only relationships that survive those reliability tests.
+The remaining research is organized by scientific dependency rather than by manuscript. Aim 1 establishes when experimental learning is trustworthy within the available volume. Aim 2 measures metric comparability and places the simulation and experimental reference-domain results in a common source-aware framework. Aim 3 will interpret only relationships that survive the applicable evidence gates.
 
 \begin{figure}[htbp]
 \centering
@@ -740,27 +740,27 @@ Scientific claim & Feasibility of direct experimental training & Spatial reprodu
 
 \textbf{5. Train replicate local operators under fixed definitions.} The core architecture, observation/action windows, optimizer settings, readout, and replicate policy will be held fixed for the primary comparison. Broad architecture or hyperparameter sweeps are optional and will not displace the multi-window analysis.
 
-\textbf{6. Evaluate a multilevel reliability matrix.} Each rollout will be assessed using:
+\textbf{6. Establish the experimental Level 1--2 reliability matrix.} Aim 1 owns the experimental evidence gates at both levels of Table~\ref{tab:evidence-ladder}. The canonical metric families are defined once in Table~\ref{tab:aim1-reliability-matrix}; Aim 2 will import rather than reconstruct this matrix.
 
-\begin{itemize}
+\begin{table}[htbp]
+\centering
+\caption{Canonical experimental reliability matrix established in Aim 1.}
+\label{tab:aim1-reliability-matrix}
+\small
+\begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}p{0.11\textwidth}>{\raggedright\arraybackslash}p{0.24\textwidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Level} & \textbf{Evidence block} & \textbf{Outputs} \\
+\midrule
+1 & Label and field integrity & registration residual, rigid drift, visual morphology, and coherent-artifact diagnostics \\
+2 & Population evolution & grain count and \(\langle R\rangle^2\) trajectories; normalized grain-size distributions with detection-limit sensitivity \\
+2 & Topology/morphology & face-count behavior, boundary morphology, and sensitivity to readout, speckle, and small-grain definitions \\
+2 & Individual-grain response & growth/shrinkage sign and magnitude where linkage supports identities \\
+1--2 & Reproducibility & between-model, between-window, and grouped-block variability across spatial and temporal partitions \\
+\bottomrule
+\end{tabularx}
+\end{table}
 
-\item registration residual and rigid drift;
-
-\item visual morphology and coherent artifacts;
-
-\item grain count and \(\langle R\rangle^2\) trajectories;
-
-\item normalized grain-size distributions with detection-limit sensitivity;
-
-\item topology and face-count behavior;
-
-\item individual-grain growth/shrinkage sign and magnitude where linkage supports it;
-
-\item between-replicate and between-window variability.
-
-\end{itemize}
-
-\textbf{7. Establish null and readout baselines.} Individual-grain sign accuracy will be compared with the majority growth/shrinkage class in each interval. One-step coarsening and field predictions will be compared with a no-change persistence rollout. Normalized grain-size distributions will be compared with an unchanged empirical distribution and with any additional simple null selected before final evaluation. Topology will be recomputed under prespecified speckle-removal, small-grain, and readout choices to test whether the current bias is robust or measurement/readout induced.
+\textbf{7. Establish null and readout baselines for the matrix.} Individual-grain sign accuracy will be compared with the majority growth/shrinkage class in each interval. One-step coarsening and field predictions will be compared with a no-change persistence rollout. Normalized grain-size distributions will be compared with an unchanged empirical distribution and with any additional simple null selected before final evaluation. Topology will be recomputed under prespecified speckle-removal, small-grain, and readout choices to test whether the current bias is robust or measurement/readout induced. These definitions will be frozen with the Aim 1 matrix and reused without re-adjudication in Aim 2.
 
 \textbf{8. Quantify key uncertainty and sensitivity sources.} Core empirical uncertainty will include model initialization, training window, and a prespecified minimal set of curation choices such as detection threshold and high-impact registration/linkage decisions. Resampling will use grains, boundaries, spatial blocks, windows, or trajectories rather than treating overlapping voxel patches as independent observations.
 
@@ -772,29 +772,19 @@ The core aim uses the current five-state laboratory-DCT volume, its raw and cura
 
 \subsection{Quantitative validation criteria}
 
-The primary success criterion is reproducibility across prespecified experimental partitions, not performance in one favorable window. The evaluation will include:
+The primary success criterion is reproducibility across prespecified experimental partitions, not performance in one favorable window. The metric families are those in Table~\ref{tab:aim1-reliability-matrix}; validation will apply the following cross-cutting rules rather than introduce a second metric catalogue:
 
 \begin{itemize}
 
-\item registration residual by axis, using the current no-more-than-0.05-voxel result as a preliminary benchmark rather than an automatically universal threshold;
+\item \textbf{Level 1 integrity:} registration residuals will be resolved by axis, using the current no-more-than-0.05-voxel result as a preliminary benchmark rather than an automatically universal threshold, and rollout drift will be judged relative to the uncurated and current curated baselines;
 
-\item drift relative to the uncurated and current curated baselines;
+\item \textbf{Level 2 predictive value:} each applicable metric family must show a prospectively defined improvement over its majority-class, persistence, or distributional null;
 
-\item error in grain count and \(\langle R\rangle^2\) trajectories;
+\item \textbf{Sensitivity:} conclusions must remain stable under the prespecified detection-limit, readout, speckle-handling, small-grain, and high-impact curation choices;
 
-\item normalized-distribution distance above and below the experimental detection limit;
+\item \textbf{Reproducibility:} uncertainty and pass/partial-pass/fail outcomes will be reported across model replicates and grouped windows or blocks rather than pooled overlapping voxels;
 
-\item face-count/topology error;
-
-\item individual-grain sign accuracy and magnitude calibration where identities are reliable;
-
-\item improvement over prespecified majority-class, persistence, and distributional nulls;
-
-\item topology sensitivity to readout, speckle handling, and small-grain definitions;
-
-\item variability across model replicates and windows;
-
-\item retained accuracy after any domain-of-applicability or abstention rule.
+\item \textbf{Applicability:} any abstention rule must improve retained performance while reporting its coverage and the conditions under which predictions are withheld.
 
 \end{itemize}
 
@@ -887,7 +877,7 @@ The initial metrics are those already established in the corresponding manuscrip
 \textbf{Pair} & \textbf{Metric source} & \textbf{Initial metrics} \\
 \midrule
 \(S\) versus \(\hat{S}\) & 3D-PRIMME manuscript & \(\langle r\rangle^2\) kinetics, average face count, topology-size relation, normalized radius distribution, voxel-wise accuracy, morphology, and applicable inclination distributions \\
-\(E\) versus \(\hat{E}\) & Experimental surrogate manuscript and Aim 1 & grain-count and size/coarsening trajectories, normalized grain-size distributions with detection-limit sensitivity, face-count topology, linked individual-grain evolution, morphology, rigid drift, null baselines, and replicate/window variability \\
+\(E\) versus \(\hat{E}\) & Experimental surrogate manuscript and Aim 1 & experimental Level 1--2 metric families and frozen null/readout definitions established in Aim 1 (Table~\ref{tab:aim1-reliability-matrix}) \\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -908,15 +898,27 @@ The paired structure separates surrogate approximation from the limitations of t
 
 \subsection{Completed preliminary evidence}
 
-The completed 3D-PRIMME work already provides substantial simulation-domain evidence for kinetics, topology, scaling, voxel accuracy, and prescribed anisotropy. The ongoing experimental work provides direct training, held-out evaluation, and both favorable and failed metrics. Aim 2 will integrate the completed simulation results into a common reporting framework rather than present them as wholly new analysis; its new components are the cross-source metric audit, the final experimental fidelity profile after Aim 1, effective-time sensitivity, and the resulting claim gate~\cite{tian2026neighborhood,tian2026threeDprimme,tian2026experiment}.
+The completed 3D-PRIMME work already provides substantial simulation-domain evidence for kinetics, topology, scaling, voxel accuracy, and prescribed anisotropy. The ongoing experimental work provides direct training, held-out evaluation, and both favorable and failed metrics. Aim 2 will integrate the completed simulation results into a common reporting framework rather than present them as wholly new analysis; its new components are the perturbation-based cross-source metric audit, source-aware synthesis of the Aim 1 experimental profile, effective-time support and sensitivity analysis, and the resulting cross-source claim gate~\cite{tian2026neighborhood,tian2026threeDprimme,tian2026experiment}.
 
 \subsection{Proposed methodology}
 
-\textbf{1. Audit metric definitions across sources.} For each metric in Table~\ref{tab:aim2-metric-policy}, the analysis will record the object being measured, units or normalization, grain-detection threshold, segmentation and connectivity rule, identity requirement, state/time alignment, and uncertainty source. These attributes will determine whether the metric is directly commensurate, conditionally commensurate, or source specific before the two fidelity profiles are compared.
+\textbf{1. Measure comparability under experimental observation rules.} For each metric in Table~\ref{tab:aim2-metric-policy}, the analysis will first record the object being measured, units or normalization, grain-detection threshold, segmentation and connectivity rule, identity requirement, state/time alignment, and uncertainty source. The audit will then be converted from a definition check into a perturbation measurement. Experimental observation operators \(\mathcal{O}_j\) will be applied to MF trajectories and their surrogate rollouts: resolved-grain cutoffs matched by a declared length-scale mapping or resolved-grain fraction, the experimental connectivity and segmentation/readout rules, and repeated identity-censoring masks calibrated to the observed linkage yields (90.4\% of grains and 97.4\% of voxels for the current training pair). For trajectory \(X\in\{S,\hat S\}\), the metric shift and change in paired discrepancy will be
+
+\begin{equation}
+\Delta_m^{(j)}(X)=m\!\left(\mathcal{O}_j X\right)-m(X),
+\qquad
+\Delta\varepsilon_m^{(j)}
+=
+d_m\!\left(\mathcal{O}_j S,\mathcal{O}_j\hat S\right)
+-d_m\!\left(S,\hat S\right).
+\label{eq:comparability-perturbation}
+\end{equation}
+
+Absolute shifts, normalized effect sizes, and uncertainty across trajectories or censoring replicates will be reported. A metric will be directly commensurate only if its definition is aligned and its perturbation effects are below a prospectively frozen tolerance; larger but characterizable effects will make it conditionally commensurate, and unstable or non-identifiable effects will make it source specific. Thus the audit can produce an unexpected quantitative result rather than a predetermined classification.
 
 \textbf{2. Consolidate the simulation-domain fidelity profile.} Documented MF trajectories \(S\) and their corresponding simulation-trained rollouts \(\hat S\) will be evaluated using the manuscript definitions. Completed results will be retained, and any reanalysis will be limited to the uncertainty, null, and reporting definitions needed for the final common framework. Metric-specific \(d(S,\hat S)\), replicate variation, rollout dependence, and failure modes will be reported.
 
-\textbf{3. Construct the experimental-domain fidelity profile.} Curated trajectories \(E\) and experiment-trained rollouts \(\hat E\) will be selected from Aim 1 eligible partitions. Metrics will use the same detection, linkage, drift, readout, and null definitions frozen in Aim 1. Results will report \(d(E,\hat E)\), model/block variability, measurement sensitivity, and failure modes at Levels 1--2 of Table~\ref{tab:evidence-ladder}.
+\textbf{3. Synthesize the experimental-domain fidelity profile.} Curated trajectories \(E\) and experiment-trained rollouts \(\hat E\) will be selected from the partitions that have already received Level 1--2 pass/partial-pass/fail outcomes in Aim 1. Aim 2 will import the metric, null, linkage, drift, readout, variability, and failure-mode definitions from Table~\ref{tab:aim1-reliability-matrix}; it will not redefine or re-adjudicate the experimental evidence gates. The new task is to express the eligible \(d(E,\hat E)\) results in the same source-aware reporting structure as \(d(S,\hat S)\) while preserving their experimental uncertainties and claim limits.
 
 \textbf{4. Test effective-time reparameterization.} Physical-time trajectories and matched-state comparisons will be reported separately. For a monotone state marker \(z\), such as grain count or \(\langle R\rangle^2\), rollout step \(k\) will be assigned an effective experimental time
 
@@ -932,11 +934,9 @@ z\in\left\{N_g,\langle R\rangle^2\right\},
 \label{eq:effective-time}
 \end{equation}
 
-using a prespecified monotone interpolation of the five experimental states. Agreement between mappings based on different state markers will be tested. This analysis asks whether part of the apparent kinetic error can be represented as a changing effective clock; it is not a claim of continuous physical-time calibration. If the state markers imply incompatible mappings, no single effective-time correction will be reported.
+using prespecified monotone interpolations of the five experimental states. Because the current matched-grain-count result places T2--T4 near rollout step 2, only approximately \(k=0,1,2\) are expected to fall distinctly within the experimental marker range. Effective time is therefore an exploratory clock diagnostic, not a calibrated trajectory. Marker consistency and interpolation sensitivity will both be tested by comparing piecewise-linear and monotone shape-preserving interpolation. A pointwise mapping will be summarized only when at least three distinct in-range rollout steps, including an interior step, are supported; a clock-drift trend will require at least four distinct steps with at least two interior points. If those support conditions fail, the two markers disagree, or interpolation changes exceed a prospectively frozen tolerance, no effective-time conclusion will be reported and only raw-time and matched-state results will be retained.
 
-\textbf{5. Compare against null models.} Experimental individual-grain sign accuracy will be reported above the interval-specific majority-class rate; one-step field and coarsening results will be compared with persistence; and distributional distances will be interpreted relative to prespecified unchanged-distribution or other simple manuscript-consistent nulls. A model metric that does not improve meaningfully over its null cannot pass the final claim gate.
-
-\textbf{6. Produce the source-aware claim matrix.} Each metric will receive its comparability class, within-pair fidelity result, uncertainty, null comparison, and pass/partial-pass/fail interpretation. Metrics may advance to Aim 3 only when the experimental pair passes the relevant Level 1--2 gates. Cross-source conclusions will additionally require direct or conditional commensurability.
+\textbf{5. Produce the source-aware claim matrix.} Each metric will receive its perturbation-based comparability class, within-pair fidelity result, uncertainty, inherited Aim 1 null comparison for \(E\leftrightarrow\hat E\), and pass/partial-pass/fail interpretation. Aim 2 will not serve as a second judge of the experimental evidence it imports: Aim 1 outcomes determine experimental eligibility, whereas Aim 2 determines whether and how an eligible metric may support a cross-source statement. Aim 3 may interpret only Aim 1 eligible experimental outputs; any interpretation that compares or transfers claims across sources must also pass the Aim 2 commensurability gate.
 
 \subsection{Required data and resources}
 
@@ -944,27 +944,27 @@ Aim 2 requires the documented MF reference trajectories and corresponding simula
 
 \subsection{Quantitative validation criteria}
 
-The metric-comparability classification and any required harmonization will be frozen before side-by-side synthesis. Simulation and experimental fidelity will be assessed independently through the discrepancies in Equation~\eqref{eq:paired-discrepancies}, with uncertainty across the appropriate trajectories, models, and spatial blocks. Experimental metrics must also be interpreted relative to their prespecified nulls. Effective-time reparameterization will be accepted only if different monotone state markers yield consistent mappings within a tolerance frozen before final analysis. Each outcome will receive a pass, partial-pass, or fail interpretation; exact numerical criteria remain \texttt{[NEEDS QUANTITATIVE CRITERION]}.
+The metric definitions, perturbation operators, normalized-effect-size convention, and commensurability tolerances will be frozen before side-by-side synthesis. Simulation and experimental fidelity will be assessed independently through the discrepancies in Equation~\eqref{eq:paired-discrepancies}, with uncertainty across the appropriate trajectories, models, spatial blocks, and censoring replicates. Experimental metrics will retain the null comparisons established in Aim 1. Effective-time results must satisfy the support, marker-consistency, and interpolation-sensitivity rules stated above. Each outcome will receive a pass, partial-pass, or fail interpretation; exact numerical tolerances remain \texttt{[NEEDS QUANTITATIVE CRITERION]}.
 
 \subsection{Expected outcome}
 
-Aim 2 will produce a metric-commensurability map, separate simulation and experimental fidelity profiles, an explicit assessment of physical-time versus matched-state conclusions, and a source-aware claim matrix. A substantive outcome may be that a familiar metric is reliable within both domains but not comparable across them.
+Aim 2 will produce a perturbation-quantified metric-commensurability map, a consolidated simulation fidelity profile, a source-aware synthesis of the Aim 1 experimental profile, an explicit assessment of physical-time versus matched-state conclusions, and a claim matrix. A substantive outcome may be that a familiar metric is reliable within both domains but changes enough under experimental observation rules that it cannot be compared directly across them.
 
 \subsection{Risks}
 
-The experimental pair may support fewer reliable trajectories and less precise uncertainty than the simulation pair. Nominally common metrics may prove non-equivalent after detection and connectivity definitions are audited. The five experimental states may be insufficient for a stable effective-time mapping, and aggregate metrics may hide local failure within either pair.
+The experimental pair may support fewer reliable trajectories and less precise uncertainty than the simulation pair. Nominally common metrics may prove non-equivalent after detection, connectivity, and linkage perturbations are measured. The MF and experimental data may lack a unique physical length-scale mapping for the detection-limit perturbation; in that case, resolved-grain-fraction sensitivity will be reported instead. The five experimental states may be insufficient for a stable effective-time mapping, and aggregate metrics may hide local failure within either pair.
 
 \subsection{Alternative strategies}
 
-If a metric cannot be harmonized, it will remain source specific rather than be forced into a common ranking. If effective-time mappings disagree across state markers, physical-time calibration will be declared unresolved and only matched-state and raw-time results will be reported. If grain linkage is inadequate, identity-agnostic metrics will replace individual-grain metrics. Failed within-domain criteria will remain scientific results and will prevent the associated claim from advancing to Aim 3.
+If a metric cannot be harmonized or its perturbation effect is unstable, it will remain source specific rather than be forced into a common ranking. If too few distinct rollout steps fall within the experimental marker range, mappings disagree across state markers, or results are sensitive to interpolation, no effective-time conclusion will be reported and only matched-state and raw-time results will remain. If grain linkage is inadequate, identity-agnostic metrics will replace individual-grain metrics. Failed within-domain criteria will remain scientific results and will prevent the associated claim from advancing to Aim 3.
 
 \subsection{Deliverables}
 
 \begin{itemize}
-\item a cross-source metric-comparability classification;
+\item a perturbation-quantified cross-source metric-comparability map;
 \item a consolidated simulation-reference versus simulation-trained fidelity profile;
-\item an experimental-reference versus experiment-trained fidelity profile across Aim 1 eligible partitions;
-\item effective-time sensitivity and null-model analyses;
+\item a source-aware synthesis of the experimental-reference versus experiment-trained fidelity profile established across Aim 1 eligible partitions;
+\item an effective-time support, marker-consistency, and interpolation-sensitivity analysis;
 \item a source-aware fidelity, uncertainty, failure-mode, and claim-gating matrix;
 \item a dissertation chapter and/or manuscript on source-aware validation of local grain-growth operators.
 \end{itemize}
@@ -1080,7 +1080,7 @@ The first term describes a sensitivity shell centered at approximately one voxel
 \subsection{Proposed methodology}
 
 \subsubsection{Aim 3A: Determine which spatial scales drive reliable experimental predictions.}
-For experiment-trained models retained after Aim 1, matched single-scale and multiscale configurations will be evaluated using the paired experimental criteria established in Aim 2. If \(W_s\) denotes the block of the scale-mixing layer associated with observation scale \(s\), its global parameter-based importance will be summarized as
+For experiment-trained models retained after Aim 1, matched single-scale and multiscale configurations will be evaluated using the experimental Level 1--2 criteria established there. Any comparison or transfer of scale conclusions across simulation- and experiment-trained models will additionally use the Aim 2 commensurability policy. If \(W_s\) denotes the block of the scale-mixing layer associated with observation scale \(s\), its global parameter-based importance will be summarized as
 \[
 I_s=\frac{\lVert W_s\rVert_1}{\sum_{r\in\mathcal{S}}\lVert W_r\rVert_1}.
 \]
@@ -1106,7 +1106,7 @@ R(m,n)=
 so that cancellation is not mistaken for weak dependence. These maps will quantify the spatial range, symmetry, and directional routing of the learned response. They will be complemented by action-likelihood maps and by confidence or entropy conditioned on curvature proxy, boundary topology, and, where measurable, boundary inclination. Two-grain boundaries and higher-order junctions will be analyzed separately.
 
 \subsubsection{Aim 3C: Distinguish model response from physical attribution.}
-The interpretation pipeline will first be reproduced on simulation-trained models, where isotropy and prescribed anisotropy provide controlled tests. Cubic rotations and reflections, axis permutations, padding controls, and model replicates will be used to identify implementation-induced asymmetry before experimental results are interpreted. The same summaries will then be applied to reliable experiment-trained models. A response will advance from Level 3 model interpretation to Level 4 physical attribution only if it is reproducible across eligible experimental windows and model replicates, is associated with a measurable microstructural descriptor after relevant geometric stratification, and survives at least one held-out or controlled test. If topology fails the Aim 1/Aim 2 gate, topology-conditioned patterns may be reported as model behavior but will not support a topology-related physical attribution. A Level 5 candidate-mechanism claim will require an additional falsifiable prediction or intervention; agreement between a sensitivity map and a familiar physical pattern alone will not be sufficient.
+The interpretation pipeline will first be reproduced on simulation-trained models, where isotropy and prescribed anisotropy provide controlled tests. Cubic rotations and reflections, axis permutations, padding controls, and model replicates will be used to identify implementation-induced asymmetry before experimental results are interpreted. The same summaries will then be applied to reliable experiment-trained models. A response will advance from Level 3 model interpretation to Level 4 physical attribution only if it is reproducible across eligible experimental windows and model replicates, is associated with a measurable microstructural descriptor after relevant geometric stratification, and survives at least one held-out or controlled test. If topology fails the Aim 1 evidence gate, topology-conditioned patterns may be reported as model behavior but will not support a topology-related physical attribution. Because the present curvature result separates two-grain interfaces from higher-order junctions, that stratification must also remain stable to the Aim 1 readout, speckle, small-grain, and connectivity tests; otherwise, both the stratified curvature--confidence relationship and the junction comparison will remain exploratory Level 3 behavior. A Level 5 candidate-mechanism claim will require an additional falsifiable prediction or intervention; agreement between a sensitivity map and a familiar physical pattern alone will not be sufficient.
 
 \subsection{Required data}
 
@@ -1148,7 +1148,7 @@ If mixer weights are unstable, scale-removal and matched single-scale experiment
 
 The three aims form a dependency chain rather than three parallel projects.
 
-Aim 1 establishes Level 1 integrity and spatial reproducibility within the available experimental volume. Aim 2 audits metric comparability, establishes the two source-specific Level 2 fidelity profiles, and determines which experimental outputs pass the claim gate. Aim 3 advances only those outputs to Level 3 model interpretation and, where the additional evidence is met, Level 4 physical attribution or Level 5 candidate-mechanism testing.
+Aim 1 establishes experimental Levels 1--2 integrity, predictive fidelity, null comparison, and spatial reproducibility within the available volume. Aim 2 quantitatively audits cross-source metric comparability, consolidates the simulation Level 2 profile, and synthesizes the eligible experimental profile under a common claim policy without re-adjudicating Aim 1. Aim 3 advances only Aim 1 eligible outputs to Level 3 model interpretation; statements that compare or transfer evidence across sources must also pass the Aim 2 commensurability gate before supporting Level 4 physical attribution or Level 5 candidate-mechanism testing.
 
 This dependency makes both positive and negative results informative:
 
@@ -1166,7 +1166,7 @@ This dependency makes both positive and negative results informative:
 
 \end{itemize}
 
-The program is efficient because the same local architecture, data representation, rollout code, replicate policy, and evidence ladder are reused across stages. Aim 3 implementation and diagnostic development may overlap with Aim 2, but final experimental interpretation will be restricted to outputs that have passed the preceding gates. What changes across stages is the supervision source and the strength of the claim allowed by the validation.
+The program is efficient because the same local architecture, data representation, rollout code, replicate policy, and evidence ladder are reused across stages. Aim 3 implementation and diagnostic development may overlap with Aim 2, but final experimental interpretation will be restricted to Aim 1 eligible outputs, and cross-source interpretation will additionally require Aim 2 commensurability. What changes across stages is the supervision source and the strength of the claim allowed by the validation.
 
 
 \chapter{Expected Outcomes, Contributions, and Scientific Impact}
@@ -1229,9 +1229,9 @@ December 2026 & Complete core empirical uncertainty and domain-of-applicability 
 
 January-February 2027 & Audit cross-source metric comparability; assemble \(S\)-\(\hat{S}\) and \(E\)-\(\hat{E}\) profiles; test effective-time mappings & Draft Aim 2 methods and source-aware benchmark section & Which metrics are commensurate, and is a consistent effective-time mapping supported? \\
 
-March 2027 & Complete paired fidelity, null, uncertainty, and failure-mode analyses & Finalize Aim 2 figures, claim matrix, and chapter & Which experimental outputs pass the Level 2 gate? \\
+March 2027 & Complete perturbation effect sizes, paired-profile synthesis, uncertainty, and failure-mode analyses & Finalize Aim 2 figures, claim matrix, and chapter & Which eligible metrics support a cross-source statement? \\
 
-February-April 2027, overlapping & Begin provisional Aim 3 implementation, then restrict final analyses to Aim 2 eligible outputs & Complete Aim 3 figures, evidence matrix, and synthesis & Which signatures support Level 3 interpretation, Level 4 attribution, or Level 5 testing? \\
+February-April 2027, overlapping & Begin provisional Aim 3 implementation, then restrict final analyses to Aim 1 eligible outputs and Aim 2 commensurate cross-source claims & Complete Aim 3 figures, evidence matrix, and synthesis & Which signatures support Level 3 interpretation, Level 4 attribution, or Level 5 testing? \\
 
 April 2027 & Integrate aims, limitations, contributions, and conclusions & Full revision and committee feedback & Are all claims consistent with achieved evidence? \\
 
@@ -1305,7 +1305,7 @@ The proposed work will quantify spatial reproducibility within the available vol
 
 \item Final Aim 1 majority-class, persistence, distributional-null, and topology/readout definitions.
 
-\item Final Aim 2 reference trajectories, metric-commensurability rules, effective-time interpolation policy, replicate policy, and quantitative criteria. \texttt{[AUTHOR INPUT REQUIRED]} \texttt{[NEEDS QUANTITATIVE CRITERION]}
+\item Final Aim 2 reference trajectories, observation-rule perturbations, effect-size normalization and commensurability tolerances, effective-time support/interpolation policy, replicate policy, and quantitative criteria. \texttt{[AUTHOR INPUT REQUIRED]} \texttt{[NEEDS QUANTITATIVE CRITERION]}
 
 \item Final Aim 3 experimental-transfer dataset, descriptor availability, and prespecified map-similarity and attribution thresholds.
 

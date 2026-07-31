@@ -197,7 +197,7 @@ def build():
         row_y[1],
         "Aim 2",
         "Establish source-aware metric comparability",
-        "Paired fidelity within simulation and experiment",
+        "Observation-rule perturbations and paired-fidelity synthesis",
     )
 
     draw_gate(c, 93)

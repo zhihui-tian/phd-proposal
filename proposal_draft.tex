@@ -203,6 +203,8 @@ p(\Delta\mathcal{H}_i)
 
 Here, \(s_i\) is the grain identity at site \(i\), \(\mathcal{N}_i\) is its neighborhood, \(\gamma_{ij}\) is the relative boundary energy, \(T\) is the pseudo-temperature, and \(\delta\) is the Kronecker delta. The mode filter instead samples sites from a positive symmetric kernel and assigns the most frequent sampled identity. Neighborhood-driven MCP replaces the fixed Moore neighborhood with samples from an arbitrary probability mass function while retaining the MCP acceptance rule. These methods provide a controlled setting in which the influence of neighborhood geometry can be separated from other parts of the update policy~\cite{wu1982potts,anderson1984kinetics,melville2024modefilter,tian2026neighborhood}.
 
+Lattice pinning has been recognized for decades, and several mitigations are in routine use: raising the pseudo-temperature so that fluctuations roughen boundaries off the lattice, switching to a triangular or hexagonal lattice whose symmetry matches the equilibrium \(120^\circ\) triple-junction angle, enlarging the neighborhood used to evaluate the Hamiltonian, or weighting transitions with a truncated radial basis function~\cite{holm1998mobility,zollner2014temperature,mason2015kinetics}. Each reduces the artifact. None explains what produces it, and the more effective ones raise the cost of the simulation substantially. That gap matters here for a specific reason: a mitigation that is not understood cannot be inverted, and this dissertation needs to prescribe a directional response deliberately, not only suppress an unwanted one.
+
 The neighborhood study investigates why stochastic grain-growth models develop lattice pinning and inclination-dependent artifacts. Its central contribution is to show that the local neighborhood is not a neutral numerical stencil. The first absolute moment of the sampling kernel defines an effective inclination-dependent interfacial energy, which can be connected through a Wulff construction to equilibrium shape and inclination distribution. Discrete sampling and stochastic update policy determine how sharply that theoretical response is expressed~\cite{tian2026neighborhood}.
 
 For a continuous two-dimensional kernel \(K(x,y)\), the inclination-dependent interfacial energy and its discrete-lattice counterpart are
@@ -236,7 +238,53 @@ x\cos\theta+y\sin\theta\le\gamma(\theta)
 \label{eq:wulff}
 \end{equation}
 
-Equations~\eqref{eq:kernel-energy}--\eqref{eq:wulff} make the causal chain explicit: changing \(K\) changes \(\gamma(\theta)\), which changes the preferred equilibrium shape and its boundary-inclination population.
+Equations~\eqref{eq:kernel-energy}--\eqref{eq:wulff} make the causal chain explicit: changing \(K\) changes \(\gamma(\theta)\), which changes the preferred equilibrium shape and its boundary-inclination population~\cite{eggleston2001anisotropic,taylor1978crystalline}.
+
+The Wulff shape is not itself the quantity measured in a simulated microstructure. To close the chain onto an observable, the completed study converts the shape into the inclination population it would generate. For a convex \(\gamma(\theta)\), the boundary normal \(\phi(\theta)\) and the arc length \(\ell(\theta)\) carried at that normal are
+
+\begin{equation}
+\phi(\theta)
+=
+\arctan\!
+\left(
+\frac{\mathrm{d}\left[\gamma(\theta)\sin\theta\right]/\mathrm{d}\theta}
+{\mathrm{d}\left[\gamma(\theta)\cos\theta\right]/\mathrm{d}\theta}
+\right),
+\qquad
+\ell(\theta)
+=
+\sqrt{
+\left(\frac{\mathrm{d}\left[\gamma(\theta)\sin\theta\right]}{\mathrm{d}\theta}\right)^{2}
++
+\left(\frac{\mathrm{d}\left[\gamma(\theta)\cos\theta\right]}{\mathrm{d}\theta}\right)^{2}
+}\,.
+\label{eq:inclination-from-wulff}
+\end{equation}
+
+Binning \(\phi(\theta)\) and accumulating \(\ell(\theta)\) within each bin gives the predicted inclination distribution, which is directly comparable with the distribution measured from a simulated microstructure by the boundary-smoothing algorithm of Yang et al.~\cite{yang2022inclination}. A kernel thus yields a falsifiable prediction, not only a qualitative expectation.
+
+Four neighborhoods were chosen to span the range from isotropic to strongly directional, and each admits a closed-form \(\gamma(\theta)\) (Table~\ref{tab:kernel-energies}). The progression is deliberate: the Gaussian kernel gives an angle-independent interfacial energy and a circular Wulff shape; squaring the Gaussian through the coordinate transformation of Fong~\cite{fong2015squaring} flattens the energy near the diagonals; the compact square kernel produces a rounded diamond whose highest-energy directions lie along the lattice axes; and the star kernel, whose mass sits on four line segments, produces an eightfold response and a rounded-octagon Wulff shape.
+
+\begin{table}[htbp]
+\centering
+\caption{Closed-form inclination-dependent interfacial energies for the four sampling neighborhoods evaluated in the completed neighborhood study. Each kernel is normalized to unit variance so that the comparison isolates shape from size. \(m(\theta)=\max\left(\left|\cos\theta\right|,\left|\sin\theta\right|\right)\).}
+\label{tab:kernel-energies}
+\small
+\begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}p{0.20\textwidth}>{\raggedright\arraybackslash}p{0.40\textwidth}X@{}}
+\toprule
+\textbf{Neighborhood} & \textbf{Interfacial energy \(\gamma(\theta)\)} & \textbf{Equilibrium response} \\
+\midrule
+Gaussian & \(\sqrt{2/\pi}\), independent of \(\theta\) & circular Wulff shape; isotropic inclination distribution \\
+Reshaped Gaussian & \(\sqrt{2/\pi}\left[\theta\sin\theta+\cos\theta\left(\ln\cos\theta+\tfrac{1}{2}\ln 2+\tfrac{\pi}{4}\right)\right]\) on \(0\le\theta\le\pi/4\), mirrored every \(\pi/4\) & near-square inclination distribution; flattening near the diagonals \\
+Square (uniform, \(a=\sqrt{3}\)) & \(\sqrt{3}\left[1+2m(\theta)^{2}\right]/\left[6\,m(\theta)\right]\) & rounded diamond; boundaries prefer the lattice axes \\
+Star & \(\tfrac{\sqrt{2}}{8}\left(\left|\cos\theta\right|+\left|\sin\theta\right|+\left|\cos\theta+\sin\theta\right|+\left|\cos\theta-\sin\theta\right|\right)\) & eightfold anisotropy; rounded-octagon Wulff shape \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+Discretization sets a floor on how finely this prediction can be expressed. On a lattice the integral in Equation~\eqref{eq:kernel-energy} becomes the sum \(\gamma_d(\theta)=\sum_m K(x_m,y_m)\left|x_m\cos\theta+y_m\sin\theta\right|\), and for a small kernel the spatial discretization quantizes the accessible angles. The Wulff construction for a \(3\times3\) uniform kernel is an octagon, so the energy-minimizing solution admits only eight inclinations, one per neighborhood direction~\cite{qiu2024cylindrical}. As the kernel support grows beyond the lattice spacing, \(\gamma_d(\theta)\) becomes a Riemann approximation of the continuous \(\gamma(\theta)\), and the theoretical response is recovered. This argument is independent of pseudo-temperature: \(T\) changes how an algorithm approaches the energy-minimizing shape, not which shape it approaches.
+
+The update policy governs that approach. At \(T=0\) in MCP, a central site belonging to the minority grain has only one energetically valid move, so a two-grain interface advances deterministically toward the majority grain; at a triple junction the randomly drawn neighbor may belong to either majority grain, and the resulting mixing slows convergence to the Wulff shape without preventing it. Raising \(T\) admits unfavorable flips, which blurs the effective kernel, but the neighborhood still sets the anisotropy because samples along the diagonals lie farther from the center and so imply a faster interface velocity. The mode filter behaves differently again: as the number of sampled sites \(M\) grows, the sampling estimate converges to the convolution that defines the Hamiltonian, so MF approaches the theoretical response more directly than either MCP variant.
 
 The same directional-moment argument extends to a three-dimensional kernel. For unit interface normal \(\hat{\mathbf n}\),
 
@@ -273,11 +321,34 @@ For surrogate learning, this result reframes simulator design as training-data g
 
 The completed study compares MCP, N-MCP, and MF evolution in \(2400\times2400\)-pixel domains initialized from a common 20,000-grain Voronoi tessellation. Comparisons are performed at matched grain counts because neighborhood choice changes the evolution rate. Gaussian, reshaped-Gaussian, square, and star-shaped sampling neighborhoods are used to vary inclination dependence systematically. The analysis evaluates theoretical and simulated inclination distributions, aggregate anisotropy magnitude, equilibrium morphology, rotation of the imposed anisotropy, von Neumann-Mullins behavior, statistical scatter, and computational cost~\cite{tian2026neighborhood}.
 
+N-MCP is the minimal modification that isolates the neighborhood from every other part of the MCP update. Only the first step changes: instead of evaluating the Hamiltonian over a fixed Moore neighborhood, the algorithm draws \(M\) sites from the kernel \(K\), computes \(\mathcal{H}_i\) over that random neighborhood, proposes one of its labels, and accepts or rejects by the Metropolis rule of Equation~\eqref{eq:mcp-update}. The site itself is excluded from sampling. Because acceptance, pseudo-temperature, and lattice are all untouched, any change in the measured inclination response is attributable to the neighborhood alone.
+
+The comparison is run under matched conditions. MF with the Gaussian kernel evolves for 2,000 unitless time steps, and the reshaped-Gaussian and uniform kernels for 4,000, since the non-circular neighborhoods coarsen more slowly; MCP and N-MCP run for 1,600 steps. Gaussian sampling uses a variance of 25 in both dimensions, and the uniform kernel spans \([-10,10]\) so that the two neighborhoods cover comparable area at the \(95\%\) level of the Gaussian. MCP is run in SPPARKS~\cite{plimpton2009spparks} from the same initial structure at \(kT=0.66\), the value reported to avoid lattice pinning~\cite{zollner2014temperature}; N-MCP samples from a Gaussian with \(\sigma=0.5\), so that \(2\sigma\) and \(3\sigma\) correspond to the \(3\times3\) and \(5\times5\) neighborhoods used in MCP. Rotation tests apply a rotation matrix to the sampled offsets at \(0^\circ\), \(30^\circ\), and \(60^\circ\), leaving the pixel grid fixed.
+
+Anisotropy is reduced to one scalar so that neighborhoods can be ranked and tracked through coarsening:
+
+\begin{equation}
+A
+=
+\frac{1}{n_{\mathrm{bins}}}
+\sum_{i=1}^{n_{\mathrm{bins}}}
+\frac{\left|f_i-f_{\mathrm{iso}}\right|}{f_{\mathrm{iso}}},
+\label{eq:anisotropy-magnitude}
+\end{equation}
+
+where \(f_i\) is the measured frequency in inclination bin \(i\) and \(f_{\mathrm{iso}}\) is the frequency an isotropic distribution would place in every bin. Values near zero indicate an inclination population with no preferred direction.
+
 \subsection{Completed results}
 
-Conventional zero-temperature MCP exhibits strong lattice-aligned boundary populations. Increasing pseudo-temperature softens this response, while N-MCP with Gaussian sampling yields an approximately circular inclination distribution in the tested conditions. Progressing from Gaussian to reshaped Gaussian, square, and star neighborhoods produces progressively stronger directional preferences. MF exhibits the same qualitative dependence: the Gaussian case is nearly isotropic, while non-circular neighborhoods generate stronger anisotropy~\cite{tian2026neighborhood}.
+Conventional zero-temperature MCP exhibits strong lattice-aligned boundary populations, visible both as boundaries clustered near \(\pm45^\circ\) from the major axes and as peaks at those angles in the inclination distribution. Raising the pseudo-temperature to \(kT=0.66\) softens but does not remove the response. N-MCP with Gaussian sampling shows no visually detectable pinning and an effectively circular inclination distribution. Progressing from Gaussian to reshaped Gaussian, square, and star neighborhoods produces progressively stronger directional preferences, with the star case adding preferences at \(0^\circ\) and \(90^\circ\) and grains that visibly approach octagons. MF exhibits the same ordering, although its anisotropy is generally weaker than N-MCP's at matched neighborhood~\cite{tian2026neighborhood}.
 
-The rotation test provides the clearest causal evidence. Rotating reshaped-Gaussian and uniform MF neighborhoods by 0, 30, and 60 degrees rotates the measured inclination response accordingly. This separates the orientation of the neighborhood from the fixed orientation of the pixel grid. The work further shows that neighborhood geometry and algorithmic stochasticity affect different observables: MF produces substantially lower scatter in the reported von Neumann-Mullins comparison than MCP and N-MCP, while changing the N-MCP neighborhood alone does not eliminate grain-level scatter. Increasing the number of MF samples improves statistical stability~\cite{tian2026neighborhood}.
+Equation~\eqref{eq:anisotropy-magnitude} puts numbers on that ordering and shows that it persists through coarsening. MCP holds an anisotropy magnitude near \(0.15\), roughly constant until the population falls below 6,000 grains. MF with Gaussian sampling holds near \(0.01\) over the same range, more than an order of magnitude lower, and rises only once the population drops below 6,000 grains and the domain no longer contains enough boundaries for a stable estimate. The reshaped Gaussian rises to about \(0.05\) by 10,000 grains and resumes rising below 6,000; the uniform kernel starts near \(0.05\) and exceeds MCP itself by 6,000 grains. N-MCP holds its low anisotropy across the tested variances and temperatures, which is the practical statement of the claim: the neighborhood, and not the pseudo-temperature, is the control variable~\cite{tian2026neighborhood}.
+
+The rotation test provides the clearest causal evidence. Rotating reshaped-Gaussian and uniform MF neighborhoods by 0, 30, and 60 degrees rotates the measured inclination response by the same angle at a fixed population of 8,369 grains, while the anisotropy magnitude changes only slightly. Since the pixel grid is identical in every run, the orientation of the response follows the neighborhood and not the lattice, which is the result the term ``lattice pinning'' would not predict.
+
+Neighborhood geometry and algorithmic stochasticity turn out to govern different observables, and separating them is what makes the mode filter the right teacher for the surrogate work. Against the von Neumann-Mullins relation, evaluated at approximately 12,590 grains, MCP reproduces the expected mean but with large grain-to-grain scatter. N-MCP is no better, and is in fact worse: excluding the center site leaves each site with between zero and eight actual samples, so the effective neighborhood size itself fluctuates. Raising the sample count to 16 and then 64, and fixing it exactly, changes the result only marginally. MF instead shows much smaller scatter at every neighborhood tested, and the residual departure of its uniform-kernel mean appears only for grains with many faces. The difference traces to the update rule: MF selects the majority label over the whole sampled neighborhood, whereas both MCP variants accept or reject a single randomly drawn label. Since the sampled mean over \(N\) independent draws has variance \(\sigma^{2}/N\), adherence improves as sampling grows, which the study confirms across 4, 9, 16, 25, 64, and 128 samples~\cite{tian2026neighborhood}.
+
+Cost decides which of these is usable as a label generator at scale. Evolving the same initial structure from 20,000 to 2,000 grains takes 34 seconds in MCP, 1 minute 16 seconds in MF, and 23 minutes 58 seconds in N-MCP. MCP is the cheapest but is not lattice free; N-MCP removes the lattice artifact at roughly twenty times the cost of MF and retains high von Neumann-Mullins variance. MF is the only one of the three that is simultaneously lattice free, statistically well behaved, and cheap enough to generate the hundreds of three-dimensional sequences the surrogate work requires. That is the reason 3D-PRIMME is trained on mode-filter data.
 
 \begin{figure}[htbp]
 \centering
@@ -369,6 +440,10 @@ Y_\vartheta\!\left(S_i^{(t)},S_j^{(t)}\right)
 
 Boundary-centered patches are extracted, and the trained network maps each local representation to candidate grain-identity update scores within the action window. Local predictions are assembled into the next global grain-ID map, and the operator is then applied autoregressively. Because the observation and action windows have fixed size, the learned operator is not tied to the global training-volume dimensions~\cite{tian2026threeDprimme}.
 
+The two windows are separate design parameters because they act at different stages. The observation window \(N_o\) is applied before the network, when the grain-ID field is converted into the interface-site representation, so it can be chosen from a physical length scale such as the mean grain size. The action window \(N_a\) is applied after that conversion and fixes the input dimension of the network. Decoupling them allows the physical context used to build the representation to be set independently of the size of the learned mapping, which is what lets one architecture serve microstructures at different length scales.
+
+One architectural change from the two-dimensional formulation is worth stating explicitly, because it bears on the interpretability work in Aim 3. The original 2D PRIMME required a regularization term that penalized increases in the number of grain-boundary sites in order to keep long rollouts stable~\cite{yan2022primme}. 3D-PRIMME removes that term and remains stable. The interface-site representation, together with the finite observation and action windows, already restricts what the network can express to the local grain-boundary environment, so the constraint that had to be imposed through the loss in two dimensions is supplied by the representation itself in three~\cite{tian2026threeDprimme}.
+
 \begin{figure}[htbp]
 \centering
 \includegraphics[alt={3D-PRIMME workflow from local grain-ID patches to autoregressive microstructure prediction},width=\textwidth]{figures/primme_workflow.png}
@@ -376,7 +451,7 @@ Boundary-centered patches are extracted, and the trained network maps each local
 \label{fig:primme-workflow}
 \end{figure}
 
-Training and evaluation use three-dimensional MF data. The reported dataset contains 200 isotropic sequences and a corresponding set of inclination-dependent sequences. Each sequence starts from a different 512-grain Voronoi structure in a \(100^3\)-voxel volume and evolves for 100 simulation steps, while a training set uses only two consecutive states from one or more sequences. For the inclination-dependent data, the Gaussian sampling covariance is
+Training and evaluation use three-dimensional MF data, chosen as the teacher for three reasons. The stochasticity of the MF update introduces fluctuations that stand in, imperfectly, for the noise of an experimental sequence. The kinetics and the directional response are both controllable through the sampling kernel, which is what makes prescribed-anisotropy tests possible at all. And the algorithm is cheap enough to generate the required volume of three-dimensional data, as the runtime comparison in Section~\ref{sec:neighborhood-physics} showed. The reported dataset contains 200 isotropic sequences and a corresponding set of inclination-dependent sequences. Each sequence starts from a different 512-grain Voronoi structure in a \(100^3\)-voxel volume and evolves for 100 simulation steps, while a training set uses only two consecutive states from one or more sequences. For the inclination-dependent data, the Gaussian sampling covariance is
 
 \[
 \boldsymbol{\Sigma}
@@ -399,7 +474,11 @@ This covariance construction applies the neighborhood-design principle of Sectio
 
 \subsubsection{Local-context sensitivity and training variability.}
 
-Window sensitivity tests show that all evaluated settings recover approximately linear coarsening, but the observation window affects the growth rate more strongly than the action window. The \(N_o=9\), \(N_a=9\) setting produces the smallest reported relative kinetic error, 2.85\%, and is used as the default. Ten replicate models trained on one two-state sequence show small spread in squared mean radius, average face count, topology-size relation, and voxel accuracy, although uncertainty grows with rollout time~\cite{tian2026threeDprimme}.
+Window sensitivity tests show that all evaluated settings recover approximately linear coarsening, but the observation window affects the growth rate more strongly than the action window, and it does so in a physically legible direction. Observation windows smaller than the relevant boundary environment underpredict the MF kinetics; windows larger than it accelerate coarsening. The action window produces a weaker and less systematic effect on growth rate, which follows from its role: once \(N_o\) has encoded the physical context, enlarging the network input adds no new information. Across the sweep, every \(N_o=9\) case falls between 2.85\% and 3.49\% relative error in \(\left\langle r\right\rangle^2\) against the MF reference, and both \(N_o=7\) and \(N_o=11\) are generally worse. The \(N_o=9\), \(N_a=9\) setting produces the smallest kinetic error, 2.85\%, and is used as the default throughout~\cite{tian2026threeDprimme}.
+
+Voxel accuracy falls with rollout time in every configuration. That decay is not by itself evidence of incorrect physics. The reference is a stochastic MF trajectory while the surrogate is deterministic, so the two diverge from the shared initial condition even when both remain physically valid, and ensemble studies of polycrystalline grain growth report the same limit on trajectory-level predictability once abrupt topological events such as grain disappearance begin to occur~\cite{lyu2026predictivity}. Voxel accuracy is read here as fidelity to the training reference, with the kinetic, topological, and distributional metrics carrying the physical claim.
+
+Ten models trained on the same single two-state sequence, differing only in initialization and data shuffling, show small spread in squared mean radius, average face count, the topology-size relation, and voxel accuracy, although the spread grows with rollout time. Varying initialization alone and shuffling alone were also tested separately, and the mean trends agree across all three settings, so the reported variability is not an artifact of one randomness source. The residual spread is read as epistemic uncertainty from finite data and parameter non-uniqueness~\cite{hullermeier2021uncertainty}, and it manifests as long-horizon trajectory divergence of the kind expected from autoregressive surrogates~\cite{mccabe2023stability,tian2026threeDprimme}.
 
 Two of the quantitative readouts can be written as
 
@@ -421,7 +500,7 @@ where the first relation is the parabolic coarsening diagnostic, \(K_g\) is the 
 
 \subsubsection{Spatial and temporal extrapolation.}
 
-The distinction between training support and inference scale is central to 3D-PRIMME. The network is trained from local patches extracted from \(100^3\)-voxel volumes and requires only one transition between two consecutive states. During inference, the same fixed local operator is applied repeatedly and independently of the global domain dimensions. A model trained at \(100^3\) is applied without retraining to \(256^3\), \(512^3\), and \(1024^3\) domains containing approximately 8,600, 68,700, and 550,000 initial grains, respectively~\cite{tian2026threeDprimme}.
+The distinction between training support and inference scale is central to 3D-PRIMME. The network is trained from local patches extracted from \(100^3\)-voxel volumes and requires only one transition between two consecutive states. During inference, the same fixed local operator is applied repeatedly and independently of the global domain dimensions. A model trained at \(100^3\) is applied without retraining to \(256^3\), \(512^3\), and \(1024^3\) domains containing approximately 8,600, 68,700, and 550,000 initial grains. The grain counts are chosen so that the mean initial grain size is the same in every domain, which makes the comparison a test of domain size alone and not of a changed microstructural state~\cite{tian2026threeDprimme}.
 
 \begin{figure}[htbp]
 \centering
@@ -430,7 +509,7 @@ The distinction between training support and inference scale is central to 3D-PR
 \label{fig:primme-extrapolation}
 \end{figure}
 
-The visual coarsening in Fig.~\ref{fig:primme-extrapolation} is accompanied by quantitative collapse across domain sizes. The tested scales exhibit closely overlapping squared-mean-radius trajectories, topological evolution, and normalized radius distributions at matched coarsening states. A \(1024^3\) rollout remains statistically stable for 100 steps, by which point 41,674 grains, or 7.6\% of the initial population, remain~\cite{tian2026threeDprimme}.
+The visual coarsening in Fig.~\ref{fig:primme-extrapolation} is accompanied by quantitative collapse across domain sizes. After a short transient associated with the Voronoi initial condition, \(\left\langle r\right\rangle^2\) grows approximately linearly and nearly identically in all three domains. The average face count rises quickly to a common steady value and collapses onto a single curve when plotted against \(\left\langle r\right\rangle^2\); the steady value is consistent with the 13 to 14 faces per grain expected for ideal three-dimensional isotropic growth~\cite{wakai2000threeD,kamachali2012topology}. Normalized grain-radius distributions also agree across domain sizes at the two matched coarsening states, \(N_G\approx N_{G,0}/2\) and \(N_G\approx N_{G,0}/4\). A \(1024^3\) rollout remains statistically stable for 100 steps, by which point 41,674 grains, or 7.6\% of the initial population, remain~\cite{tian2026threeDprimme}.
 
 \begin{figure}[p]
 \centering
@@ -457,9 +536,11 @@ Together, Figs.~\ref{fig:primme-extrapolation} and~\ref{fig:primme-scaling} dist
 
 Models trained on 1, 10, or 50 two-state sequences are evaluated against an independent set of ten MF simulations under a fixed number of optimizer updates. All three training-set sizes preserve approximately linear coarsening and similar face-count behavior. Ten sequences give the highest voxel accuracy and smallest replicate spread in that comparison, whereas the 50-sequence case coarsens more slowly and shows larger variability. The latter observation is treated as a training-design result, possibly reflecting redundancy, stochastic diversity, or insufficient optimization under the fixed update budget. It is not evidence that additional data are intrinsically harmful~\cite{tian2026threeDprimme}.
 
+The deeper reason the model tolerates so little temporal supervision is that it learns a local update rule and not a trajectory. A single \(100^3\) volume already contains a very large number of boundary-centered neighborhoods, so the training set is highly redundant: once the dominant local transition patterns are sampled, further sequences add optimization examples without adding much independent information. Dimensionality compounds this. The two-dimensional formulation required 200 sequences of five consecutive steps, whereas the three-dimensional model reaches stable predictions from one or ten sequences of two steps, because a 3D microstructure of comparable linear size contains far more local neighborhoods, interface geometries, and topological environments than a 2D one~\cite{yan2022primme,tian2026threeDprimme}.
+
 \subsubsection{Recovery of prescribed inclination dependence.}
 
-The inclination-dependent test asks for more than recovery of scalar coarsening statistics. The anisotropic MF kernel produces an evolving directional signature, but boundary inclination is not supplied to 3D-PRIMME as an explicit input feature. Nevertheless, the initially near-circular distributions develop the expected elongated response, and the 3D-PRIMME curves remain close to the MF reference in the XY, XZ, and YZ projection planes through rollout step 50. This agreement indicates that the interface-site representation retains sufficient local geometry for the network to infer the teacher's direction-dependent update rule~\cite{tian2026threeDprimme}.
+The inclination-dependent test asks for more than recovery of scalar coarsening statistics. The anisotropic MF kernel produces an evolving directional signature, but boundary inclination is not supplied to 3D-PRIMME as an explicit input feature. Nevertheless, the initially near-circular distributions develop the expected elongated response, and the 3D-PRIMME curves remain close to the MF reference in the XY, XZ, and YZ projection planes through rollout step 50. The distributions are measured with the same boundary-smoothing algorithm used in the neighborhood study~\cite{yang2022inclination,yang2024triplejunction}, so the simulation and surrogate are held to one definition of inclination. This agreement indicates that the interface-site representation retains sufficient local geometry for the network to infer the teacher's direction-dependent update rule. It also sets up a concrete extension: an explicit misorientation representation has already been demonstrated in two dimensions~\cite{melville2024anisotropic}, and adding one here would give a fully anisotropic three-dimensional operator accounting for both inclination and misorientation~\cite{tian2026threeDprimme}.
 
 \begin{figure}[htbp]
 \centering

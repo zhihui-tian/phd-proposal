@@ -379,25 +379,7 @@ It should not be claimed that the study directly proved improved 3D-PRIMME accur
 
 A local surrogate represents evolution through a fixed neighborhood operator instead of a global map over the entire volume. This creates three potential advantages. First, a small three-dimensional volume contains many local boundary-centered training examples. Second, the learned operator can be applied to a larger domain because its input size does not depend on global volume dimensions. Third, repeated application provides temporal rollouts beyond the training interval. These benefits are meaningful only if locality retains sufficient boundary context and if rollout errors do not accumulate into incorrect kinetics or topology~\cite{montes2021surrogate,yan2022primme,qin2024graingnn,tep2025grain,tian2026threeDprimme}.
 
-Validation must therefore occur at several levels:
-
-\begin{itemize}
-
-\item voxel and boundary-update agreement;
-
-\item field morphology and rigid drift;
-
-\item population kinetics such as grain count and squared mean radius;
-
-\item normalized grain-size distributions;
-
-\item topology and face-count behavior;
-
-\item individual-grain growth or shrinkage;
-
-\item inclination-dependent response where supported.
-
-\end{itemize}
+Validation must therefore span voxel and boundary-update agreement, field morphology and rigid drift, population kinetics, normalized grain-size distributions, topology and face-count behavior, individual-grain growth or shrinkage, and inclination-dependent response where supported. These observables are organized by evidentiary strength in Table~\ref{tab:evidence-ladder}.
 
 Agreement at one level does not imply agreement at another. Direct simulation--experiment studies and multi-model comparisons show that one description may reproduce size statistics while missing shape, topology, interface curvature, or individual-grain evolution~\cite{mckenna2014fourD,rowenhorst2010topology,martine2019metrics}. A learned rollout can likewise reproduce a size distribution while making incorrect individual updates or retaining the wrong topology~\cite{tian2026threeDprimme,tian2026experiment}.
 
@@ -712,19 +694,8 @@ The stable results establish direct-training feasibility and Level 1 evidence in
 \end{itemize}
 
 \subsection*{Limitations not resolved or not guaranteed by this proposal}
-\begin{itemize}
 
-\item cross-specimen, cross-processing-condition, or cross-material generalization;
-
-\item a continuously calibrated physical-time evolution law or guaranteed correction of late-time kinetics;
-
-\item formal probabilistic uncertainty calibration if the number of sufficiently independent windows is inadequate;
-
-\item proof that experimental supervision contains specific material physics absent from MF, which would require a separately calibrated simulation--experiment comparison;
-
-\item unique physical-mechanism discovery; Aim 3 may instead establish stable model interpretation or bounded physical attribution.
-
-\end{itemize}
+The proposal does not address cross-specimen, cross-processing-condition, or cross-material generalization. It also does not guarantee a continuously calibrated physical-time evolution law, correction of late-time kinetics, or formal probabilistic uncertainty calibration when the number of sufficiently independent windows is inadequate. Finally, direct experimental supervision alone cannot establish that the learned operator contains specific material physics absent from MF, which would require a separately calibrated simulation--experiment comparison, nor can it guarantee unique physical-mechanism discovery. Aim 3 may instead establish stable model interpretation or bounded physical attribution.
 
 
 \chapter{Proposed Research: Specific Aims}
@@ -784,7 +755,9 @@ Scientific claim & Feasibility of direct experimental training & Spatial reprodu
 
 \subsection{Proposed methodology}
 
-\textbf{1. Quantify window feasibility before model comparison.} The full reconstruction is \(549\times149\times211\) voxels and candidate windows are selected at \(100^3\) voxels before trimming. Figure~\ref{fig:aim1-support} shows the resulting support, spatial and temporal, and Table~\ref{tab:window-geometry} gives the per-axis arithmetic behind it. Because the \(y\) extent is only 149 voxels, any two \(100\)-voxel candidate windows must overlap by at least 51 voxels in \(y\). The absolute packing bound is ten mutually non-overlapping \(100^3\) windows, and no partition can be described as independent merely because it contains a different window origin. The actual candidate stride, overlap graph, quality distribution, and admissible-window count will be recorded before the partition design is frozen.
+\subsubsection{Experimental-window construction and curation}
+
+Window feasibility will be quantified before model comparison. The full reconstruction is \(549\times149\times211\) voxels and candidate windows are selected at \(100^3\) voxels before trimming. Figure~\ref{fig:aim1-support} shows the resulting support, spatial and temporal, and Table~\ref{tab:window-geometry} gives the per-axis arithmetic behind it. Because the \(y\) extent is only 149 voxels, any two \(100\)-voxel candidate windows must overlap by at least 51 voxels in \(y\). The absolute packing bound is ten mutually non-overlapping \(100^3\) windows, and no partition can be described as independent merely because it contains a different window origin. The actual candidate stride, overlap graph, quality distribution, and admissible-window count will be recorded before the partition design is frozen.
 
 \begin{figure}[htbp]
 \centering
@@ -809,15 +782,17 @@ Scientific claim & Feasibility of direct experimental training & Spatial reprodu
 \end{tabularx}
 \end{table}
 
-\textbf{2. Define a minimum multi-window dataset.} Additional candidate windows will be selected from the current DCT volume using the same residual-driven philosophy as the preliminary study. Selection criteria will be fixed before model comparison and will include interior-volume support, post-registration residual, displacement-gradient amplitude, boundary content, and linkage feasibility. The final number and placement of windows will depend on their measured quality.
+Additional candidate windows will be selected from the current DCT volume using the same residual-driven philosophy as the preliminary study. Selection criteria will be fixed before model comparison and will include interior-volume support, post-registration residual, displacement-gradient amplitude, boundary content, and linkage feasibility. The final number and placement of windows will depend on their measured quality.
 
-\textbf{3. Apply a consistent label-preserving curation pipeline.} Each selected window will undergo whole-label integer registration, in-place trimming to a common interior volume, and full-volume grain linkage. Registration residuals, unmatched boundary fractions, linkage yield, and retained volume will be recorded, not buried as preprocessing detail.
+Each selected window will undergo a consistent label-preserving curation pipeline comprising whole-label integer registration, in-place trimming to a common interior volume, and full-volume grain linkage. Registration residuals, unmatched boundary fractions, linkage yield, and retained volume will be recorded, not buried as preprocessing detail.
 
-\textbf{4. Define grouped training and validation partitions.} Windows connected by spatial overlap will remain in the same block so that overlapping voxels do not create an artificial impression of independence. The failure mode being guarded against is well documented outside materials science: when samples retain spatial dependence, random splits report optimistic accuracy that blocked splits do not reproduce, and the gap can be large enough to invert the apparent ranking of models~\cite{roberts2017crossvalidation,ploton2020spatial}. The effective sample size will be reported at the window or non-overlapping block level rather than as the number of candidate origins or voxel patches. Because independent blocking in \(y\) is geometrically impossible at the candidate-window scale, primary spatial holdouts will be defined along supported \(x\) and \(z\) separations, with overlapping-window analyses labeled as sensitivity or reproducibility tests, not as independent validation. Temporal holdout will be retained where common-volume and linkage definitions permit it.
+Grouped training and validation partitions will keep windows connected by spatial overlap in the same block so that overlapping voxels do not create an artificial impression of independence. The failure mode being guarded against is well documented outside materials science: when samples retain spatial dependence, random splits report optimistic accuracy that blocked splits do not reproduce, and the gap can be large enough to invert the apparent ranking of models~\cite{roberts2017crossvalidation,ploton2020spatial}. The effective sample size will be reported at the window or non-overlapping block level rather than as the number of candidate origins or voxel patches. Because independent blocking in \(y\) is geometrically impossible at the candidate-window scale, primary spatial holdouts will be defined along supported \(x\) and \(z\) separations, with overlapping-window analyses labeled as sensitivity or reproducibility tests, not as independent validation. Temporal holdout will be retained where common-volume and linkage definitions permit it.
 
-\textbf{5. Train replicate local operators under fixed definitions.} The core architecture, observation/action windows, optimizer settings, readout, and replicate policy will be held fixed for the primary comparison. Broad architecture or hyperparameter sweeps are optional and will not displace the multi-window analysis.
+\subsubsection{Model training, metrics, and null baselines}
 
-\textbf{6. Establish the experimental Level 1--2 reliability matrix.} Aim 1 owns the experimental evidence gates at both levels of Table~\ref{tab:evidence-ladder}. The canonical metric families, their evidence levels, and their null baselines are defined once in Table~\ref{tab:aim1-reliability-matrix} and are not redefined anywhere else in this proposal.
+Replicate local operators will be trained under fixed definitions. The core architecture, observation/action windows, optimizer settings, readout, and replicate policy will be held fixed for the primary comparison. Broad architecture or hyperparameter sweeps are optional and will not displace the multi-window analysis.
+
+The experimental Level 1--2 reliability matrix will then establish the evidence gates owned by Aim 1 at both levels of Table~\ref{tab:evidence-ladder}. The canonical metric families, their evidence levels, and their null baselines are defined once in Table~\ref{tab:aim1-reliability-matrix} and are not redefined anywhere else in this proposal.
 
 The matrix separates two kinds of evidence. Five families are stated as one measured quantity against one frozen null, which is what a single-shot adjudication requires, and these are the families Aim 2 carries into the training-blind test. Two further blocks, curation integrity and reproducibility, are established in Aim 1 alone. Both are estimated by examining the same data repeatedly, across curation choices, windows, and model replicates, so neither can be adjudicated by a test that permits one look. They gate which operators and partitions become eligible for Aim 2 instead of being scored by it.
 
@@ -846,11 +821,13 @@ Reproducibility & 1--2 & between-model, between-window, and grouped-block variab
 \end{tabularx}
 \end{table}
 
-\textbf{7. Establish null and readout baselines for the matrix.} Individual-grain sign accuracy will be compared with the majority growth/shrinkage class in each interval. One-step coarsening and field predictions will be compared with a no-change persistence rollout. Normalized grain-size distributions will be compared with an unchanged empirical distribution and with any additional simple null selected before final evaluation. Topology will be recomputed under prespecified speckle-removal, small-grain, and readout choices to test whether the current bias is robust or measurement/readout induced. These definitions will be frozen with the Aim 1 matrix and reused without re-adjudication in Aim 2.
+Null and readout baselines for the matrix will be established alongside the metric definitions. Individual-grain sign accuracy will be compared with the majority growth/shrinkage class in each interval. One-step coarsening and field predictions will be compared with a no-change persistence rollout. Normalized grain-size distributions will be compared with an unchanged empirical distribution and with any additional simple null selected before final evaluation. Topology will be recomputed under prespecified speckle-removal, small-grain, and readout choices to test whether the current bias is robust or measurement/readout induced. These definitions will be frozen with the Aim 1 matrix and reused without re-adjudication in Aim 2.
 
-\textbf{8. Quantify key uncertainty and sensitivity sources.} Core empirical uncertainty will include model initialization, training window, and a prespecified minimal set of curation choices such as detection threshold and high-impact registration/linkage decisions. Resampling will treat grains, boundaries, spatial blocks, windows, or trajectories as the independent unit; overlapping voxel patches will not be counted as independent observations. Resampling contiguous blocks, instead of individual observations, is the standard correction when the sampling unit is dependent~\cite{kunsch1989bootstrap}.
+\subsubsection{Uncertainty and domain of applicability}
 
-\textbf{9. Define a practical domain of applicability.} A prediction will be considered supported only when its input quality and rollout diagnostics fall within the ranges represented by reliable training/validation cases. This follows the area-of-applicability idea developed for spatial prediction, where a model is declared valid only over the region of feature space its training data actually cover~\cite{meyer2021applicability}; distribution-free conformal methods offer an alternative route to the same abstention behavior if the number of independent blocks supports calibration~\cite{angelopoulos2021conformal}. If a useful empirical uncertainty score rises with held-out error, it will be used to rank or abstain from unsupported predictions. Formal probabilistic intervals will be attempted only if the number of sufficiently independent blocks and observed variability support them.
+Key uncertainty and sensitivity sources will be quantified through model initialization, training window, and a prespecified minimal set of curation choices such as detection threshold and high-impact registration/linkage decisions. Resampling will treat grains, boundaries, spatial blocks, windows, or trajectories as the independent unit; overlapping voxel patches will not be counted as independent observations. Resampling contiguous blocks, instead of individual observations, is the standard correction when the sampling unit is dependent~\cite{kunsch1989bootstrap}.
+
+A practical domain of applicability will be defined from those results. A prediction will be considered supported only when its input quality and rollout diagnostics fall within the ranges represented by reliable training/validation cases. This follows the area-of-applicability idea developed for spatial prediction, where a model is declared valid only over the region of feature space its training data actually cover~\cite{meyer2021applicability}; distribution-free conformal methods offer an alternative route to the same abstention behavior if the number of independent blocks supports calibration~\cite{angelopoulos2021conformal}. If a useful empirical uncertainty score rises with held-out error, it will be used to rank or abstain from unsupported predictions. Formal probabilistic intervals will be attempted only if the number of sufficiently independent blocks and observed variability support them.
 
 \textbf{Required data and resources.} The core aim uses the current five-state laboratory-DCT volume, its raw and curated grain-ID maps, additional windows from the same volume, registration/linkage diagnostics, and replicate experiment-trained models. Orientation or boundary-character information may be incorporated later if reliable, but it is not required for core completion. The existing local architecture and evaluation pipeline reduce implementation risk.
 
@@ -909,13 +886,17 @@ Aim 2 is confirmatory. It imports those definitions without modification and app
 
 Aim 2 evaluates the five adjudicable families of Table~\ref{tab:aim1-reliability-matrix}, each with the measured quantity and the null baseline already frozen for it in Aim 1. No family is added, split, renamed, or given a second definition here; the two Aim 1-only blocks, curation integrity and reproducibility, are excluded for the reason given when the matrix was defined. Reproducing that table in this section would invite exactly the drift the freeze is meant to prevent, so it is referenced instead.
 
-\textbf{1. Freeze the evaluation protocol.} Before any held-out partition is examined, the metric definitions, null baselines, readout and linkage conventions, uncertainty estimator, per-family tolerance, and the identity of the evaluated partition will be recorded in a fixed protocol document together with the eligible operators carried forward from Aim 1. Model selection, including replicate selection and any stopping rule, will be completed using Aim 1 material only.
+The evaluation proceeds through three ordered phases.
 
-\textbf{2. Evaluate eligible operators on the training-blind partition.} Rollout will be initialized from a single measured experimental state and advanced autoregressively to the observed states of the evaluated partition. All five metric families will be computed with the imported definitions. Replicate models will be reported individually as well as in aggregate, so that optimization variability is not concealed by averaging.
+\subsubsection{Protocol freeze}
 
-\textbf{3. Compare each family with its frozen null.} For each family the reported quantity will be the improvement over its null baseline together with the associated uncertainty, not the raw metric alone. A family whose value does not separate from its null will be recorded as uninformative rather than as a pass.
+Before any held-out partition is examined, the metric definitions, null baselines, readout and linkage conventions, uncertainty estimator, per-family tolerance, and the identity of the evaluated partition will be recorded in a fixed protocol document together with the eligible operators carried forward from Aim 1. Model selection, including replicate selection and any stopping rule, will be completed using Aim 1 material only.
 
-\textbf{4. Test effective-time reparameterization as a support-limited diagnostic.} Physical-time trajectories and matched-state comparisons will be reported separately. For a monotone state marker \(z\), such as grain count or \(\langle R\rangle^2\), rollout step \(k\) will be assigned an effective experimental time
+\subsubsection{Single training-blind execution}
+
+Eligible operators will be evaluated once on the training-blind partition. Rollout will be initialized from a single measured experimental state and advanced autoregressively to the observed states of the evaluated partition. All five metric families will be computed with the imported definitions. Replicate models will be reported individually as well as in aggregate, so that optimization variability is not concealed by averaging.
+
+As a support-limited secondary diagnostic, effective-time reparameterization will be tested while physical-time trajectories and matched-state comparisons are reported separately. For a monotone state marker \(z\), such as grain count or \(\langle R\rangle^2\), rollout step \(k\) will be assigned an effective experimental time
 
 \begin{equation}
 t_{\mathrm{eff}}(k;z)
@@ -931,7 +912,9 @@ z\in\left\{N_g,\langle R\rangle^2\right\},
 
 using prespecified monotone interpolations of the five experimental states. Because the current matched-grain-count result places T2--T4 near rollout step 2, only approximately \(k=0,1,2\) are expected to fall distinctly within the experimental marker range. Effective time is therefore an exploratory clock diagnostic, not a calibrated trajectory. Marker consistency and interpolation sensitivity will both be tested by comparing piecewise-linear and monotone shape-preserving interpolation. A pointwise mapping will be summarized only when at least three distinct in-range rollout steps, including an interior step, are supported; a clock-drift trend will require at least four distinct steps with at least two interior points. If those support conditions fail, the two markers disagree, or interpolation changes exceed a prospectively frozen tolerance, no effective-time conclusion will be reported and only raw-time and matched-state results will be retained.
 
-\textbf{5. Adjudicate and report the validation matrix.} Each metric family will receive a pass, partial-pass, or fail interpretation together with its null comparison, uncertainty, and the stated reason for the outcome. A failed family is excluded from Aim 3 interpretation but is retained and reported, never removed from the record.
+\subsubsection{Null comparison and adjudication}
+
+For each family the reported quantity will be the improvement over its frozen null baseline together with the associated uncertainty, not the raw metric alone. A family whose value does not separate from its null will be recorded as uninformative rather than as a pass. Each metric family will then receive a pass, partial-pass, or fail interpretation together with its null comparison, uncertainty, and the stated reason for the outcome. A failed family is excluded from Aim 3 interpretation but is retained and reported, never removed from the record.
 
 \textbf{Required data and resources.} Aim 2 requires the curated experimental trajectories and eligible partitions produced by Aim 1, the experiment-trained operators and their replicates, the analysis definitions frozen in the Aim 1 reliability matrix, and the rollout and evaluation code already in use. It requires no simulation data, no new acquisition, and no simulation initialized from an experimental state.
 
@@ -1088,21 +1071,25 @@ Aim 3 is expected to produce a scale-resolved and spatially resolved account of 
 
 \section{Dependency and integration across aims}
 
-The dependency chain is what makes an unfavorable result usable. Each aim inherits the evidence gate of the one before it, so a failure narrows the domain of the claim instead of ending the program:
+The dependency chain is what makes an unfavorable result usable. Each aim inherits the evidence gate of the one before it, so a failure narrows the domain of the claim instead of ending the program (Table~\ref{tab:aim-dependency-outcomes}).
 
-\begin{itemize}
+\begin{table}[htbp]
+\centering
+\caption{How unfavorable outcomes at each evidence gate constrain the resulting dissertation claim.}
+\label{tab:aim-dependency-outcomes}
+\small
+\begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}p{0.18\textwidth}X>{\raggedright\arraybackslash}p{0.31\textwidth}@{}}
+\toprule
+\textbf{Evidence gate} & \textbf{Unfavorable outcome} & \textbf{Resulting claim ceiling} \\
+\midrule
+Aim 1 reliability & Model behavior depends strongly on one window or overlap block & Narrow the valid domain and withhold broader spatial-reproducibility claims \\
+Aim 2 validation & A metric family fails the training-blind test or does not separate from its frozen null & Record the family as failed or uninformative and exclude that output from physical interpretation \\
+Aim 3 interpretation & Model interpretation is stable but unique physical attribution is unsupported & Stop at Level 3 model interpretation rather than escalating to a physical-attribution or mechanism claim \\
+\bottomrule
+\end{tabularx}
+\end{table}
 
-\item If Aim 1 finds that performance depends strongly on one window or overlap block, the valid domain will be narrowed and broader spatial-reproducibility claims will be withheld.
-
-\item If a metric family fails the Aim 2 training-blind test, that experimental model output will not be interpreted physically, however well the same family is reproduced in the simulation domain.
-
-\item If a family passes but does not separate from its frozen null, it will be recorded as uninformative, not as evidence of predictive fidelity.
-
-\item If every family passes, the result establishes validated fidelity within the evaluated experimental domain but does not by itself prove that the operator has recovered material physics absent from the simulator.
-
-\item If Aim 3 supports stable model interpretation but not unique physical attribution, the dissertation will stop at the appropriate evidentiary level.
-
-\end{itemize}
+Conversely, if every metric family passes, the result establishes validated fidelity within the evaluated experimental domain but does not by itself prove that the operator has recovered material physics absent from the simulator.
 
 One local architecture, data representation, rollout code, replicate policy, and evidence ladder serve all three stages; what changes is the supervision source and the strength of claim the validation permits. Aim 3 implementation and diagnostic development may overlap with Aim 2 in time, but final experimental interpretation will be restricted to outputs that are both Aim 1 eligible and Aim 2 validated.
 

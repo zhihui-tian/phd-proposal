@@ -120,12 +120,12 @@ The dissertation follows the causal chain:
 
 \end{quote}
 
-The first two stages are completed foundations. They establish that local simulation rules can be physically diagnosed and that a compact local architecture can learn and scale those rules. Aim 1 then documents how one experimental field of view is selected, curated, linked, and used for direct training. Aim 2 evaluates the resulting rollout on later states that were held out from fitting but not from subsequent analysis. Changing the label generator removes the simulator from the supervision path, but it does not establish generalization beyond the selected trajectory or identify physical content absent from the simulator. Aim 3 therefore interprets only the experimental outputs supported by the available field-integrity and temporal evidence.
+The first two stages are completed foundations. They establish that local simulation rules can be physically diagnosed and that a compact local architecture can learn and scale those rules. Aim 1 then combines selection, curation, linkage, and direct T0--T1 training in one experimental field of view with retrospective evaluation on later states that were held out from fitting but not from subsequent analysis. Changing the label generator removes the simulator from the supervision path, but it does not establish generalization beyond the selected trajectory or identify physical content absent from the simulator. Aim 2 therefore interprets only the experimental outputs supported by both field-integrity and temporal evidence.
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[alt={Research workflow from simulation foundations through three dependent experimental aims},width=0.96\textwidth]{figures/proposal_framework.pdf}
-\caption{Overview of the dissertation research program. Completed simulation foundations lead to three experiment-centered aims: single-window selection, curation, and direct training; retrospective evaluation on states held out from fitting; and bounded interpretation of the supported model responses.}
+\includegraphics[alt={Research workflow from simulation foundations through two dependent experimental aims},width=0.96\textwidth]{figures/proposal_framework.pdf}
+\caption{Overview of the dissertation research program. Completed simulation foundations lead to two experiment-centered aims: establishing and evaluating direct learning from one curated 4D trajectory, followed by bounded interpretation of the supported model responses.}
 \label{fig:proposal-framework}
 \end{figure}
 
@@ -143,9 +143,9 @@ The dissertation uses one evidence ladder throughout (Table~\ref{tab:evidence-la
 \textbf{Level} & \textbf{Evidence required} & \textbf{Role in this dissertation} \\
 \midrule
 1 & \textbf{Label and field integrity:} registration, linkage, boundary updates, drift, and coherent-artifact checks & established in curation; extended in Aim 1 \\
-2 & \textbf{Mesoscale predictive fidelity:} kinetics, distributions, topology, morphology, and grain-level response relative to the appropriate reference & established for key simulation outputs; evaluated retrospectively on held-out-from-training experimental states in Aim 2 \\
-3 & \textbf{Stable model interpretation:} reproducible scale attribution and input--output response structure & simulation-domain methods completed; experimental transfer in Aim 3 \\
-4 & \textbf{Physical attribution:} stable model responses associated with measurable physical descriptors under controls & conditional Aim 3 outcome \\
+2 & \textbf{Mesoscale predictive fidelity:} kinetics, distributions, topology, morphology, and grain-level response relative to the appropriate reference & established for key simulation outputs; evaluated retrospectively on held-out-from-training experimental states in Aim 1 \\
+3 & \textbf{Stable model interpretation:} reproducible scale attribution and input--output response structure & simulation-domain methods completed; experimental transfer in Aim 2 \\
+4 & \textbf{Physical attribution:} stable model responses associated with measurable physical descriptors under controls & conditional Aim 2 outcome \\
 5 & \textbf{Candidate mechanism:} falsifiable prediction or intervention beyond pattern agreement & enabled but not guaranteed \\
 \bottomrule
 \end{tabularx}
@@ -403,7 +403,7 @@ Boundary-centered patches are extracted, and the trained network maps each local
 
 The two windows are separate design parameters because they act at different stages. The observation window \(N_o\) is applied before the network, when the grain-ID field is converted into the interface-site representation, so it can be chosen from a physical length scale such as the mean grain size. The action window \(N_a\) is applied after that conversion and fixes the input dimension of the network. Decoupling them allows the physical context used to build the representation to be set independently of the size of the learned mapping, which is what lets one architecture serve microstructures at different length scales.
 
-One architectural change from the two-dimensional formulation is worth stating explicitly, because it bears on the interpretability work in Aim 3. The original 2D PRIMME required a regularization term that penalized increases in the number of grain-boundary sites in order to keep long rollouts stable~\cite{yan2022primme}. 3D-PRIMME removes that term and remains stable. The interface-site representation, together with the finite observation and action windows, already restricts what the network can express to the local grain-boundary environment, so the constraint that had to be imposed through the loss in two dimensions is supplied by the representation itself in three~\cite{tian2026threeDprimme}.
+One architectural change from the two-dimensional formulation is worth stating explicitly, because it bears on the interpretability work in Aim 2. The original 2D PRIMME required a regularization term that penalized increases in the number of grain-boundary sites in order to keep long rollouts stable~\cite{yan2022primme}. 3D-PRIMME removes that term and remains stable. The interface-site representation, together with the finite observation and action windows, already restricts what the network can express to the local grain-boundary environment, so the constraint that had to be imposed through the loss in two dimensions is supplied by the representation itself in three~\cite{tian2026threeDprimme}.
 
 \begin{figure}[htbp]
 \centering
@@ -549,39 +549,43 @@ This multilevel strategy is consistent with the distinction between aleatoric an
 
 The available laboratory-DCT dataset contains five grain-ID reconstructions spanning four two-hour intervals. The full reconstruction contains \(549\times149\times211\) voxels, but only one curated field of view is used for the current experimental-surrogate study. This spatial restriction is central to the claim boundary: the volume contains many overlapping local training patches, but it supplies neither cross-specimen evidence nor replication across independently acquired experimental fields.
 
-Recent work shows that the local architecture can be trained directly on one curated experimental transition and rolled forward to later measured states. It also provides a decisive negative control: training on uncurated labels produces coherent rigid translation even when population-level statistics appear plausible, whereas label-preserving curation reduces that learned drift by more than an order of magnitude~\cite{tian2026experiment}. The detailed window-selection, registration, linkage, and direct-training procedure is treated as Aim 1, and evaluation against states held out from training is treated as Aim 2.
+Recent work shows that the local architecture can be trained directly on one curated experimental transition and rolled forward to later measured states. It also provides a decisive negative control: training on uncurated labels produces coherent rigid translation even when population-level statistics appear plausible, whereas label-preserving curation reduces that learned drift by more than an order of magnitude~\cite{tian2026experiment}. Aim 1 treats the detailed window-selection, registration, linkage, direct-training, and held-out temporal-evaluation workflow as one scientific objective.
 
 \section{Remaining gap motivating the proposed aims}
 
-The experimental foundation establishes the need for three distinct research objectives. Aim 1 documents and evaluates the single-window selection, label-preserving curation, and direct-training workflow that produced the current experimental operator. Aim 2 determines what that operator reproduces on T2--T4, which were held out from fitting but have already been examined during the ongoing study; this is a retrospective held-out temporal evaluation, not a new training-blind confirmatory test. Aim 3 asks which spatial information the resulting operator uses and which stable responses can be related to measurable interface geometry.
+The experimental foundation establishes the need for two distinct research objectives. Aim 1 documents and evaluates the complete single-trajectory workflow: window selection, label-preserving curation, linkage, direct T0--T1 training, and retrospective evaluation on T2--T4, which were held out from fitting but have already been examined during the ongoing study. Aim 2 asks which spatial information the resulting operator uses and which stable responses can be related to measurable interface geometry.
 
 The single selected field of view cannot support cross-window, cross-specimen, cross-processing-condition, or cross-material generalization. The dissertation also does not guarantee a continuously calibrated physical-time law, correction of late-time kinetics, formal probabilistic calibration, or unique physical-mechanism discovery. Its experimental claims will therefore remain bounded to the curated trajectory and the model, readout, temporal, and controlled-simulation variations that are actually observed.
 
 
 \chapter{Dissertation Research: Specific Aims}
 
-The dissertation research is organized by scientific dependency rather than by completion date. Aim 1 establishes a single-window selection, label-preserving curation, and direct-training workflow. Aim 2 evaluates the resulting operator on later experimental states that were held out from fitting. Aim 3 interprets only relationships supported by those field-integrity and temporal-evaluation results.
+The dissertation research is organized by scientific dependency rather than by completion date. Aim 1 establishes and evaluates direct experimental learning within one curated 4D trajectory. Aim 2 interprets only relationships supported by both the field-integrity and temporal-evaluation stages of Aim 1.
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[alt={Dependency ladder in which Aim 1 enables Aim 2 and Aim 2 enables Aim 3},width=0.94\textwidth]{figures/specific_aims_overview.pdf}
-\caption{Specific Aims and their scientific dependency. Single-window selection, curation, and direct training in Aim 1 enable held-out temporal evaluation in Aim 2; only supported relationships advance to interpretability and physics learning in Aim 3.}
+\includegraphics[alt={Dependency ladder in which Aim 1 establishes and evaluates direct experimental learning before Aim 2 interpretation},width=0.94\textwidth]{figures/specific_aims_overview.pdf}
+\caption{Specific Aims and their scientific dependency. Aim 1 combines single-window selection, curation, direct training, and held-out temporal evaluation; only supported relationships advance to interpretability and physics learning in Aim 2.}
 \label{fig:specific-aims-overview}
 \end{figure}
 
-\section{Aim 1: Establish direct experimental learning from a curated 4D window}
+\section{Aim 1: Establish and evaluate direct experimental learning from a curated 4D trajectory}
 
 \subsection{Question and hypothesis}
 
-Can a residual-driven, label-preserving workflow select and curate one experimental 4D window well enough for a local surrogate to learn grain evolution without learning acquisition motion as dynamics?
+Can a residual-driven, label-preserving workflow select and curate one experimental 4D window well enough for a local surrogate to learn grain evolution without learning acquisition motion as dynamics, and to what extent does the resulting operator reproduce the measured T2--T4 evolution in the same field of view?
 
-If the selected field of view is registered by whole-label transformations, linked before local target construction, and audited with direction-sensitive residual and rollout-drift diagnostics, then the unmodified local architecture can learn a stable experimental transition from T0 to T1. The resulting claim is deliberately local: Aim 1 establishes data integrity and direct-training feasibility in the selected trajectory, not spatial reproducibility across experimental windows.
+If the selected field of view is registered by whole-label transformations, linked before local target construction, and audited with direction-sensitive residual and rollout-drift diagnostics, then the unmodified local architecture can learn a stable experimental transition from T0 to T1. On T2--T4, the resulting operator will reproduce field morphology, early coarsening kinetics, and normalized grain-size statistics more faithfully than topology and individual-grain volume change. Comparisons with persistence, unchanged-distribution, majority-class, and readout-sensitivity baselines will distinguish incremental predictive information from agreement that follows from slow or self-similar evolution. The resulting claim is deliberately local: Aim 1 establishes data integrity, direct-training feasibility, and a bounded fidelity profile in the selected trajectory, not spatial reproducibility across experimental windows.
 
 \subsection{Rationale and preliminary evidence}
 
 Direct experimental supervision changes the teacher from a controlled simulator to measured evolution, but it also makes label construction part of the scientific model. A rigid or spatially varying registration residual can become a coherent learned update and then amplify under autoregressive rollout. Aim 1 therefore treats window selection, categorical registration, grain linkage, and drift auditing as components of the learning method rather than as incidental preprocessing. The work uses one field of view because that is the experimental trajectory selected and analyzed in the ongoing study; no cross-window claim is made.
 
-\subsection{Methodology and completed results}
+T2--T4 were excluded from model fitting, so they test temporal extrapolation beyond the T0--T1 training pair. They are not a new confirmatory partition: all five states contributed to the common interior-volume definition, and the later states have already been examined in the ongoing study. The temporal component of Aim 1 is therefore framed as retrospective held-out-from-training evaluation within one selected field of view. This distinction prevents temporal holdout from being overstated as independent system validation.
+
+The existing results already span favorable and unfavorable outcomes. Rollouts remain morphologically coherent and reproduce early aggregate coarsening and normalized size-distribution shape, while late-time kinetics, topology, and individual-grain magnitude show visible limitations~\cite{tian2026experiment}. Aim 1 consolidates those results under the common matrix of Table~\ref{tab:aim1-reliability-matrix} and completes the persistence, majority-class, unchanged-distribution, and readout-sensitivity comparisons needed to state what information the model adds beyond simple baselines.
+
+\subsection{Curation, direct training, and field-integrity results}
 
 The ongoing study uses five laboratory-DCT grain-ID reconstructions acquired after cumulative holds of 8, 10, 12, 14, and 16 hours. The full reconstruction contains \(549\times149\times211\) voxels. Window selection uses only the tracked T0--T1 pair and proceeds in two stages. A \(100^3\) window is first scanned over the full admissible corner domain at a 25-voxel stride: \(x=0,25,\ldots,425\), \(y\in\{0,25\}\), and \(z=0,25,\ldots,100\), with the historical reference corner \((449,24,34)\) added explicitly. Of these 181 placements, 52 contain at least 97\% foreground in the T0--T1 union mask. A 5-voxel refinement is then performed over \(x=280,285,\ldots,380\), \(y=15,20,\ldots,35\), and \(z=40,45,\ldots,90\), again including the historical corner. This stage enumerates 1,156 placements and retains 831 after the same foreground filter.
 
@@ -605,7 +609,7 @@ The score identifies a low-distortion family rather than a unique isolated optim
 \begin{figure}[htbp]
 \centering
 \includegraphics[alt={Single-window selection and the experimental time sequence used for training and evaluation},width=\textwidth]{figures/aim1_support.png}
-\caption{Experimental support used in Aims 1--2. Left: one \(100^3\) field of view is selected from 831 candidate placements using a residual-driven objective and then trimmed in place to \(100\times95\times84\) voxels before label-preserving registration and linkage. Right: T0--T1 supplies the only training transition; T2--T4 are held out from fitting and used for retrospective temporal evaluation in Aim 2.}
+\caption{Experimental support used in Aim 1. Left: one \(100^3\) field of view is selected from 831 candidate placements using a residual-driven objective and then trimmed in place to \(100\times95\times84\) voxels before label-preserving registration and linkage. Right: T0--T1 supplies the only training transition; T2--T4 are held out from fitting and used for retrospective temporal evaluation.}
 \label{fig:aim1-support}
 \end{figure}
 
@@ -634,18 +638,18 @@ The unmodified 3D-PRIMME architecture is then trained on T0--T1. A \(9^3\) obser
 
 The curation reduces unmatched boundary fractions on three visible faces from 0.54--0.73 to 0.19--0.21, leaves residual displacement no larger than 0.05 voxel per axis, and removes 87\% of the dominant rotation-induced displacement ramp. The uncurated control nevertheless retains plausible population statistics while its recursive rollout develops a coherent drift of 3.0--4.2 voxels per step, with a mean near 3.5. After curation, the mean per-step displacement across the three models is approximately \((-0.02,+0.13,-0.09)\) voxels along \((x,y,z)\), and the representative drift magnitude remains near 0.14--0.18 voxel per step. The result establishes direct-training feasibility and shows why directional field diagnostics must accompany aggregate agreement~\cite{tian2026experiment}.
 
-The experimental evaluation matrix separates the field-integrity evidence established in Aim 1 from the temporal rollout quantities reported in Aim 2. The five predictive families and their comparators are defined once in Table~\ref{tab:aim1-reliability-matrix}. Because T2--T4 have already been examined in the ongoing study, the final null and sensitivity comparisons are retrospective reporting controls, not prospectively frozen components of a new confirmatory test.
+The experimental evaluation matrix separates the field-integrity evidence from the temporal rollout quantities within Aim 1. The five predictive families and their comparators are defined once in Table~\ref{tab:aim1-reliability-matrix}. Because T2--T4 have already been examined in the ongoing study, the final null and sensitivity comparisons are retrospective reporting controls, not prospectively frozen components of a new confirmatory test.
 
 \begin{table}[htbp]
 \centering
-\caption{Experimental evaluation matrix spanning Aims 1--2. Aim 1 establishes curation integrity and robustness across model and analysis choices; Aim 2 reports five predictive families on T2--T4 together with the listed null or sensitivity comparisons.}
+\caption{Experimental evaluation matrix for Aim 1. Curation and robustness measures establish field integrity; five predictive families on T2--T4 are reported with the listed null or sensitivity comparisons.}
 \label{tab:aim1-reliability-matrix}
 \small
 \begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}p{0.20\textwidth}X>{\raggedright\arraybackslash}p{0.29\textwidth}@{}}
 \toprule
 \textbf{Family} & \textbf{Measured quantity} & \textbf{Comparison or sensitivity baseline} \\
 \midrule
-\multicolumn{3}{@{}l}{\emph{Reported on held-out-from-training states in Aim 2}}\\
+\multicolumn{3}{@{}l}{\emph{Reported on held-out-from-training states}}\\
 \addlinespace[2pt]
 Morphology & voxel overlap and boundary discrepancy against the measured state; coherent-artifact diagnostics & no-change persistence rollout \\
 Kinetics & grain count and \(\langle R\rangle^2\) trajectories; directional rigid drift & persistence rollout; uncurated-drift reference \\
@@ -653,7 +657,7 @@ Size distribution & normalized grain-size distribution discrepancy, with detecti
 Topology & average face count and linkage-consistent neighbor change & readout-, speckle-, and small-grain-perturbed recomputation \\
 Individual-grain response & growth/shrinkage sign and magnitude where linkage supports identities & majority growth/shrinkage class \\
 \addlinespace[3pt]
-\multicolumn{3}{@{}l}{\emph{Established in Aim 1}}\\
+\multicolumn{3}{@{}l}{\emph{Established by curation and direct training}}\\
 \addlinespace[2pt]
 Curation integrity & registration residual by axis, unmatched boundary fraction, linkage yield, retained volume & curated versus uncurated comparison \\
 Replicate and analysis robustness & between-model variability and sensitivity to detection, padding, registration, linkage, readout, speckle, and small-grain choices & documented alternate analysis choices \\
@@ -663,34 +667,11 @@ Replicate and analysis robustness & between-model variability and sensitivity to
 
 The remaining Aim 1 analyses complete the reporting controls in the matrix. Model variability is estimated across the three initializations; curation sensitivity is evaluated through the existing detection-threshold, padding, registration, linkage, and readout analyses. Resampling treats grains or coherent spatial blocks, rather than overlapping voxel patches, as the sampling unit~\cite{kunsch1989bootstrap}. Aim 1 does not use these variations to estimate cross-window generalization or formal probabilistic uncertainty.
 
-Aim 1 uses the current five-state laboratory-DCT volume, the 831-candidate search record, the raw and curated grain-ID maps for the selected window, registration and linkage diagnostics, and the three experiment-trained model replicates. No additional experimental window or new acquisition is required.
+The curation and direct-training stages use the current five-state laboratory-DCT volume, the 831-candidate search record, the raw and curated grain-ID maps for the selected window, registration and linkage diagnostics, and the three experiment-trained model replicates.
 
-\subsection{Evaluation criteria, expected outcomes, and contingencies}
+\subsection{Temporal-evaluation methodology and current results}
 
-Aim 1 separates its preprocessing gate from its post-training diagnostics. The quantitative registration gate is mean T0--T1 label displacement no larger than 0.05 voxel on each axis; the curated pair satisfies this gate. Unmatched boundary fraction, linkage yield, retained volume, and comparison with the uncurated labels are reported to expose the remaining data limitations, but the existing analysis record does not assign them additional pass/fail thresholds. Directional rollout drift across the three trained models and grain-count monotonicity are post hoc diagnostics, not curation acceptance gates, because they depend on trained-model behavior or later measured states. Sensitivity conclusions must be reported across model replicates and coherent units rather than pooled voxel patches.
-
-The achieved outcome is a curated single-window trajectory and a directly trained local operator whose label and field integrity are documented. Its claim boundary is the selected field of view and the T0--T1 transition; Aim 1 does not establish spatial reproducibility elsewhere in the reconstruction.
-
-The completed search record makes the selection reproducible while preserving its claim boundary: rank 15 is a near-optimal member of a low-distortion family chosen after a separate surface-contact screen, not the unconstrained minimizer of a single objective. If a future dataset fails the 0.05-voxel registration gate, direct-learning claims based on that pair will be withheld. If linkage is inadequate, grain-level claims will be withheld even when identity-agnostic field and population diagnostics remain reportable.
-
-
-\section{Aim 2: Evaluate experiment-trained rollout on held-out experimental states}
-
-\subsection{Question and hypothesis}
-
-To what extent does an operator trained only on the curated T0--T1 transition reproduce the measured T2--T4 evolution in the same field of view?
-
-The experiment-trained operator will reproduce field morphology, early coarsening kinetics, and normalized grain-size statistics more faithfully than topology and individual-grain volume change. Comparisons with persistence, unchanged-distribution, majority-class, and readout-sensitivity baselines will distinguish incremental predictive information from agreement that follows from slow or self-similar evolution.
-
-\subsection{Rationale and preliminary evidence}
-
-T2--T4 were excluded from model fitting, so they test temporal extrapolation beyond the T0--T1 training pair. They are not a new confirmatory partition: all five states contributed to the common interior-volume definition, and the later states have already been examined in the ongoing study. Aim 2 is therefore framed as retrospective held-out-from-training evaluation within one selected field of view. This distinction prevents temporal holdout from being overstated as independent system validation.
-
-The existing results already span favorable and unfavorable outcomes. Rollouts remain morphologically coherent and reproduce early aggregate coarsening and normalized size-distribution shape, while late-time kinetics, topology, and individual-grain magnitude show visible limitations~\cite{tian2026experiment}. Aim 2 consolidates those results under the common matrix of Table~\ref{tab:aim1-reliability-matrix} and completes the persistence, majority-class, unchanged-distribution, and readout-sensitivity comparisons needed to state what information the model adds beyond simple baselines.
-
-\subsection{Evaluation methodology and current results}
-
-Aim 2 reports the five predictive families of Table~\ref{tab:aim1-reliability-matrix} on T2--T4. Physical-time trajectories are shown separately from matched-grain-count comparisons, and all three model replicates are reported so that initialization variability is not concealed by averaging. The learned rollouts remain visually coherent: large grains grow, small grains disappear, boundaries flatten, and only a short-lived single-voxel speckle artifact is reported. After one rollout step, the representative prediction retains 1,624 grains compared with 1,609 in experiment. The prediction later diverges as the experiment slows between T3 and T4 while the fixed two-hour learned operator maintains a steadier rate~\cite{tian2026experiment}.
+The temporal evaluation reports the five predictive families of Table~\ref{tab:aim1-reliability-matrix} on T2--T4. Physical-time trajectories are shown separately from matched-grain-count comparisons, and all three model replicates are reported so that initialization variability is not concealed by averaging. The learned rollouts remain visually coherent: large grains grow, small grains disappear, boundaries flatten, and only a short-lived single-voxel speckle artifact is reported. After one rollout step, the representative prediction retains 1,624 grains compared with 1,609 in experiment. The prediction later diverges as the experiment slows between T3 and T4 while the fixed two-hour learned operator maintains a steadier rate~\cite{tian2026experiment}.
 
 \begin{figure}[htbp]
 \centering
@@ -758,34 +739,36 @@ z\in\left\{N_g,\langle R\rangle^2\right\},
 \end{equation}
 using monotone interpolations of the five experimental states. Because the matched-grain-count result places T2--T4 near rollout step 2, only approximately \(k=0,1,2\) fall distinctly within the experimental marker range. Effective time is therefore an exploratory clock diagnostic, not a calibrated trajectory. Piecewise-linear and monotone shape-preserving interpolation will be compared, and both grain count and \(\langle R\rangle^2\) must support the same qualitative conclusion. A pointwise mapping will be summarized only when at least three distinct in-range rollout steps, including an interior step, are supported; a clock-drift trend requires at least four distinct steps with at least two interior points. The final interpolation-sensitivity tolerance remains \texttt{[NEEDS EFFECTIVE-TIME SENSITIVITY TOLERANCE]}. If support is insufficient or the markers disagree, only raw-time and matched-state results will be retained.
 
-Final reporting will give each metric family a supported, mixed, unsupported, or uninformative interpretation together with its simple baseline, model-replicate spread, and relevant readout sensitivity. These labels summarize retrospective evidence; they are not confirmatory pass/fail decisions with a prospective error rate. Unsupported outputs remain in the record and do not advance to experimental interpretation in Aim 3.
+Final reporting will give each metric family a supported, mixed, unsupported, or uninformative interpretation together with its simple baseline, model-replicate spread, and relevant readout sensitivity. These labels summarize retrospective evidence; they are not confirmatory pass/fail decisions with a prospective error rate. Unsupported outputs remain in the record and do not advance to experimental interpretation in Aim 2.
 
-Aim 2 uses the curated T0--T4 trajectory, the three experiment-trained model replicates from Aim 1, and the existing rollout, linkage, topology, and distribution-analysis code. It requires no new acquisition, second spatial window, or simulation initialized from the experimental state.
+The temporal-evaluation stage uses the curated T0--T4 trajectory, the three experiment-trained model replicates, and the existing rollout, linkage, topology, and distribution-analysis code. Aim 1 requires no new acquisition, second spatial window, or simulation initialized from the experimental state.
 
 \subsection{Evaluation criteria, expected outcomes, and contingencies}
 
-Aim 2 succeeds as an evaluation if all five metric families are reported against the comparisons in Table~\ref{tab:aim1-reliability-matrix}, uncertainty is based on model replicates and coherent units rather than pooled voxels, and the already-observed status of T2--T4 is stated explicitly. Final quantitative criteria for distinguishing supported from mixed evidence remain \texttt{[NEEDS FINAL RETROSPECTIVE REPORTING CRITERIA]}.
+Aim 1 separates its preprocessing gate from its post-training diagnostics. The quantitative registration gate is mean T0--T1 label displacement no larger than 0.05 voxel on each axis; the curated pair satisfies this gate. Unmatched boundary fraction, linkage yield, retained volume, and comparison with the uncurated labels are reported to expose the remaining data limitations, but the existing analysis record does not assign them additional pass/fail thresholds. Directional rollout drift across the three trained models and grain-count monotonicity are post hoc diagnostics, not curation acceptance gates, because they depend on trained-model behavior or later measured states. Sensitivity conclusions must be reported across model replicates and coherent units rather than pooled voxel patches.
 
-The expected result is a mixed fidelity profile: field morphology, early kinetics, and normalized size distributions are likely to add information beyond their simple baselines, while topology or individual-grain response may remain unsupported. That profile defines which outputs may be interpreted in Aim 3 within the selected trajectory.
+Aim 1 succeeds as an evaluation if all five metric families are reported against the comparisons in Table~\ref{tab:aim1-reliability-matrix}, uncertainty is based on model replicates and coherent units rather than pooled voxels, and the already-observed status of T2--T4 is stated explicitly. Final quantitative criteria for distinguishing supported from mixed evidence remain \texttt{[NEEDS FINAL RETROSPECTIVE REPORTING CRITERIA]}.
 
-The main limitations are temporal support and linkage. If T2--T4 do not support a stable effective-time mapping, no clock conclusion will be reported. If linkage is inadequate, identity-agnostic population or boundary quantities will be reported instead of grain-level response. No failed family will be replaced by a more favorable post hoc metric, and none of these analyses will be described as independent validation.
+The achieved foundation is a curated single-window trajectory and a directly trained local operator whose label and field integrity are documented. The expected final result is a mixed fidelity profile: field morphology, early kinetics, and normalized size distributions are likely to add information beyond their simple baselines, while topology or individual-grain response may remain unsupported. That profile defines which outputs may be interpreted in Aim 2 within the selected trajectory.
+
+The completed search record makes the selection reproducible while preserving its claim boundary: rank 15 is a near-optimal member of a low-distortion family chosen after a separate surface-contact screen, not the unconstrained minimizer of a single objective. If a future dataset fails the 0.05-voxel registration gate, direct-learning claims based on that pair will be withheld. If linkage is inadequate, identity-agnostic population or boundary quantities will be reported instead of grain-level response even when field and population diagnostics remain reportable. If T2--T4 do not support a stable effective-time mapping, no clock conclusion will be reported. No failed family will be replaced by a more favorable post hoc metric, and none of these analyses will be described as independent validation. Aim 1 does not establish spatial reproducibility elsewhere in the reconstruction.
 
 
-\section{Aim 3: Interpretability and physics learning from experimentally learned evolution rules}
+\section{Aim 2: Interpretability and physics learning from experimentally learned evolution rules}
 
 \subsection{Question and hypothesis}
 
 Which spatial information does a reliable experiment-trained operator use, how is that information transformed into local evolution decisions, and which reproducible response signatures can be related to measurable grain-boundary geometry?
 
-Experiment-trained operators that pass the Aim 1 field-integrity and Aim 2 temporal-evaluation gates will exhibit a reproducible hierarchy of spatial information and a localized, symmetry-consistent response structure. Short-range neighborhoods will carry the dominant transition information, while additional scales will improve trajectory-level fidelity. After numerical and data-induced artifacts are controlled, the resulting scale dependence and output sensitivities will be associated with measurable curvature, topology, and inclination descriptors. Relationships that remain stable across model initializations, available experimental states, relevant geometric strata, and a controlled simulation test may support bounded physical attribution within the selected trajectory; otherwise, they will remain model-level interpretations.
+Experiment-trained operators that pass the Aim 1 field-integrity and temporal-evaluation gates will exhibit a reproducible hierarchy of spatial information and a localized, symmetry-consistent response structure. Short-range neighborhoods will carry the dominant transition information, while additional scales will improve trajectory-level fidelity. After numerical and data-induced artifacts are controlled, the resulting scale dependence and output sensitivities will be associated with measurable curvature, topology, and inclination descriptors. Relationships that remain stable across model initializations, available experimental states, relevant geometric strata, and a controlled simulation test may support bounded physical attribution within the selected trajectory; otherwise, they will remain model-level interpretations.
 
 \subsection{Rationale and preliminary evidence}
 
-Prediction alone does not establish physical understanding. The neighborhood study shows that a local sampling rule can alter macroscopic anisotropy and pinning, and 3D-PRIMME shows that a learned operator can recover prescribed inclination dependence~\cite{tian2026neighborhood,tian2026threeDprimme}. These findings make the local neighborhood scientifically meaningful, but they do not reveal which parts of that neighborhood drive a trained model or how the learned representation produces a transition. Gradient-based attribution provides a principled way to connect outputs to inputs, but attribution maps require explicit fidelity checks because visually plausible explanations can be insensitive to the learned model or training labels~\cite{sundararajan2017attribution,adebayo2018sanity}. The wider interpretability literature reinforces the point from several directions: saliency maps can shift under input transformations that leave the prediction unchanged~\cite{kindermans2019unreliability}; several popular attribution methods perform no better than random feature ranking when scored by retraining after removal~\cite{hooker2019roar}; and an explanation of a black box is not the same object as an account of the mechanism~\cite{rudin2019stopexplaining}. These are the reasons Aim 3 pairs every attribution summary with a functional test. The aim interrogates the same operator from two complementary directions. Input-side analysis asks which spatial scales supply useful information. Output-side analysis asks how perturbations of that information change the model's transition field. The simulation-trained operator provides a controlled development environment; the primary experimental target is the operator whose field integrity is established in Aim 1 and whose relevant outputs are supported by the Aim 2 temporal evaluation.
+Prediction alone does not establish physical understanding. The neighborhood study shows that a local sampling rule can alter macroscopic anisotropy and pinning, and 3D-PRIMME shows that a learned operator can recover prescribed inclination dependence~\cite{tian2026neighborhood,tian2026threeDprimme}. These findings make the local neighborhood scientifically meaningful, but they do not reveal which parts of that neighborhood drive a trained model or how the learned representation produces a transition. Gradient-based attribution provides a principled way to connect outputs to inputs, but attribution maps require explicit fidelity checks because visually plausible explanations can be insensitive to the learned model or training labels~\cite{sundararajan2017attribution,adebayo2018sanity}. The wider interpretability literature reinforces the point from several directions: saliency maps can shift under input transformations that leave the prediction unchanged~\cite{kindermans2019unreliability}; several popular attribution methods perform no better than random feature ranking when scored by retraining after removal~\cite{hooker2019roar}; and an explanation of a black box is not the same object as an account of the mechanism~\cite{rudin2019stopexplaining}. These are the reasons Aim 2 pairs every attribution summary with a functional test. The aim interrogates the same operator from two complementary directions. Input-side analysis asks which spatial scales supply useful information. Output-side analysis asks how perturbations of that information change the model's transition field. The simulation-trained operator provides a controlled development environment; the primary experimental target is the operator whose field integrity and relevant temporal outputs are supported by Aim 1.
 
-Three simulation-domain analyses establish the feasibility of stable model interpretation: one input-side probe that asks which spatial scales supply useful information, and two output-side probes that ask how the model converts that information into a transition, through confidence conditioned on a local curvature proxy and through the action field and full Jacobian. None of them satisfies the experimental reliability gates or completes Aim 3. Their role is to validate the probes and expose numerical failure modes before the same analyses are transferred to experiment-trained operators.
+Three simulation-domain analyses establish the feasibility of stable model interpretation: one input-side probe that asks which spatial scales supply useful information, and two output-side probes that ask how the model converts that information into a transition, through confidence conditioned on a local curvature proxy and through the action field and full Jacobian. None of them satisfies the experimental reliability gates or completes Aim 2. Their role is to validate the probes and expose numerical failure modes before the same analyses are transferred to experiment-trained operators.
 
-The input-side feasibility study compares multiscale 3D-PRIMME models with observation windows \(7^3\), \(9^3\), and \(11^3\) against matched single-scale models across ten training seeds (Figure~\ref{fig:aim3-input-prelim}). The multiscale model produced the lowest error in the simulated mean-squared grain-radius trajectory (\(11.76\pm1.93\), compared with \(13.39\)--\(22.19\) for the single-scale models) while matching the best voxel-level accuracy (\(0.842\pm0.015\)). Relative \(L_1\) norms of the learned scale-mixing blocks consistently assigned greater weight to smaller observation windows, with diminishing contributions from larger and closely spaced windows. Increasing the prediction gap from one to four frames shifted weight slightly toward larger windows, but the change was less than three percentage points. These results support the feasibility of scale attribution while also showing that raw mixer weights must be paired with functional ablations before they are interpreted physically.
+The input-side feasibility study compares multiscale 3D-PRIMME models with observation windows \(7^3\), \(9^3\), and \(11^3\) against matched single-scale models across ten training seeds (Figure~\ref{fig:aim2-input-prelim}). The multiscale model produced the lowest error in the simulated mean-squared grain-radius trajectory (\(11.76\pm1.93\), compared with \(13.39\)--\(22.19\) for the single-scale models) while matching the best voxel-level accuracy (\(0.842\pm0.015\)). Relative \(L_1\) norms of the learned scale-mixing blocks consistently assigned greater weight to smaller observation windows, with diminishing contributions from larger and closely spaced windows. Increasing the prediction gap from one to four frames shifted weight slightly toward larger windows, but the change was less than three percentage points. These results support the feasibility of scale attribution while also showing that raw mixer weights must be paired with functional ablations before they are interpreted physically.
 
 \begin{figure}[htbp]
 \centering
@@ -795,7 +778,7 @@ The input-side feasibility study compares multiscale 3D-PRIMME models with obser
 
 \includegraphics[alt={Relative scale-mixer weights across spatial observation windows},width=0.96\textwidth]{figures/aim3_scale_mixer_weights.png}
 \caption{Existing simulation-domain results used directly for input-side interpretability. Top: \(\langle r^2\rangle\) trajectories over 100 rollout steps for the MF reference and the single- and multiscale model ensembles; bands summarize variation across ten seeds. Bottom: relative \(L_1\) scale-mixer weights for two multiscale configurations. Multiscale prediction improves trajectory fidelity, while the learned mixer places greater parameter weight on smaller observation windows. Mixer norms remain attribution indicators, not physical causal effects, until functional ablation supports them.}
-\label{fig:aim3-input-prelim}
+\label{fig:aim2-input-prelim}
 \end{figure}
 
 The first output-side probe conditions model confidence on a local curvature proxy. For boundary voxel \(i\), this proxy is the number of neighboring voxels whose grain identity differs from the center in a \(3\times3\times3\) neighborhood,
@@ -805,7 +788,7 @@ c_i=\sum_{j\in\mathcal{N}_{3\times3\times3}(i)\setminus i}
 \]
 where \(g_i\) is the grain identity at the center voxel. The model response is summarized by the maximum predicted transition score, \(q_i=\max_m p_i(m)\), and by output entropy. When the analysis is restricted to neighborhoods containing exactly two grain identities, \(q_i\) decreases toward the locally flat-interface proxy \(c_i\approx13\) and increases again for more strongly concave or convex configurations. Entropy shows the complementary trend. Including or excluding the center action produces no visible change because \(99.97\%\) of sampled boundary voxels select a neighboring identity. Pooling two-grain boundaries with higher-order junctions, by contrast, obscures the U-shaped response; junction neighborhoods constitute approximately \(65\%\) of the boundary-voxel population in this test. The result supports a topology-conditioned association between model confidence and a discrete curvature proxy, not direct recovery of a continuum curvature law.
 
-The second output-side probe examines the action field and full input--output Jacobian. The mean \(9^3\) action-likelihood field is compact, centered to within \(0.16\) voxel, and accurately summarized by a three-dimensional Gaussian with per-voxel fitting error below \(0.01\). A full Jacobian pipeline was then verified against an analytic symmetric function to machine precision. The analysis exposed a storage-axis bias introduced by the padding implementation; assigning each training sample a uniformly selected cubic-group transformation removed the systematic bias without changing validation loss. In the symmetry-controlled model, the aggregate sensitivity contains a center dip, a nearest-neighbor ring, and an approximately isotropic decay (Figures~\ref{fig:aim3-jacobian-render} and~\ref{fig:aim3-output-prelim}), while each directional output preferentially responds to the input in its own direction.
+The second output-side probe examines the action field and full input--output Jacobian. The mean \(9^3\) action-likelihood field is compact, centered to within \(0.16\) voxel, and accurately summarized by a three-dimensional Gaussian with per-voxel fitting error below \(0.01\). A full Jacobian pipeline was then verified against an analytic symmetric function to machine precision. The analysis exposed a storage-axis bias introduced by the padding implementation; assigning each training sample a uniformly selected cubic-group transformation removed the systematic bias without changing validation loss. In the symmetry-controlled model, the aggregate sensitivity contains a center dip, a nearest-neighbor ring, and an approximately isotropic decay (Figures~\ref{fig:aim2-jacobian-render} and~\ref{fig:aim2-output-prelim}), while each directional output preferentially responds to the input in its own direction.
 
 Let \(S(r)\) denote the shell mean of the voxelwise total sensitivity \(S(n)\) at distance \(r\) from the neighborhood center. This radial sensitivity is currently represented by a Shell-Gauss+\(C\) candidate model,
 \[
@@ -827,7 +810,7 @@ S(r)=
 \exp\!\left[-\frac{r^2}{2(1.75)^2}\right]
 +0.011.
 \]
-The first term describes a sensitivity shell centered at approximately one voxel, the second describes a broader short-range background, and \(C\) represents the nonzero long-range tail. The fit uses shell means over the radial domain while excluding the eight corner voxels at \(r\approx6.93\). Figure~\ref{fig:aim3-jacobian-render} keeps the distinction between the measured aggregate Jacobian and its radial approximation explicit: the former is computed directly from network derivatives, whereas the latter is a smooth post-hoc representation of that response. The fit is a candidate summary of the learned response, not an independently learned kernel, a finalized physical law, or proof that a unique physical mechanism has been recovered.
+The first term describes a sensitivity shell centered at approximately one voxel, the second describes a broader short-range background, and \(C\) represents the nonzero long-range tail. The fit uses shell means over the radial domain while excluding the eight corner voxels at \(r\approx6.93\). Figure~\ref{fig:aim2-jacobian-render} keeps the distinction between the measured aggregate Jacobian and its radial approximation explicit: the former is computed directly from network derivatives, whereas the latter is a smooth post-hoc representation of that response. The fit is a candidate summary of the learned response, not an independently learned kernel, a finalized physical law, or proof that a unique physical mechanism has been recovered.
 
 \begin{figure}[htbp]
 \centering
@@ -845,7 +828,7 @@ The first term describes a sensitivity shell centered at approximately one voxel
 \small (b) Radial Shell-Gauss+\(C\) approximation
 \end{minipage}
 \caption{Three-dimensional comparison of the learned operator's output-side response and its compact radial approximation. (a) The aggregate sensitivity is computed directly from the mean absolute full Jacobian and summed over all 729 output positions; it retains voxel-scale deviations from perfect radial symmetry. (b) The Shell-Gauss+\(C\) function is fitted to radial shell means and evaluated on the same \(9^3\) grid; it enforces a smooth isotropic response while preserving the nearest-neighbor shell, broader short-range component, and nonzero tail. The right panel is a post-hoc summary of the left panel, not a second independently learned kernel.}
-\label{fig:aim3-jacobian-render}
+\label{fig:aim2-jacobian-render}
 \end{figure}
 
 \begin{figure}[htbp]
@@ -856,18 +839,18 @@ The first term describes a sensitivity shell centered at approximately one voxel
 
 \includegraphics[alt={Shell-averaged radial sensitivity and three candidate response fits},width=0.90\textwidth]{figures/aim3_jacobian_radial_fit.png}
 \caption{Existing full-Jacobian results used directly for output-side response probing. Top: three orthogonal central slices of the total absolute input sensitivity for the cubic-group-symmetrized all-voxel model. The sensitivity is approximately axis symmetric and contains a center dip surrounded by a stronger nearest-neighbor response. Bottom: shell-averaged radial sensitivity and three candidate fits, showing a nearest-neighbor-scale maximum followed by short-range decay and a nonzero tail. The fitting comparison remains exploratory; no functional form is treated as a finalized physical law.}
-\label{fig:aim3-output-prelim}
+\label{fig:aim2-output-prelim}
 \end{figure}
 
 \subsection{Proposed methodology}
 
-Aim 3A will determine which spatial scales drive the experimental outputs supported by Aim 2. For the experiment-trained model family established in Aim 1, matched single-scale and multiscale configurations will be evaluated on those output families. Comparing or transferring scale conclusions across simulation- and experiment-trained models lies outside the core plan, since the two sources do not yet share an audited set of commensurate metrics. If \(W_s\) denotes the block of the scale-mixing layer associated with observation scale \(s\), its global parameter-based importance will be summarized as
+Aim 2A will determine which spatial scales drive the experimental outputs supported by Aim 1. For the experiment-trained model family established and evaluated in Aim 1, matched single-scale and multiscale configurations will be evaluated on those output families. Comparing or transferring scale conclusions across simulation- and experiment-trained models lies outside the core plan, since the two sources do not yet share an audited set of commensurate metrics. If \(W_s\) denotes the block of the scale-mixing layer associated with observation scale \(s\), its global parameter-based importance will be summarized as
 \[
 I_s=\frac{\lVert W_s\rVert_1}{\sum_{r\in\mathcal{S}}\lVert W_r\rVert_1}.
 \]
 Because parameter magnitude is not equivalent to functional importance, \(I_s\) will be tested against scale removal, scale masking, and matched single-scale performance. Removal-based importance is the standard way to convert a parameter-space indicator into a functional claim, and reporting it as a range over equally well-performing models, instead of for one fitted model, guards against reading a single optimization outcome as a property of the problem~\cite{fisher2019allmodels,lundberg2017shap}. Scale rankings and ablation effects will be estimated across model initializations and checked across the available experimental states and relevant boundary-geometry strata. Prediction-horizon perturbations will test whether longer temporal targets increase dependence on broader spatial context.
 
-Aim 3B will determine how local information becomes an evolution decision. Let \(K_i(n)\) denote input feature \(n\) in local sample \(i\), and let \(p_i(m)\) denote the predicted transition score for output position \(m\). The full input--output Jacobian is
+Aim 2B will determine how local information becomes an evolution decision. Let \(K_i(n)\) denote input feature \(n\) in local sample \(i\), and let \(p_i(m)\) denote the predicted transition score for output position \(m\). The full input--output Jacobian is
 \[
 J_i(m,n)=\frac{\partial p_i(m)}{\partial K_i(n)}.
 \]
@@ -885,15 +868,15 @@ R(m,n)=
 \]
 so that cancellation is not mistaken for weak dependence. These maps will quantify the spatial range, symmetry, and directional routing of the learned response. Because a Jacobian is a local derivative, it characterizes the response only near the evaluated inputs; where the conclusions must hold across the input distribution, variance-based global sensitivity indices provide the complementary aggregate measure~\cite{sobol2001indices}. They will be complemented by action-likelihood maps and by confidence or entropy conditioned on curvature proxy, boundary topology, and, where measurable, boundary inclination. Two-grain boundaries and higher-order junctions will be analyzed separately.
 
-Aim 3C will separate stable model response from physical attribution. The interpretation pipeline will first be reproduced on simulation-trained models, where isotropy and prescribed anisotropy provide controlled tests. Cubic rotations and reflections, axis permutations, padding controls, and model replicates will be used to identify implementation-induced asymmetry before experimental results are interpreted. The relevant symmetry is a property the operator should possess and the implementation can silently break, as the storage-axis bias found in the preliminary Jacobian work demonstrates; architectures that enforce group equivariance by construction offer the alternative to auditing it after the fact, at the cost of committing to the symmetry group in advance~\cite{cohen2016equivariant,weiler2019steerable}. The same summaries will then be applied to the experiment-trained model family. A response will advance from Level 3 model interpretation to bounded Level 4 physical attribution only if it is reproducible across model initializations, experimental states, and relevant geometric strata, is associated with a measurable microstructural descriptor, and survives a controlled simulation test. If topology is unsupported in Aim 2, topology-conditioned patterns may be reported as model behavior but will not support topology-related physical attribution. Because the present curvature result separates two-grain interfaces from higher-order junctions, that stratification must also remain stable to the Aim 2 readout, speckle, small-grain, and connectivity analyses; otherwise, both the curvature--confidence relationship and the junction comparison will remain exploratory Level 3 behavior. A Level 5 candidate-mechanism claim requires an additional falsifiable prediction or intervention; agreement between a sensitivity map and a familiar pattern is not sufficient.
+Aim 2C will separate stable model response from physical attribution. The interpretation pipeline will first be reproduced on simulation-trained models, where isotropy and prescribed anisotropy provide controlled tests. Cubic rotations and reflections, axis permutations, padding controls, and model replicates will be used to identify implementation-induced asymmetry before experimental results are interpreted. The relevant symmetry is a property the operator should possess and the implementation can silently break, as the storage-axis bias found in the preliminary Jacobian work demonstrates; architectures that enforce group equivariance by construction offer the alternative to auditing it after the fact, at the cost of committing to the symmetry group in advance~\cite{cohen2016equivariant,weiler2019steerable}. The same summaries will then be applied to the experiment-trained model family. A response will advance from Level 3 model interpretation to bounded Level 4 physical attribution only if it is reproducible across model initializations, experimental states, and relevant geometric strata, is associated with a measurable microstructural descriptor, and survives a controlled simulation test. If topology is unsupported in Aim 1, topology-conditioned patterns may be reported as model behavior but will not support topology-related physical attribution. Because the present curvature result separates two-grain interfaces from higher-order junctions, that stratification must also remain stable to the Aim 1 readout, speckle, small-grain, and connectivity analyses; otherwise, both the curvature--confidence relationship and the junction comparison will remain exploratory Level 3 behavior. A Level 5 candidate-mechanism claim requires an additional falsifiable prediction or intervention; agreement between a sensitivity map and a familiar pattern is not sufficient.
 
-The work will use the existing multiscale and Jacobian simulation studies, symmetry-controlled simulation checkpoints, the reliable experiment-trained checkpoints and held-out predictions from Aims 1 and 2, and local descriptors derived from registered grain-ID volumes. Required descriptors include neighborhood composition, the current curvature proxy, boundary topology, and boundary inclination when it can be estimated at adequate spatial resolution.
+The work will use the existing multiscale and Jacobian simulation studies, symmetry-controlled simulation checkpoints, the reliable experiment-trained checkpoints and held-out predictions from Aim 1, and local descriptors derived from registered grain-ID volumes. Required descriptors include neighborhood composition, the current curvature proxy, boundary topology, and boundary inclination when it can be estimated at adequate spatial resolution.
 
 \subsection{Evaluation criteria, expected outcomes, and contingencies}
 
-Interpretation summaries will be reported across model replicates with bootstrap or replicate-based uncertainty. Input-side conclusions require agreement between scale-mixer rankings and at least one functional ablation, while output-side conclusions must be stable to sample size, signed-versus-absolute aggregation, cubic coordinate transformations, available experimental states, and relevant geometric strata. Physical attribution additionally requires a consistent effect across model replicates and a controlled simulation test. These criteria distinguish stable model interpretation from bounded physical attribution; a candidate-mechanism claim still requires a falsifiable prediction or intervention. Exact map-similarity and descriptor-effect tolerances remain \texttt{[NEEDS AIM 3 INTERPRETATION TOLERANCES]}.
+Interpretation summaries will be reported across model replicates with bootstrap or replicate-based uncertainty. Input-side conclusions require agreement between scale-mixer rankings and at least one functional ablation, while output-side conclusions must be stable to sample size, signed-versus-absolute aggregation, cubic coordinate transformations, available experimental states, and relevant geometric strata. Physical attribution additionally requires a consistent effect across model replicates and a controlled simulation test. These criteria distinguish stable model interpretation from bounded physical attribution; a candidate-mechanism claim still requires a falsifiable prediction or intervention. Exact map-similarity and descriptor-effect tolerances remain \texttt{[NEEDS AIM 2 INTERPRETATION TOLERANCES]}.
 
-Aim 3 is expected to distinguish stable model properties from responses attributable to measurable interface geometry and from candidate explanations that remain short of established mechanisms. Its output will be a symmetry-audited, functionally tested account of the spatial scales and local responses used by reliable experiment-trained operators.
+Aim 2 is expected to distinguish stable model properties from responses attributable to measurable interface geometry and from candidate explanations that remain short of established mechanisms. Its output will be a symmetry-audited, functionally tested account of the spatial scales and local responses used by reliable experiment-trained operators.
 
 The principal risks are that parameter weights may not reflect functional importance, voxel-level sensitivities or geometric descriptors may be noisy, and numerical anisotropy may be comparable to the physical signal. Functional ablations will supersede unstable weight rankings, and sensitivity will be aggregated by shell, direction, boundary class, or grain when voxel-level maps are unreliable. If observational data cannot separate competing explanations, controlled simulation will define the claim ceiling; if physical attribution does not survive the reliability tests, the result will remain validated model interpretation rather than a mechanism claim.
 
@@ -901,7 +884,7 @@ The principal risks are that parameter weights may not reflect functional import
 
 \section{Dependency and integration across aims}
 
-The dependency chain is what makes an unfavorable result usable. Each aim inherits the evidence gate of the one before it, so a failure narrows the domain of the claim instead of ending the program (Table~\ref{tab:aim-dependency-outcomes}).
+The dependency chain is what makes an unfavorable result usable. Each stage inherits the evidence gate of the one before it, so a failure narrows the domain of the claim instead of ending the program (Table~\ref{tab:aim-dependency-outcomes}).
 
 \begin{table}[htbp]
 \centering
@@ -912,15 +895,15 @@ The dependency chain is what makes an unfavorable result usable. Each aim inheri
 \toprule
 \textbf{Evidence gate} & \textbf{Unfavorable outcome} & \textbf{Resulting claim ceiling} \\
 \midrule
-Aim 1 field integrity & Registration exceeds 0.05 voxel on any axis, or linkage and post-training diagnostics expose a claim-specific limitation & Withhold direct-learning or grain-level claims affected by that limitation while retaining reportable identity-agnostic diagnostics \\
-Aim 2 temporal evaluation & A metric family is unsupported, uninformative, or does not improve over its simple comparator & Retain the result but exclude that output from experimental physical interpretation \\
-Aim 3 interpretation & Model interpretation is stable but unique physical attribution is unsupported & Stop at stable model interpretation rather than escalating to a physical-attribution or mechanism claim \\
+Aim 1 field-integrity stage & Registration exceeds 0.05 voxel on any axis, or linkage and post-training diagnostics expose a claim-specific limitation & Withhold direct-learning or grain-level claims affected by that limitation while retaining reportable identity-agnostic diagnostics \\
+Aim 1 temporal-evaluation stage & A metric family is unsupported, uninformative, or does not improve over its simple comparator & Retain the result but exclude that output from experimental physical interpretation \\
+Aim 2 interpretation & Model interpretation is stable but unique physical attribution is unsupported & Stop at stable model interpretation rather than escalating to a physical-attribution or mechanism claim \\
 \bottomrule
 \end{tabularx}
 \end{table}
 
 Conversely, support across all metric families would establish a strong fidelity profile within the selected trajectory, but it would not establish spatial generalization or prove that the operator recovered material physics absent from the simulator.
-One local architecture, data representation, rollout code, replicate policy, and evidence ladder serve all three aims. Aim 3 implementation may overlap with Aim 2 in time, but experimental interpretation will be restricted to outputs whose field integrity is established in Aim 1 and whose temporal evidence is supported in Aim 2.
+One local architecture, data representation, rollout code, replicate policy, and evidence ladder serve both aims. Aim 2 implementation may overlap with Aim 1 in time, but experimental interpretation will be restricted to outputs supported by both the field-integrity and temporal-evaluation stages of Aim 1.
 
 
 \chapter{Expected Outcomes, Contributions, and Scientific Impact}
@@ -937,14 +920,14 @@ The following contributions are guaranteed in the sense that they are completed 
 \item a documented single-window workflow for residual-driven selection, label-preserving registration, grain linkage, direct training, and directional drift auditing;
 \item persistence, majority-class, unchanged-distribution, readout, and topology-sensitivity comparisons for retrospective evaluation on T2--T4;
 \item a metric-by-metric fidelity profile that retains unsupported results and states the limits imposed by one selected field of view;
-\item symmetry-audited multiscale and Jacobian interpretation methods transferred to the experimental operator only for outputs supported by Aims 1--2.
+\item symmetry-audited multiscale and Jacobian interpretation methods transferred to the experimental operator only for outputs supported by Aim 1.
 \end{itemize}
 
 These outputs shift the central methodological question from whether a network can fit one favorable transition to which evidence is required before a measured or simulated rollout can be used scientifically.
 
 \section{Conditional scientific contributions}
 
-Broader claims remain conditional on the achieved evidence. If Aim 2 outputs improve over their simple comparators and remain stable to the reported readout choices, they may support bounded fidelity claims for the selected trajectory. If Aim 3 responses reproduce across model initializations, experimental states, geometric strata, and controlled simulation tests, selected signatures may advance from stable model interpretation to bounded physical attribution. Formal probabilistic calibration, spatial or material transfer, and a unique mechanism claim are not supported by the available single-window dataset.
+Broader claims remain conditional on the achieved evidence. If Aim 1 temporal outputs improve over their simple comparators and remain stable to the reported readout choices, they may support bounded fidelity claims for the selected trajectory. If Aim 2 responses reproduce across model initializations, experimental states, geometric strata, and controlled simulation tests, selected signatures may advance from stable model interpretation to bounded physical attribution. Formal probabilistic calibration, spatial or material transfer, and a unique mechanism claim are not supported by the available single-window dataset.
 
 \section{Scientific impact}
 
@@ -956,9 +939,9 @@ For experimental materials science, the work provides a way to use sparse 4D gra
 \section{Research timeline and scope control}
 
 The schedule is planned backward from the May 2027 completion target. Research and writing overlap so that the dissertation is not postponed until all analysis is complete.
-To protect the core scope, the schedule prioritizes completion of the Aim 1 curation-sensitivity reporting, finishes the Aim 2 null and readout comparisons, and bases final Aim 3 claims only on supported outputs. Additional experimental windows, external datasets, new materials, a direct MF rollout initialized from an experimental state, broad architecture sweeps, and formal probabilistic calibration remain outside the core plan.
+To protect the core scope, the schedule prioritizes completion of the Aim 1 curation-sensitivity, null, and readout comparisons and bases final Aim 2 claims only on supported outputs. Additional experimental windows, external datasets, new materials, a direct MF rollout initialized from an experimental state, broad architecture sweeps, and formal probabilistic calibration remain outside the core plan.
 
-One further analysis is deferred to the same category. The simulation and experimental fidelity profiles are kept separate throughout this proposal, and no nominally shared metric is assumed to mean the same thing in both. Auditing that assumption, by applying experimental observation operators such as resolved-grain cutoffs, connectivity rules, and identity censoring to simulation trajectories and asking which metrics survive as commensurate, is a coherent study in its own right. It is not required for the Aim 2 temporal evaluation and will be attempted only if the three aims finish with time remaining.
+One further analysis is deferred to the same category. The simulation and experimental fidelity profiles are kept separate throughout this proposal, and no nominally shared metric is assumed to mean the same thing in both. Auditing that assumption, by applying experimental observation operators such as resolved-grain cutoffs, connectivity rules, and identity censoring to simulation trajectories and asking which metrics survive as commensurate, is a coherent study in its own right. It is not required for the Aim 1 temporal evaluation and will be attempted only if both aims finish with time remaining.
 
 \begin{table}[htbp]
 \centering
@@ -976,11 +959,11 @@ One further analysis is deferred to the same category. The simulation and experi
 
 August-September 2026 & Complete Aim 1 curation-sensitivity reporting and document the recovered two-stage window-selection record & Draft introduction, experimental foundation, and Aim 1 chapter & Does the final report keep the registration gate distinct from post hoc diagnostics? \\
 
-October-November 2026 & Complete Aim 1 model-replicate and curation sensitivities; calculate Aim 2 persistence, majority-class, distributional, and readout comparisons & Finalize Aim 1 and draft the Aim 2 evaluation chapter & Which T2--T4 outputs add information beyond simple comparators? \\
+October-November 2026 & Complete Aim 1 model-replicate and curation sensitivities; calculate persistence, majority-class, distributional, and readout comparisons & Finalize the Aim 1 curation chapter and draft its temporal-evaluation chapter & Which T2--T4 outputs add information beyond simple comparators? \\
 
-December 2026-January 2027 & Complete matched-state and effective-time support analyses; finalize the retrospective fidelity matrix & Complete Aim 2 figures, tables, and limitations & Which outputs are supported, mixed, unsupported, or uninformative? \\
+December 2026-January 2027 & Complete Aim 1 matched-state and effective-time support analyses; finalize the retrospective fidelity matrix & Complete Aim 1 temporal-evaluation figures, tables, and limitations & Which outputs are supported, mixed, unsupported, or uninformative? \\
 
-January-April 2027 & Transfer multiscale and Jacobian probes to the experiment-trained model; complete functional ablations, symmetry controls, and geometric stratification & Complete Aim 3 figures, evidence matrix, and synthesis & Which signatures support stable model interpretation, bounded physical attribution, or mechanism testing? \\
+January-April 2027 & Transfer multiscale and Jacobian probes to the experiment-trained model; complete functional ablations, symmetry controls, and geometric stratification & Complete Aim 2 figures, evidence matrix, and synthesis & Which signatures support stable model interpretation, bounded physical attribution, or mechanism testing? \\
 
 April 2027 & Integrate aims, limitations, contributions, and conclusions & Full revision and committee feedback & Are all claims consistent with achieved evidence? \\
 
@@ -1016,11 +999,11 @@ The dissertation will use a seven-chapter structure that follows the causal prog
 
 3 & A Physics-Regulated Neural Framework for Learning 3D Grain-Growth Dynamics & Establish scalable learning of controlled simulation rules & Completed prior work; under review \\
 
-4 & Experimentally Grounded Learning: Single-Window Selection, Curation, and Direct Training & Aim 1 field integrity and direct-learning evidence & Substantially completed \\
+4 & Experimentally Grounded Learning: Single-Window Selection, Curation, and Direct Training & Aim 1 field-integrity and direct-learning stage & Substantially completed \\
 
-5 & Held-Out Temporal Evaluation of Experiment-Trained Rollout & Aim 2 T2--T4 results, null comparisons, and fidelity matrix & Ongoing \\
+5 & Held-Out Temporal Evaluation of Experiment-Trained Rollout & Aim 1 T2--T4 evaluation, null comparisons, and fidelity matrix & Ongoing \\
 
-6 & Interpretability and Physics Learning from Experimentally Learned Evolution Rules & Aim 3 & Probe development completed; experimental application proposed \\
+6 & Interpretability and Physics Learning from Experimentally Learned Evolution Rules & Aim 2 & Probe development completed; experimental application proposed \\
 
 7 & Integrated Conclusions and Future Directions & Cross-aim synthesis, limitations, and broader implications & To be written \\
 
@@ -1046,9 +1029,9 @@ Several decisions remain open because the current source text or analysis record
 
 \begin{enumerate}
 
-\item \textbf{Aim 2 reporting criteria.} What retrospective thresholds should distinguish supported, mixed, unsupported, and uninformative evidence, and what effective-time interpolation sensitivity is acceptable?
+\item \textbf{Aim 1 reporting criteria.} What retrospective thresholds should distinguish supported, mixed, unsupported, and uninformative evidence, and what effective-time interpolation sensitivity is acceptable?
 
-\item \textbf{Aim 3 escalation.} What evidence would the committee require before a reproducible response signature is reported as physical attribution rather than model behavior?
+\item \textbf{Aim 2 escalation.} What evidence would the committee require before a reproducible response signature is reported as physical attribution rather than model behavior?
 
 \item \textbf{Data release.} DCT data ownership, the availability of another specimen or time state, and permission to release curated data or code remain to be confirmed.
 

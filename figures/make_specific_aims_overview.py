@@ -7,7 +7,7 @@ from reportlab.lib.colors import HexColor, white
 OUTPUT = Path(__file__).resolve().parent / "specific_aims_overview.pdf"
 
 PAGE_W = 468
-PAGE_H = 276
+PAGE_H = 216
 
 INK = HexColor("#1D2D39")
 MUTED = HexColor("#596A76")
@@ -92,39 +92,7 @@ def draw_aim1_schematic(c, x, y):
     draw_arrow(c, x + size + 5, y + 22, x + size + gap - 5)
 
 
-def draw_hat_label(c, x, y, label, color=INK):
-    c.setFillColor(color)
-    c.setFont("Helvetica-Bold", 8.5)
-    c.drawCentredString(x, y, label)
-    c.setStrokeColor(color)
-    c.setLineWidth(0.75)
-    c.line(x - 3, y + 10, x, y + 13)
-    c.line(x, y + 13, x + 3, y + 10)
-
-
 def draw_aim2_schematic(c, x, y):
-    c.setFillColor(INK)
-    c.setFont("Helvetica-Bold", 8.5)
-
-    c.drawCentredString(x + 6, y + 24, "E")
-    draw_hat_label(c, x + 90, y + 24, "E", TEAL)
-    draw_arrow(c, x + 16, y + 27, x + 79, TEAL)
-
-    c.setStrokeColor(LINE)
-    c.setLineWidth(0.55)
-    c.line(x + 22, y + 20, x + 22, y + 34)
-    c.line(x + 22, y + 20, x + 72, y + 20)
-
-    c.setStrokeColor(TEAL)
-    c.setLineWidth(1.0)
-    c.bezier(x + 24, y + 24, x + 39, y + 37, x + 53, y + 16, x + 70, y + 29)
-
-    c.setFont("Helvetica", 6.2)
-    c.setFillColor(MUTED)
-    c.drawCentredString(x + 48, y + 7, "T2-T4 held out from fitting")
-
-
-def draw_aim3_schematic(c, x, y):
     plot_x = x
     plot_y = y + 4
     c.setStrokeColor(LINE)
@@ -170,7 +138,7 @@ def build():
     c.setFillColor(white)
     c.rect(0, 0, PAGE_W, PAGE_H, fill=1, stroke=0)
 
-    row_y = (207, 115, 23)
+    row_y = (139, 31)
     text_x = 160
 
     draw_aim1_schematic(c, 28, row_y[0] + 2)
@@ -179,11 +147,11 @@ def build():
         text_x,
         row_y[0],
         "Aim 1",
-        "Select, curate, and train one 4D window",
-        "Residual-driven selection, label integrity, and drift control",
+        "Curate, train, and evaluate one 4D trajectory",
+        "Field integrity, direct learning, and retrospective T2-T4 fidelity",
     )
 
-    draw_gate(c, 185)
+    draw_gate(c, 108)
 
     draw_aim2_schematic(c, 28, row_y[1] + 3)
     draw_text(
@@ -191,18 +159,6 @@ def build():
         text_x,
         row_y[1],
         "Aim 2",
-        "Evaluate rollout on later measured states",
-        "Retrospective T2-T4 fidelity, nulls, and readout sensitivity",
-    )
-
-    draw_gate(c, 93)
-
-    draw_aim3_schematic(c, 28, row_y[2] + 3)
-    draw_text(
-        c,
-        text_x,
-        row_y[2],
-        "Aim 3",
         "Interpretability and physics learning",
         "Supported responses enable bounded physical attribution",
     )

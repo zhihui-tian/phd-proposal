@@ -199,20 +199,6 @@ def draw_aim1_schematic(c, x, y):
 
 def draw_aim2_schematic(c, x, y):
     c.setStrokeColor(LINE)
-    c.setLineWidth(0.8)
-    c.line(x + 8, y + 22, x + 120, y + 22)
-    for i, label in enumerate(("T0", "T1", "T2", "T3", "T4")):
-        px = x + 8 + i * 28
-        c.setFillColor(BLUE if i < 2 else white)
-        c.setStrokeColor(BLUE if i < 2 else MUTED)
-        c.circle(px, y + 22, 4.2, fill=1, stroke=1)
-        c.setFillColor(MUTED)
-        c.setFont("Helvetica", 5.5)
-        c.drawCentredString(px, y + 7, label)
-
-
-def draw_aim3_schematic(c, x, y):
-    c.setStrokeColor(LINE)
     c.setLineWidth(0.65)
     c.line(x, y + 2, x, y + 39)
     c.line(x, y + 2, x + 42, y + 2)
@@ -280,34 +266,23 @@ def build():
     draw_foundation_merge(c)
     draw_focus(c)
 
-    draw_aim1_schematic(c, 26, 128)
+    draw_aim1_schematic(c, 26, 103)
     draw_aim_text(
         c,
         160,
-        132,
+        107,
         "Aim 1",
-        "Select, curate, and train one 4D window",
-        "Selection provenance, label integrity, and drift control",
+        "Curate, train, and evaluate one 4D trajectory",
+        "Field integrity, direct learning, and retrospective T2-T4 fidelity",
     )
-    draw_aim_gate(c, 119)
+    draw_aim_gate(c, 86)
 
-    draw_aim2_schematic(c, 26, 68)
+    draw_aim2_schematic(c, 26, 20)
     draw_aim_text(
         c,
         160,
-        72,
+        24,
         "Aim 2",
-        "Evaluate rollout on later measured states",
-        "Retrospective T2-T4 fidelity and simple baseline comparisons",
-    )
-    draw_aim_gate(c, 59)
-
-    draw_aim3_schematic(c, 26, 8)
-    draw_aim_text(
-        c,
-        160,
-        12,
-        "Aim 3",
         "Interpretability and physics learning",
         "Supported responses advance toward bounded physical attribution",
     )

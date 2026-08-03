@@ -76,7 +76,15 @@ This dissertation asks:
 
 \begin{quote}
 
-\textbf{How can local, physics-guided machine learning progress from learning physically controlled simulation dynamics to learning reliably from sparse 4D experimental observations, and ultimately support physical interpretation of mesoscale grain growth?}
+How can local, physics-guided machine learning progress from learning physically controlled simulation dynamics to learning reliably from sparse 4D experimental observations, and ultimately support physical interpretation of mesoscale grain growth?
+
+\end{quote}
+
+The hypothesis it tests is:
+
+\begin{quote}
+
+A local operator can learn grain evolution directly from a curated 4D experiment. What it learns can then be tested for physical content, not presumed to carry it.
 
 \end{quote}
 
@@ -95,14 +103,6 @@ The question is addressed through a sequence of progressively removed assumption
 \item interpret only those experimentally learned relationships that pass the relevant reliability tests.
 
 \end{enumerate}
-
-The corresponding hypothesis is:
-
-\begin{quote}
-
-\textbf{A local operator can learn grain evolution directly from a curated 4D experiment. What it learns can then be tested for physical content, not presumed to carry it.}
-
-\end{quote}
 
 This hypothesis does not assume that agreement with a simulator proves agreement with nature, that one selected experimental window establishes generalization, or that accurate prediction automatically identifies a mechanism. Its experimental claim is bounded to the selected field of view and the observed trajectory.
 

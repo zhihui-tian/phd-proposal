@@ -52,24 +52,6 @@
 
 \begin{document}
 
-\clearpage
-\section*{Research Status and Evidence Convention}
-\addcontentsline{toc}{chapter}{RESEARCH STATUS AND EVIDENCE CONVENTION}
-
-The work described here spans three levels of research maturity, and the text labels which level every claim rests on:
-
-\begin{itemize}
-
-\item \textbf{Completed prior work:} the neighborhood-driven anisotropy and lattice-pinning study and 3D-PRIMME. The 3D-PRIMME manuscript is currently under review.
-
-\item \textbf{Substantially completed and ongoing experimental work:} Aim 1 single-window selection, label-preserving curation, and direct training; Aim 2 evaluation on T2--T4, which were held out from fitting but have already been examined in the ongoing study.
-
-\item \textbf{Proposed remaining work:} completion of the Aim 1 curation-sensitivity reporting; completion of the Aim 2 null, readout, and sensitivity comparisons; and transfer of the developed input- and output-side interpretation methods to the experiment-trained model in Aim 3.
-
-\end{itemize}
-
-Formal citations identify the manuscript or external literature supporting each claim. Where the current source text or analysis record does not establish a methodological choice, rationale, or quantitative threshold, a specific \texttt{[NEEDS ...]} placeholder marks the unresolved decision rather than supplying an unsupported detail.
-
 \chapter{Introduction and Research Vision}
 
 \section{Mesoscale prediction as a local-to-global problem}
@@ -169,10 +151,9 @@ The dissertation uses one evidence ladder throughout (Table~\ref{tab:evidence-la
 \end{tabularx}
 \end{table}
 
+Formal citations identify the manuscript or external literature supporting each claim. Where the current source text or analysis record does not establish a methodological choice, rationale, or quantitative threshold, a specific \texttt{[NEEDS ...]} placeholder marks the unresolved decision rather than supplying an unsupported detail.
 
 \chapter{Completed Foundations: From Simulation Physics to 3D Surrogate Learning}
-
-\textbf{Research status: COMPLETED PRIOR WORK}
 
 \section{Neighborhood-dependent simulation physics}
 \label{sec:neighborhood-physics}
@@ -373,8 +354,6 @@ It should not be claimed that the study directly proved improved 3D-PRIMME accur
 \bigskip
 
 \section{Simulation-trained 3D-PRIMME}
-
-\textbf{Research status: COMPLETED PRIOR WORK; MANUSCRIPT UNDER REVIEW}
 
 A local surrogate represents evolution through a fixed neighborhood operator instead of a global map over the entire volume. This creates three potential advantages. First, a small three-dimensional volume contains many local boundary-centered training examples. Second, the learned operator can be applied to a larger domain because its input size does not depend on global volume dimensions. Third, repeated application provides temporal rollouts beyond the training interval. These benefits are meaningful only if locality retains sufficient boundary context and if rollout errors do not accumulate into incorrect kinetics or topology~\cite{montes2021surrogate,yan2022primme,qin2024graingnn,tep2025grain,tian2026threeDprimme}.
 
@@ -592,8 +571,6 @@ The dissertation research is organized by scientific dependency rather than by c
 
 \section{Aim 1: Establish direct experimental learning from a curated 4D window}
 
-\textbf{Status:} SUBSTANTIALLY COMPLETED; FINAL CURATION-SENSITIVITY REPORTING IS ONGOING
-
 \subsection{Question and hypothesis}
 
 Can a residual-driven, label-preserving workflow select and curate one experimental 4D window well enough for a local surrogate to learn grain evolution without learning acquisition motion as dynamics?
@@ -699,8 +676,6 @@ The completed search record makes the selection reproducible while preserving it
 
 \section{Aim 2: Evaluate experiment-trained rollout on held-out experimental states}
 
-\textbf{Status:} ONGOING WITH STABLE PRELIMINARY RESULTS; FINAL NULL AND READOUT COMPARISONS ARE PROPOSED
-
 \subsection{Question and hypothesis}
 
 To what extent does an operator trained only on the curated T0--T1 transition reproduce the measured T2--T4 evolution in the same field of view?
@@ -797,8 +772,6 @@ The main limitations are temporal support and linkage. If T2--T4 do not support 
 
 
 \section{Aim 3: Interpretability and physics learning from experimentally learned evolution rules}
-
-\textbf{Status:} PROPOSED AIM WITH COMPLETED SIMULATION-DOMAIN METHOD DEVELOPMENT
 
 \subsection{Question and hypothesis}
 

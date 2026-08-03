@@ -1,14 +1,13 @@
-"""Aim 1 support figure: what the single reconstructed volume can actually carry.
+"""Aim 1 support figure: single-window selection and temporal use.
 
 Every number is taken from the experimental manuscript, Section 2:
   reconstruction 549 x 149 x 211 voxels, 5 um voxel;
   curated analysis window trimmed in place to 100 x 95 x 84 voxels;
   five states T0-T4 at cumulative holds of 8, 10, 12, 14, 16 h (uniform 2 h).
 
-The slot count is arithmetic on those dimensions, not a claim from the
-manuscript: it is a geometric upper bound on non-overlapping windows, drawn so
-that the committee can see the support rather than be told about it. How many
-slots survive curation is the first question Aim 1 answers.
+The left panel documents the actual one-window workflow rather than a
+multi-window packing bound. The right panel distinguishes held out from fitting
+from an unexamined confirmatory test.
 
 Categories are separated by fill, outline style, and label -- never by hue
 alone -- so the figure survives colour-vision deficiency, greyscale printing,
@@ -45,65 +44,45 @@ def f(sz, bold=False):
     return ImageFont.truetype(FONT_B if bold else FONT, sz * S)
 
 
-def dashed_rect(d, box, colour, width, dash=18, gap=12):
-    x0, y0, x1, y1 = box
-    for (ax, ay, bx, by) in ((x0, y0, x1, y0), (x1, y0, x1, y1),
-                             (x1, y1, x0, y1), (x0, y1, x0, y0)):
-        span = max(abs(bx - ax), abs(by - ay))
-        if not span:
-            continue
-        ux, uy = (bx - ax) / span, (by - ay) / span
-        t = 0
-        while t < span:
-            e = min(t + dash, span)
-            d.line([ax + ux * t, ay + uy * t, ax + ux * e, ay + uy * e],
-                   fill=colour, width=width)
-            t = e + gap
-
-
 def main():
     img = Image.new("RGB", (W * S, H * S), WHITE)
     d = ImageDraw.Draw(img)
 
     # ---------------------------------------------------------- panel A
-    d.text((60 * S, 40 * S), "SPATIAL SUPPORT", font=f(26, True), fill=MUTED)
-    d.text((60 * S, 84 * S),
-           f"x–z face of the reconstruction, {NX} × {NZ} voxels",
+    d.text((60 * S, 40 * S), "SINGLE-WINDOW SELECTION", font=f(26, True), fill=MUTED)
+    d.text((60 * S, 84 * S), "one field of view selected, curated, and trained",
            font=f(30), fill=INK)
 
-    ax0, ay0 = 60 * S, 160 * S
-    scale = (1300 * S) / NX
-    aw, ah = NX * scale, NZ * scale
-    d.rectangle([ax0, ay0, ax0 + aw, ay0 + ah], fill=SHELL, outline=LINE, width=2 * S)
+    steps = (
+        ("FULL VOLUME", f"{NX}×{NY}×{NZ}", "five registered states"),
+        ("CANDIDATES", "831 windows", "100³ before trimming"),
+        ("RANKING", "residual driven", "residual + displacement gradient"),
+        ("SELECTED + CURATED", "rank 15 → 100×95×84", "integer registration + linkage"),
+    )
+    x0, y0 = 60 * S, 205 * S
+    bw, bh, gap = 285 * S, 205 * S, 55 * S
+    for i, (title, value, note) in enumerate(steps):
+        left = x0 + i * (bw + gap)
+        box = [left, y0, left + bw, y0 + bh]
+        final = i == len(steps) - 1
+        d.rounded_rectangle(box, radius=14 * S, fill=BLUE if final else SOFT,
+                            outline=BLUE if final else LINE, width=3 * S)
+        d.text((left + bw / 2, y0 + 54 * S), title, font=f(20, True),
+               fill=WHITE if final else MUTED, anchor="mm")
+        d.text((left + bw / 2, y0 + 105 * S), value, font=f(27, True),
+               fill=WHITE if final else INK, anchor="mm")
+        d.text((left + bw / 2, y0 + 157 * S), note, font=f(17),
+               fill=WHITE if final else MUTED, anchor="mm")
+        if not final:
+            ax = left + bw + 10 * S
+            bx = left + bw + gap - 10 * S
+            ay = y0 + bh / 2
+            d.line([ax, ay, bx, ay], fill=BLUE, width=3 * S)
+            d.polygon([(bx, ay), (bx - 12 * S, ay - 8 * S),
+                       (bx - 12 * S, ay + 8 * S)], fill=BLUE)
 
-    ncols, nrows = NX // WX, NZ // WZ
-    sw, sh = WX * scale, WZ * scale
-    for r in range(nrows):
-        for c in range(ncols):
-            x0 = ax0 + c * sw
-            y0 = ay0 + r * sh
-            box = [x0 + 3 * S, y0 + 3 * S, x0 + sw - 3 * S, y0 + sh - 3 * S]
-            if r == 0 and c == 0:                       # the window actually used
-                d.rectangle(box, fill=BLUE)
-                d.text((x0 + sw / 2, y0 + sh / 2 - 26 * S), "CURRENT",
-                       font=f(21, True), fill=WHITE, anchor="mm")
-                d.text((x0 + sw / 2, y0 + sh / 2 + 8 * S), "100×95×84",
-                       font=f(19), fill=WHITE, anchor="mm")
-            else:
-                d.rectangle(box, fill=SOFT)
-                dashed_rect(d, box, BLUE, 2 * S)
-                d.text((x0 + sw / 2, y0 + sh / 2), "slot",
-                       font=f(19), fill=MUTED, anchor="mm")
-
-    d.text((ax0 + aw - 14 * S, ay0 + ah - 14 * S), "remainder < one window",
-           font=f(19), fill=MUTED, anchor="rs")
-    d.text((ax0, ay0 + ah + 22 * S),
-           f"{ncols} × {nrows} = {ncols * nrows} non-overlapping slots"
-           f"    ·    y = {NY} voxels admits one {WY}-voxel window",
-           font=f(24), fill=INK)
-    d.text((ax0, ay0 + ah + 60 * S),
-           "geometric upper bound — the selected window ranked 15 of 831 "
-           "candidate placements",
+    d.text((60 * S, 470 * S),
+           "pending documentation: candidate stride · exact objective · rank-15 decision",
            font=f(22), fill=MUTED)
 
     # ---------------------------------------------------------- panel B
@@ -132,17 +111,17 @@ def main():
         d.text(((x_a + x_b) / 2, y + 34 * S), label, font=f(22, True),
                fill=BLUE if solid else MUTED, anchor="mm")
 
-    bracket(xs[0], xs[1], ty + 110 * S, "trained", True)
-    bracket(xs[2], xs[4], ty + 110 * S, "held out", False)
+    bracket(xs[0], xs[1], ty + 110 * S, "Aim 1: trained", True)
+    bracket(xs[2], xs[4], ty + 110 * S, "Aim 2: held out from fitting", False)
     d.text((bx, ty + 210 * S),
-           "one field of view · one training interval",
+           "same field of view · later states already examined",
            font=f(24), fill=INK)
     d.text((bx, ty + 248 * S),
-           "extending beyond it is Aim 1",
+           "retrospective temporal evaluation, not a new blind test",
            font=f(22), fill=MUTED)
 
     img.resize((W, H), Image.LANCZOS).save(OUT)
-    print(f"wrote {OUT}  ({ncols * nrows} slots)")
+    print(f"wrote {OUT}")
 
 
 if __name__ == "__main__":

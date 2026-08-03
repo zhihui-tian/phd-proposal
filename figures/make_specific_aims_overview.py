@@ -121,7 +121,7 @@ def draw_aim2_schematic(c, x, y):
 
     c.setFont("Helvetica", 6.2)
     c.setFillColor(MUTED)
-    c.drawCentredString(x + 48, y + 7, "training-blind partition")
+    c.drawCentredString(x + 48, y + 7, "T2-T4 held out from fitting")
 
 
 def draw_aim3_schematic(c, x, y):
@@ -179,8 +179,8 @@ def build():
         text_x,
         row_y[0],
         "Aim 1",
-        "Establish reliable experimental learning",
-        "Spatial reproducibility, baselines, and applicability limits",
+        "Select, curate, and train one 4D window",
+        "Residual-driven selection, label integrity, and drift control",
     )
 
     draw_gate(c, 185)
@@ -191,8 +191,8 @@ def build():
         text_x,
         row_y[1],
         "Aim 2",
-        "Validate rollout on unseen experimental partitions",
-        "Frozen definitions, null baselines, pass/partial/fail adjudication",
+        "Evaluate rollout on later measured states",
+        "Retrospective T2-T4 fidelity, nulls, and readout sensitivity",
     )
 
     draw_gate(c, 93)
@@ -204,7 +204,7 @@ def build():
         row_y[2],
         "Aim 3",
         "Interpretability and physics learning",
-        "Validated responses advance toward physical attribution",
+        "Supported responses enable bounded physical attribution",
     )
 
     c.showPage()

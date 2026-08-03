@@ -174,61 +174,41 @@ def draw_aim_gate(c, y):
 
 
 def draw_aim1_schematic(c, x, y):
-    for offset in (0, 36, 72):
+    for offset in (0, 22, 44):
         left = x + offset
         c.setFillColor(SOFT_TEAL)
         c.setStrokeColor(LINE)
         c.setLineWidth(0.65)
-        c.rect(left, y + 7, 29, 29, fill=1, stroke=1)
+        c.rect(left, y + 12, 18, 18, fill=1, stroke=1)
         c.setStrokeColor(MUTED)
         c.setLineWidth(0.5)
-        c.line(left, y + 23, left + 10, y + 17)
-        c.line(left + 10, y + 17, left + 20, y + 21)
-        c.line(left + 20, y + 21, left + 29, y + 12)
-        c.line(left + 10, y + 17, left + 8, y + 7)
-        c.line(left + 20, y + 21, left + 21, y + 36)
-        c.setFillColor(BLUE)
-        c.circle(left + 15, y + 11, 1.4, fill=1, stroke=0)
+        c.line(left, y + 23, left + 7, y + 18)
+        c.line(left + 7, y + 18, left + 13, y + 22)
+        c.line(left + 13, y + 22, left + 18, y + 15)
+
+    draw_right_arrow(c, x + 66, y + 21, x + 82, TEAL)
+    c.setFillColor(TEAL)
+    c.setStrokeColor(TEAL)
+    c.rect(x + 89, y + 6, 31, 31, fill=1, stroke=1)
+    c.setStrokeColor(white)
+    c.setLineWidth(1.0)
+    c.line(x + 94, y + 23, x + 100, y + 17)
+    c.line(x + 100, y + 17, x + 108, y + 22)
+    c.line(x + 108, y + 22, x + 116, y + 12)
 
 
 def draw_aim2_schematic(c, x, y):
-    # Frozen evaluation protocol: a sealed sheet of metric definitions.
-    c.setFillColor(SOFT_BLUE)
     c.setStrokeColor(LINE)
-    c.setLineWidth(0.65)
-    c.rect(x, y + 5, 27, 31, fill=1, stroke=1)
-    c.setStrokeColor(MUTED)
-    c.setLineWidth(0.5)
-    for row in (30, 26, 22):
-        c.line(x + 5, y + row, x + 22, y + row)
-    c.setStrokeColor(BLUE)
     c.setLineWidth(0.8)
-    c.arc(x + 10, y + 13, x + 17, y + 20, 0, 180)
-    c.setFillColor(BLUE)
-    c.rect(x + 9, y + 9, 9, 6, fill=1, stroke=0)
-
-    draw_right_arrow(c, x + 33, y + 21, x + 48)
-
-    # Training-blind partition: never seen during training or model selection.
-    c.setStrokeColor(MUTED)
-    c.setLineWidth(0.7)
-    c.setDash(2, 2)
-    c.rect(x + 55, y + 5, 31, 31, fill=0, stroke=1)
-    c.setDash()
-    c.setStrokeColor(LINE)
-    c.setLineWidth(0.5)
-    c.line(x + 55, y + 23, x + 66, y + 16)
-    c.line(x + 66, y + 16, x + 76, y + 20)
-    c.line(x + 76, y + 20, x + 86, y + 10)
-    c.line(x + 66, y + 16, x + 64, y + 5)
-    c.line(x + 76, y + 20, x + 78, y + 36)
-
-    draw_right_arrow(c, x + 92, y + 21, x + 105, TEAL)
-
-    # Single adjudication: pass, partial pass, or fail.
-    for row, width, color in ((30, 14, TEAL), (22, 9, BLUE), (14, 4, LINE)):
-        c.setFillColor(color)
-        c.rect(x + 111, y + row, width, 3.4, fill=1, stroke=0)
+    c.line(x + 8, y + 22, x + 120, y + 22)
+    for i, label in enumerate(("T0", "T1", "T2", "T3", "T4")):
+        px = x + 8 + i * 28
+        c.setFillColor(BLUE if i < 2 else white)
+        c.setStrokeColor(BLUE if i < 2 else MUTED)
+        c.circle(px, y + 22, 4.2, fill=1, stroke=1)
+        c.setFillColor(MUTED)
+        c.setFont("Helvetica", 5.5)
+        c.drawCentredString(px, y + 7, label)
 
 
 def draw_aim3_schematic(c, x, y):
@@ -292,9 +272,9 @@ def build():
         c,
         col_x[2],
         274,
-        "Stable preliminary work",
-        "Curate 4D experiments",
-        "Registered grain evolution",
+        "Available experiment",
+        "Measure 4D evolution",
+        "One five-state DCT trajectory",
     )
 
     draw_foundation_merge(c)
@@ -306,8 +286,8 @@ def build():
         160,
         132,
         "Aim 1",
-        "Establish reliable experimental learning",
-        "Spatial reproducibility, baselines, and applicability limits",
+        "Select, curate, and train one 4D window",
+        "Selection provenance, label integrity, and drift control",
     )
     draw_aim_gate(c, 119)
 
@@ -317,8 +297,8 @@ def build():
         160,
         72,
         "Aim 2",
-        "Validate rollout on unseen experimental partitions",
-        "Frozen protocol, training-blind test, and per-family adjudication",
+        "Evaluate rollout on later measured states",
+        "Retrospective T2-T4 fidelity and simple baseline comparisons",
     )
     draw_aim_gate(c, 59)
 
@@ -329,7 +309,7 @@ def build():
         12,
         "Aim 3",
         "Interpretability and physics learning",
-        "Validated responses advance toward physical attribution",
+        "Supported responses advance toward bounded physical attribution",
     )
 
     c.showPage()

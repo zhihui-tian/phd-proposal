@@ -5,9 +5,9 @@ Every number is taken from the experimental manuscript, Section 2:
   curated analysis window trimmed in place to 100 x 95 x 84 voxels;
   five states T0-T4 at cumulative holds of 8, 10, 12, 14, 16 h (uniform 2 h).
 
-The left panel documents the actual one-window workflow rather than a
-multi-window packing bound. The right panel distinguishes held out from fitting
-from an unexamined confirmatory test.
+The left panel documents the actual two-stage one-window workflow rather than
+a multi-window packing bound. The right panel distinguishes held out from
+fitting from an unexamined confirmatory test.
 
 Categories are separated by fill, outline style, and label -- never by hue
 alone -- so the figure survives colour-vision deficiency, greyscale printing,
@@ -54,10 +54,10 @@ def main():
            font=f(30), fill=INK)
 
     steps = (
-        ("FULL VOLUME", f"{NX}×{NY}×{NZ}", "five registered states"),
-        ("CANDIDATES", "831 windows", "100³ before trimming"),
-        ("RANKING", "residual driven", "residual + displacement gradient"),
-        ("SELECTED + CURATED", "rank 15 → 100×95×84", "integer registration + linkage"),
+        ("FULL VOLUME", f"{NX}×{NY}×{NZ}", "25-voxel coarse scan"),
+        ("FINE SCAN", "831 retained", "5-voxel grid · ≥97% foreground"),
+        ("RANKING", "residual + ramp", "equal weighting in voxel units"),
+        ("SELECTED + CURATED", "rank 15 → 100×95×84", "near-optimal · avoids surface"),
     )
     x0, y0 = 60 * S, 205 * S
     bw, bh, gap = 285 * S, 205 * S, 55 * S
@@ -82,7 +82,7 @@ def main():
                        (bx - 12 * S, ay + 8 * S)], fill=BLUE)
 
     d.text((60 * S, 470 * S),
-           "pending documentation: candidate stride · exact objective · rank-15 decision",
+           "rank 15: same low-distortion family · less surface contact than rank 6",
            font=f(22), fill=MUTED)
 
     # ---------------------------------------------------------- panel B

@@ -64,7 +64,7 @@ The work described here spans three levels of research maturity, and the text la
 
 \item \textbf{Substantially completed and ongoing experimental work:} Aim 1 single-window selection, label-preserving curation, and direct training; Aim 2 evaluation on T2--T4, which were held out from fitting but have already been examined in the ongoing study.
 
-\item \textbf{Proposed remaining work:} reconstruction of the remaining Aim 1 selection provenance and final curation criteria; completion of the Aim 2 null, readout, and sensitivity comparisons; and transfer of the developed input- and output-side interpretation methods to the experiment-trained model in Aim 3.
+\item \textbf{Proposed remaining work:} completion of the Aim 1 curation-sensitivity reporting; completion of the Aim 2 null, readout, and sensitivity comparisons; and transfer of the developed input- and output-side interpretation methods to the experiment-trained model in Aim 3.
 
 \end{itemize}
 
@@ -592,7 +592,7 @@ The dissertation research is organized by scientific dependency rather than by c
 
 \section{Aim 1: Establish direct experimental learning from a curated 4D window}
 
-\textbf{Status:} SUBSTANTIALLY COMPLETED; FINAL SELECTION-PROVENANCE RECONSTRUCTION AND CURATION SENSITIVITY ANALYSES ARE ONGOING
+\textbf{Status:} SUBSTANTIALLY COMPLETED; FINAL CURATION-SENSITIVITY REPORTING IS ONGOING
 
 \subsection{Question and hypothesis}
 
@@ -606,9 +606,24 @@ Direct experimental supervision changes the teacher from a controlled simulator 
 
 \subsection{Methodology and completed results}
 
-The ongoing study uses five laboratory-DCT grain-ID reconstructions acquired after cumulative holds of 8, 10, 12, 14, and 16 hours. The full reconstruction contains \(549\times149\times211\) voxels. A search over 831 candidate \(100^3\) analysis windows was used to identify one field of view for the experimental-surrogate study. The candidate-window stride and boundary-enumeration rule are not specified in the current source text. \texttt{[NEEDS CANDIDATE-WINDOW STRIDE AND ENUMERATION RULE]}
+The ongoing study uses five laboratory-DCT grain-ID reconstructions acquired after cumulative holds of 8, 10, 12, 14, and 16 hours. The full reconstruction contains \(549\times149\times211\) voxels. Window selection uses only the tracked T0--T1 pair and proceeds in two stages. A \(100^3\) window is first scanned over the full admissible corner domain at a 25-voxel stride: \(x=0,25,\ldots,425\), \(y\in\{0,25\}\), and \(z=0,25,\ldots,100\), with the historical reference corner \((449,24,34)\) added explicitly. Of these 181 placements, 52 contain at least 97\% foreground in the T0--T1 union mask. A 5-voxel refinement is then performed over \(x=280,285,\ldots,380\), \(y=15,20,\ldots,35\), and \(z=40,45,\ldots,90\), again including the historical corner. This stage enumerates 1,156 placements and retains 831 after the same foreground filter.
 
-Window selection is based on post-registration residual and displacement-gradient amplitude rather than raw inter-frame agreement. The selected window ranks 15th among the 831 candidates under that objective, whereas the window favored by raw agreement ranks last under the residual-driven criterion. The current source text does not specify the exact scalar objective, its component weighting, or the decision that selected rank 15 rather than a higher-ranked candidate. \texttt{[NEEDS EXACT SELECTION OBJECTIVE AND WEIGHTING]} \texttt{[NEEDS RATIONALE FOR SELECTING RANK 15]}
+For each retained corner \(\mathbf{c}\), the local T0--T1 displacement is estimated by axiswise roll agreement with parabolic sub-voxel refinement. After applying its rounded integer displacement, the fractional residual \(\mathbf{r}(\mathbf{c})\) is remeasured on the staggered pair. The six off-diagonal components of the local displacement-gradient tensor \(\mathbf{G}(\mathbf{c})\) are estimated by linear fits across five slabs. Candidates are ranked in ascending order by
+
+\begin{equation}
+s(\mathbf{c})
+=
+\left\|\mathbf{r}(\mathbf{c})\right\|_{\infty}
++
+\frac{L-1}{2}
+\max_i\sum_{j\ne i}\left|G_{ij}(\mathbf{c})\right|,
+\qquad L=100.
+\label{eq:window-selection-score}
+\end{equation}
+
+The two terms are expressed in voxels and enter with equal coefficient: the first is the largest post-stagger residual, and the second is the largest estimated half-window displacement ramp. Post-stagger agreement is retained as a diagnostic but does not enter the implemented ordering. The historical raw-agreement window ranks 831st under Equation~\eqref{eq:window-selection-score}, showing that raw agreement is insensitive to the residual and shear targeted by the search.
+
+The score identifies a low-distortion family rather than a unique isolated optimum. The representative corner \((355,20,90)\) ranks sixth with \(s=0.823\), but its T0 crop contacts the specimen surface and contains approximately 0.96\% background. The production corner \((355,25,85)\) lies in the same quiet region, ranks 15th with \(s=0.855\), and reduces T0/T1 background to approximately 0.05\%/0.09\%. It was therefore selected by a documented secondary screen---near-optimal residual-driven score without the visible surface contact of the higher-ranked representative---rather than presented as the unconstrained score minimum. Subsequent three-initialization training gave the two corners comparable drift ranges, supporting the stability of this within-family choice.
 
 \begin{figure}[htbp]
 \centering
@@ -675,11 +690,11 @@ The remaining Aim 1 analyses complete the reporting controls in the matrix. Mode
 
 \subsection{Evaluation criteria, expected outcomes, and contingencies}
 
-Aim 1 succeeds if the selected trajectory has auditable selection provenance, axis-resolved registration residuals, adequate linkage yield, and a curated rollout whose directional drift remains well below the uncurated control across model replicates. Final quantitative acceptance criteria for the curation audit remain \texttt{[NEEDS FINAL CURATION ACCEPTANCE CRITERIA]}. Sensitivity conclusions must be reported across model replicates and coherent units rather than pooled voxel patches.
+Aim 1 separates its preprocessing gate from its post-training diagnostics. The quantitative registration gate is mean T0--T1 label displacement no larger than 0.05 voxel on each axis; the curated pair satisfies this gate. Unmatched boundary fraction, linkage yield, retained volume, and comparison with the uncurated labels are reported to expose the remaining data limitations, but the existing analysis record does not assign them additional pass/fail thresholds. Directional rollout drift across the three trained models and grain-count monotonicity are post hoc diagnostics, not curation acceptance gates, because they depend on trained-model behavior or later measured states. Sensitivity conclusions must be reported across model replicates and coherent units rather than pooled voxel patches.
 
 The achieved outcome is a curated single-window trajectory and a directly trained local operator whose label and field integrity are documented. Its claim boundary is the selected field of view and the T0--T1 transition; Aim 1 does not establish spatial reproducibility elsewhere in the reconstruction.
 
-The principal unresolved issue is selection provenance. If the exact objective or the reason for selecting rank 15 cannot be reconstructed from the search record, the choice will be reported as a limitation rather than presented as a reproducible optimum. If linkage or registration fails an eventual acceptance criterion, the affected grain-level or field-level claim will be withheld while the remaining integrity diagnostics are retained.
+The completed search record makes the selection reproducible while preserving its claim boundary: rank 15 is a near-optimal member of a low-distortion family chosen after a separate surface-contact screen, not the unconstrained minimizer of a single objective. If a future dataset fails the 0.05-voxel registration gate, direct-learning claims based on that pair will be withheld. If linkage is inadequate, grain-level claims will be withheld even when identity-agnostic field and population diagnostics remain reportable.
 
 
 \section{Aim 2: Evaluate experiment-trained rollout on held-out experimental states}
@@ -924,7 +939,7 @@ The dependency chain is what makes an unfavorable result usable. Each aim inheri
 \toprule
 \textbf{Evidence gate} & \textbf{Unfavorable outcome} & \textbf{Resulting claim ceiling} \\
 \midrule
-Aim 1 field integrity & Selection provenance is incomplete, or registration, linkage, or drift fails the final curation audit & Report the affected limitation and withhold the corresponding field- or grain-level claim \\
+Aim 1 field integrity & Registration exceeds 0.05 voxel on any axis, or linkage and post-training diagnostics expose a claim-specific limitation & Withhold direct-learning or grain-level claims affected by that limitation while retaining reportable identity-agnostic diagnostics \\
 Aim 2 temporal evaluation & A metric family is unsupported, uninformative, or does not improve over its simple comparator & Retain the result but exclude that output from experimental physical interpretation \\
 Aim 3 interpretation & Model interpretation is stable but unique physical attribution is unsupported & Stop at Level 3 model interpretation rather than escalating to a physical-attribution or mechanism claim \\
 \bottomrule
@@ -968,7 +983,7 @@ For experimental materials science, the work provides a way to use sparse 4D gra
 \section{Research timeline and scope control}
 
 The schedule is planned backward from the May 2027 completion target. Research and writing overlap so that the dissertation is not postponed until all analysis is complete.
-To protect the core scope, the schedule prioritizes reconstruction of the Aim 1 selection record and completion of its curation audit, finishes the Aim 2 null and readout comparisons, and bases final Aim 3 claims only on supported outputs. Additional experimental windows, external datasets, new materials, a direct MF rollout initialized from an experimental state, broad architecture sweeps, and formal probabilistic calibration remain outside the core plan.
+To protect the core scope, the schedule prioritizes completion of the Aim 1 curation-sensitivity reporting, finishes the Aim 2 null and readout comparisons, and bases final Aim 3 claims only on supported outputs. Additional experimental windows, external datasets, new materials, a direct MF rollout initialized from an experimental state, broad architecture sweeps, and formal probabilistic calibration remain outside the core plan.
 
 One further analysis is deferred to the same category. The simulation and experimental fidelity profiles are kept separate throughout this proposal, and no nominally shared metric is assumed to mean the same thing in both. Auditing that assumption, by applying experimental observation operators such as resolved-grain cutoffs, connectivity rules, and identity censoring to simulation trajectories and asking which metrics survive as commensurate, is a coherent study in its own right. It is not required for the Aim 2 temporal evaluation and will be attempted only if the three aims finish with time remaining.
 
@@ -986,7 +1001,7 @@ One further analysis is deferred to the same category. The simulation and experi
 
 \midrule
 
-August-September 2026 & Reconstruct the candidate-window stride, scoring objective, and rank-15 decision; complete the Aim 1 curation audit & Draft introduction, experimental foundation, and Aim 1 chapter & Is the selected-window provenance complete and defensible? \\
+August-September 2026 & Complete Aim 1 curation-sensitivity reporting and document the recovered two-stage window-selection record & Draft introduction, experimental foundation, and Aim 1 chapter & Does the final report keep the registration gate distinct from post hoc diagnostics? \\
 
 October-November 2026 & Complete Aim 1 model-replicate and curation sensitivities; calculate Aim 2 persistence, majority-class, distributional, and readout comparisons & Finalize Aim 1 and draft the Aim 2 evaluation chapter & Which T2--T4 outputs add information beyond simple comparators? \\
 
@@ -1057,10 +1072,6 @@ The dissertation documents how one experimental field of view is selected, curat
 Several decisions remain open because the current source text or analysis record does not yet provide the information needed to resolve them. Committee guidance is welcome on each.
 
 \begin{enumerate}
-
-\item \textbf{Window-selection provenance.} What candidate stride and boundary-enumeration rule produced the 831 placements, what exact objective combined post-registration residual and displacement-gradient amplitude, and why was rank 15 selected rather than a higher-ranked candidate?
-
-\item \textbf{Aim 1 acceptance criteria.} What quantitative registration, linkage, and directional-drift criteria should define an acceptable curated trajectory for the final audit?
 
 \item \textbf{Aim 2 reporting criteria.} What retrospective thresholds should distinguish supported, mixed, unsupported, and uninformative evidence, and what effective-time interpolation sensitivity is acceptable?
 

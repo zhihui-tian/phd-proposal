@@ -560,8 +560,8 @@ The score identifies a low-distortion family rather than a unique isolated optim
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[alt={Single-window selection and the experimental time sequence used for training and evaluation},width=\textwidth,trim=0 255 0 0,clip]{figures/aim1_support.png}
-\caption{Experimental support used in Aim 1. Left: one \(100^3\) field of view is selected from 831 candidate placements using a residual-driven objective and then trimmed in place to \(100\times95\times84\) voxels before label-preserving registration and linkage. Right: T0--T1 supplies the only training transition; T2--T4 are held out from fitting and used for retrospective temporal evaluation.}
+\includegraphics[alt={Single-window selection above the experimental time sequence used for training and evaluation},width=\textwidth]{figures/aim1_support.png}
+\caption{Experimental support used in Aim 1. Top: one field of view is selected from the full reconstruction by a 25-voxel coarse scan and then a 5-voxel refinement, of which 831 placements retain at least 97\% foreground; candidates are ranked by Equation~\eqref{eq:window-selection-score}, whose residual and ramp terms carry equal weight in voxel units, and the selected window is trimmed in place to \(100\times95\times84\) voxels before label-preserving registration and linkage. Bottom: T0--T1 supplies the only training transition; T2--T4 are held out from fitting and used for retrospective temporal evaluation.}
 \label{fig:aim1-support}
 \end{figure}
 

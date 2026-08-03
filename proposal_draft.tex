@@ -70,7 +70,7 @@ Within that landscape, the approaches closest to this dissertation span phase-fi
 
 This dissertation does not claim that local learning replaces phase-field, graph, or other surrogate formulations. Its contribution is a source-aware program organized around three questions: which local rule is present in the labels, whether that rule can be learned and scaled, and what additional evidence becomes necessary when the teacher changes from a controlled simulator to sparse 4D measurement. In the experimental setting, window selection, label-preserving curation, simple null models, replicate and readout sensitivity, and field-level artifact diagnostics are part of the scientific method, not auxiliary preprocessing.
 
-\section{Overarching research question}
+\section{Research question and central hypothesis}
 
 This dissertation asks:
 
@@ -96,9 +96,7 @@ The question is addressed through a sequence of progressively removed assumption
 
 \end{enumerate}
 
-\section{Central hypothesis}
-
-The central hypothesis is:
+The corresponding hypothesis is:
 
 \begin{quote}
 
@@ -110,17 +108,9 @@ This hypothesis does not assume that agreement with a simulator proves agreement
 
 The hypothesis has operational failure conditions. It will not be supported if selection provenance or field-level artifact diagnostics are inadequate; if T2--T4 results do not improve over the relevant simple baselines; or if interpretation signatures are unstable across model initializations, experimental states, geometric strata, and controlled tests. The first failure mode is not hypothetical: an uncurated model produced roughly \(3.5\) voxels per step of rigid drift while its population statistics still looked favorable~\cite{tian2026experiment}.
 
-\section{Dissertation logic and significance}
+\section{Dissertation logic and evidence ladder}
 
-The dissertation follows the causal chain:
-
-\begin{quote}
-
-\textbf{Neighborhood-controlled simulation physics   \(\rightarrow\) scalable simulation-trained surrogate   \(\rightarrow\) curated direct experimental learning   \(\rightarrow\) held-out temporal evaluation   \(\rightarrow\) bounded physical interpretation}
-
-\end{quote}
-
-The first two stages are completed foundations. They establish that local simulation rules can be physically diagnosed and that a compact local architecture can learn and scale those rules. Aim 1 then combines selection, curation, linkage, and direct T0--T1 training in one experimental field of view with retrospective evaluation on later states that were held out from fitting but not from subsequent analysis. Changing the label generator removes the simulator from the supervision path, but it does not establish generalization beyond the selected trajectory or identify physical content absent from the simulator. Aim 2 therefore interprets only the experimental outputs supported by both field-integrity and temporal evidence.
+The first two stages of that sequence are completed foundations. They establish that local simulation rules can be physically diagnosed and that a compact local architecture can learn and scale those rules. Aim 1 then combines selection, curation, linkage, and direct T0--T1 training in one experimental field of view with retrospective evaluation on later states that were held out from fitting but not from subsequent analysis. Changing the label generator removes the simulator from the supervision path, but it does not identify physical content absent from the simulator. Aim 2 therefore interprets only the experimental outputs supported by both field-integrity and temporal evidence, as summarized in Figure~\ref{fig:proposal-framework}.
 
 \begin{figure}[htbp]
 \centering
@@ -129,9 +119,7 @@ The first two stages are completed foundations. They establish that local simula
 \label{fig:proposal-framework}
 \end{figure}
 
-\section{Evidence ladder and claim discipline}
-
-The dissertation uses one evidence ladder throughout (Table~\ref{tab:evidence-ladder}). Each level requires the preceding level but supports a stronger scientific statement. This hierarchy prevents label agreement, rollout fidelity, model interpretation, physical attribution, and mechanism testing from being treated as interchangeable.
+Claim strength is graded on one evidence ladder used throughout (Table~\ref{tab:evidence-ladder}). Each level requires the preceding level but supports a stronger scientific statement. This hierarchy prevents label agreement, rollout fidelity, model interpretation, physical attribution, and mechanism testing from being treated as interchangeable.
 
 \begin{table}[htbp]
 \centering

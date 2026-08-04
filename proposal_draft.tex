@@ -64,7 +64,7 @@ Machine learning does not remove the need to define physical content. A supervis
 
 Physics-based grain-growth models and learned surrogates answer different parts of the local-to-global problem. Monte Carlo and mode-filter methods provide efficient stochastic evolution with explicit control over the local update policy; phase-field methods resolve diffuse-interface evolution from prescribed free-energy and kinetic models; and geometric or topological descriptions expose relations among boundary motion, grain size, and connectivity~\cite{anderson1984kinetics,chen2002phasefield,krill2002phasefield,macpherson2007vonneumann,melville2024modefilter}. These approaches remain essential reference models, but applying them directly to a sparse sequence of categorical experimental grain maps still requires assumptions about constitutive parameters, temporal calibration, boundary conditions, and measurement uncertainty.
 
-Learned surrogates for physical dynamics have converged on a small number of representational choices, and the distinctions among them decide what a model can be asked to do after training. Neural operators learn a mapping between function spaces and are therefore discretization invariant by construction, whether parameterized in Fourier space or through branch and trunk networks~\cite{li2021fno,lu2021deeponet,wang2021pideeponet}. Physics-informed formulations instead encode the governing equations in the loss, which presumes those equations are known~\cite{raissi2019pinn}. Graph-network simulators carry state on particles or mesh nodes and pass messages along edges, which suits adaptive discretizations and irregular geometry~\cite{sanchez2020gns,pfaff2021meshgraphnets,brandstetter2022mppde}, and hybrid learned-numerical solvers replace only the expensive term of a classical scheme~\cite{kochkov2021cfd}. Grain growth has now been approached from most of these directions: a Fourier neural operator gives resolution-invariant two-dimensional prediction~\cite{peivaste2025fno}, convolutional recurrent and graph models learn microstructure evolution with adaptive spatiotemporal resolution~\cite{yang2021convlstm,fan2024gnn}, and combined convolutional and graph networks have been used to scale kinetic Monte Carlo grain growth~\cite{tian2025scaling}.
+Learned surrogates for physical dynamics have converged on a small number of representational choices, and the distinctions among them decide what a model can be asked to do after training. Neural operators learn a mapping between function spaces and are therefore discretization invariant by construction, whether parameterized in Fourier space or through branch and trunk networks~\cite{li2021fno,lu2021deeponet,wang2021pideeponet}. Physics-informed formulations instead encode the governing equations in the loss, which presumes those equations are known~\cite{raissi2019pinn}. Graph-network simulators carry state on particles or mesh nodes and pass messages along edges, which suits adaptive discretizations and irregular geometry~\cite{sanchez2020gns,pfaff2021meshgraphnets,brandstetter2022mppde}, and hybrid learned-numerical solvers replace only the expensive term of a classical scheme~\cite{kochkov2021cfd}. Grain growth has now been approached from most of these directions: a Fourier neural operator gives resolution-invariant two-dimensional prediction~\cite{peivaste2025fno}, convolutional recurrent and graph models learn microstructure evolution with adaptive spatiotemporal resolution~\cite{yang2021convlstm,fan2024gnn}, and combined convolutional and graph networks have been used to scale kinetic Monte Carlo grain growth~\cite{tian2026scaling}.
 
 Within that landscape, the approaches closest to this dissertation span phase-field-trained surrogates, local physics-regularized update models, dynamic graph models for three-dimensional microstructures, and high-fidelity deep-learning accelerators~\cite{montes2021surrogate,yan2022primme,qin2024graingnn,tep2025grain}. Their representations, supervision, and validation targets differ in concrete ways. The phase-field surrogate of Montes de Oca Zapiain \emph{et al.} evolves a global low-dimensional representation of simulated two-phase spinodal decomposition. The original PRIMME learns two-dimensional Monte Carlo Potts neighbor transitions, whereas GrainGNN uses phase-field-labeled, hand-crafted grain/junction graphs to predict three-dimensional epitaxial grain formation. The autoencoder--ConvLSTM model of Tep and Bernacki operates on simulator-generated two-dimensional image sequences and emphasizes image similarity, mean size, distributions, and computational acceleration. A fixed three-dimensional local operator, by comparison, decouples the learned input size from the global inference volume, turns one volume into many boundary-centered examples, and can be evaluated through categorical voxel transitions as well as kinetics, topology, morphology, and inclination response. The completed 3D-PRIMME work tests this latter hypothesis explicitly through rollout, spatial scaling, topology, and prescribed-anisotropy experiments.
 
@@ -952,6 +952,43 @@ The dissertation will use a seven-chapter structure that follows the causal prog
 \end{table}
 
 Each chapter will state the assumption it controls or removes, the evidence it contributes to the central hypothesis, and the limitation that motivates the next chapter. Shared notation, maturity labels, and validation metrics will prevent the dissertation from reading as three disconnected papers.
+
+Each research chapter is intended to appear as a separate publication. Table~\ref{tab:expected-publications} gives their current status and the point in the schedule of Table~\ref{tab:research-timeline} at which the remaining analysis supporting each one is complete. The table also records one related first-author preprint that is not a dissertation chapter.
+
+\begin{table}[htbp]
+\centering
+\caption{Expected publications from the dissertation research, with the chapters they correspond to and their status at the time of this proposal. The final entry is related first-author work that falls outside the chapter structure.}
+\label{tab:expected-publications}
+\small
+
+\begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}p{0.06\textwidth}X>{\raggedright\arraybackslash}p{0.21\textwidth}>{\raggedright\arraybackslash}p{0.17\textwidth}@{}}
+
+\toprule
+
+\textbf{Ch.} & \textbf{Working title} & \textbf{Status} & \textbf{Expected submission} \\
+
+\midrule
+
+2 & Neighborhood-driven anisotropy and lattice pinning in stochastic grain-growth models & Manuscript complete & Ready; target not yet fixed \\
+
+3 & A physics-regulated neural framework for learning 3D grain-growth dynamics & Under review; preprint arXiv:2607.04680 & Submitted \\
+
+4--5 & Training a voxel-level grain-growth surrogate directly on a 4D experiment & In preparation; letter drafted for \emph{Scripta Materialia} & Early 2027, after the Aim 1 fidelity matrix \\
+
+6 & Interpretability and physics learning from experimentally learned evolution rules & Simulation-domain probes developed; experimental application proposed & Spring 2027, after the Aim 2 controls \\
+
+\addlinespace[3pt]
+\multicolumn{4}{@{}l}{\emph{Related first-author work, outside the chapter structure}}\\
+\addlinespace[2pt]
+
+--- & Scaling kinetic Monte-Carlo simulations of grain growth with combined convolutional and graph neural networks & Published, \emph{Acta Materialia} \textbf{311}, 122153 & 2026 \\
+
+\bottomrule
+
+\end{tabularx}
+\end{table}
+
+The Chapter 2 to 5 entries correspond to work that is complete or substantially complete, so their remaining risk is editorial rather than scientific. The Chapter 6 paper is conditional on Aim 2 producing responses that survive the reliability tests; if it does not, the same chapter reports validated model interpretation without a physical-attribution claim.
 
 
 \chapter{Conclusion}

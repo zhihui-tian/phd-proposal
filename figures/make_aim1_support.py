@@ -41,19 +41,25 @@ WX, WY, WZ = 100, 95, 84
 HOLDS = [8, 10, 12, 14, 16]
 
 S = 3                                   # supersample factor
-W, H = 1160, 770                        # design units; see layout note above
-FONT = "/System/Library/Fonts/Supplemental/Arial.ttf"
-FONT_B = "/System/Library/Fonts/Supplemental/Arial Bold.ttf"
+W, H = 1160, 682                        # design units; see layout note above
+# Times, to match the body font the UF class loads through newtxtext, and
+# the Times used by the figures extracted from the manuscripts.
+FONT = "/System/Library/Fonts/Supplemental/Times New Roman.ttf"
+FONT_B = "/System/Library/Fonts/Supplemental/Times New Roman Bold.ttf"
+FONT_I = "/System/Library/Fonts/Supplemental/Times New Roman Italic.ttf"
 
-# design-unit font sizes; at W = 1160 one unit renders at 0.403 pt
-F_EYEBROW, F_LEAD = 21, 25              # 8.5 pt, 10.1 pt
-F_BOX_TITLE, F_BOX_VALUE = 19, 26       # 7.7 pt, 10.5 pt
-F_NODE, F_NODE_SUB = 22, 19             # 8.9 pt, 7.7 pt
-F_BRACKET, F_NOTE, F_NOTE_SUB = 20, 20, 19
+# design-unit font sizes; at W = 1160 one unit renders at 0.403 pt.  Times has
+# a smaller x-height than Arial, so these run about a tenth larger than the
+# sans sizes they replace.
+F_PANEL = 23                            # 9.3 pt
+F_BOX_TITLE, F_BOX_VALUE = 21, 28       # 8.5 pt, 11.3 pt
+F_NODE, F_NODE_SUB = 24, 21             # 9.7 pt, 8.5 pt
+F_BRACKET, F_NOTE, F_NOTE_SUB = 22, 22, 21
 
 
-def f(sz, bold=False):
-    return ImageFont.truetype(FONT_B if bold else FONT, sz * S)
+def f(sz, bold=False, italic=False):
+    path = FONT_I if italic else (FONT_B if bold else FONT)
+    return ImageFont.truetype(path, sz * S)
 
 
 def text_w(d, s, font):
@@ -65,10 +71,8 @@ def main():
     d = ImageDraw.Draw(img)
 
     # ------------------------------------------------- panel A: selection
-    d.text((50 * S, 30 * S), "SINGLE-WINDOW SELECTION",
-           font=f(F_EYEBROW, True), fill=MUTED)
-    d.text((50 * S, 64 * S), "one field of view selected, curated, and trained",
-           font=f(F_LEAD), fill=INK)
+    d.text((50 * S, 34 * S), "Single-window selection",
+           font=f(F_PANEL, italic=True), fill=MUTED)
 
     steps = (
         ("FULL VOLUME", f"{NX}×{NY}×{NZ}"),
@@ -85,7 +89,7 @@ def main():
     gap = 44 * S
     row_w = 4 * bw + 3 * gap
     x0 = (W * S - row_w) / 2
-    y0, bh = 132 * S, 150 * S
+    y0, bh = 88 * S, 150 * S
 
     for i, (title, value) in enumerate(steps):
         left = x0 + i * (bw + gap)
@@ -105,19 +109,17 @@ def main():
             d.polygon([(bxx, ay), (bxx - 12 * S, ay - 8 * S),
                        (bxx - 12 * S, ay + 8 * S)], fill=BLUE)
 
-    d.text((50 * S, 312 * S),
+    d.text((50 * S, 268 * S),
            "rank 15 of 831 · same low-distortion family as rank 6, "
            "with less surface contact",
            font=f(F_NOTE_SUB), fill=MUTED)
 
     # ------------------------------------------------- panel B: time states
-    d.text((50 * S, 392 * S), "TEMPORAL SUPPORT",
-           font=f(F_EYEBROW, True), fill=MUTED)
-    d.text((50 * S, 426 * S), "five states, four intervals of 2 h",
-           font=f(F_LEAD), fill=INK)
+    d.text((50 * S, 336 * S), "Temporal support",
+           font=f(F_PANEL, italic=True), fill=MUTED)
 
     tx0, tx1 = 78 * S, (W - 78) * S
-    ty = 540 * S
+    ty = 452 * S
     d.line([tx0, ty, tx1, ty], fill=LINE, width=3 * S)
     xs = [tx0 + (tx1 - tx0) * i / (len(HOLDS) - 1) for i in range(len(HOLDS))]
     for i, (x, h) in enumerate(zip(xs, HOLDS)):
@@ -143,10 +145,10 @@ def main():
     bracket(xs[0], xs[1], ty + 98 * S, "training transition", True)
     bracket(xs[2], xs[4], ty + 98 * S, "held out from fitting", False)
 
-    d.text((50 * S, 698 * S),
+    d.text((50 * S, 610 * S),
            "same field of view · later states already examined",
            font=f(F_NOTE), fill=INK)
-    d.text((50 * S, 732 * S),
+    d.text((50 * S, 644 * S),
            "retrospective temporal evaluation, not a new blind test",
            font=f(F_NOTE_SUB), fill=MUTED)
 

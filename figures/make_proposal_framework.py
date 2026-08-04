@@ -20,10 +20,9 @@ SOFT_TEAL = HexColor("#EEF6F5")
 
 def draw_spaced_label(c, x, y, text, align="left"):
     obj = c.beginText()
-    obj.setFont("Helvetica-Bold", 6.8)
+    obj.setFont("Times-Italic", 8.2)
     obj.setFillColor(MUTED)
-    obj.setCharSpace(0.65)
-    width = c.stringWidth(text, "Helvetica-Bold", 6.8) + 0.65 * max(len(text) - 1, 0)
+    width = c.stringWidth(text, "Times-Italic", 8.2)
     if align == "center":
         obj.setTextOrigin(x - width / 2, y)
     else:
@@ -41,12 +40,12 @@ def draw_right_arrow(c, x1, y, x2, color=BLUE):
 
 
 def draw_foundation_text(c, x, y, status, title, subtitle):
-    draw_spaced_label(c, x, y + 24, status.upper())
+    draw_spaced_label(c, x, y + 24, status)
     c.setFillColor(INK)
-    c.setFont("Helvetica-Bold", 9.2)
+    c.setFont("Times-Bold", 9.9)
     c.drawString(x, y + 9, title)
     c.setFillColor(MUTED)
-    c.setFont("Helvetica", 7.7)
+    c.setFont("Times-Roman", 8.3)
     c.drawString(x, y - 4, subtitle)
 
 
@@ -139,12 +138,12 @@ def draw_foundation_merge(c):
 
 
 def draw_focus(c):
-    draw_spaced_label(c, PAGE_W / 2, 210, "EXPERIMENT-CENTERED AIMS", align="center")
+    draw_spaced_label(c, PAGE_W / 2, 210, "Experiment-centered aims", align="center")
     c.setFillColor(INK)
-    c.setFont("Helvetica-Bold", 10.2)
+    c.setFont("Times-Bold", 11.0)
     c.drawCentredString(PAGE_W / 2, 195, "Measured 4D grain evolution is the scientific target")
     c.setFillColor(MUTED)
-    c.setFont("Helvetica", 8.1)
+    c.setFont("Times-Roman", 8.7)
     c.drawCentredString(
         PAGE_W / 2,
         181,
@@ -153,12 +152,12 @@ def draw_focus(c):
 
 
 def draw_aim_text(c, x, y, aim, title, subtitle):
-    draw_spaced_label(c, x, y + 33, aim.upper())
+    draw_spaced_label(c, x, y + 33, aim)
     c.setFillColor(INK)
-    c.setFont("Helvetica-Bold", 11.2)
+    c.setFont("Times-Bold", 12.1)
     c.drawString(x, y + 15, title)
     c.setFillColor(MUTED)
-    c.setFont("Helvetica", 8.5)
+    c.setFont("Times-Roman", 9.2)
     c.drawString(x, y, subtitle)
 
 
@@ -220,13 +219,14 @@ def draw_aim2_schematic(c, x, y):
 
 
 def build():
-    c = canvas.Canvas(str(OUTPUT), pagesize=(PAGE_W, PAGE_H), pageCompression=1)
+    c = canvas.Canvas(str(OUTPUT), pagesize=(PAGE_W, PAGE_H), pageCompression=1,
+                       initialFontName="Times-Roman")
     c.setTitle("Dissertation research framework")
     c.setAuthor("Zhihui Tian")
     c.setFillColor(white)
     c.rect(0, 0, PAGE_W, PAGE_H, fill=1, stroke=0)
 
-    draw_spaced_label(c, 20, 366, "COMPLETED AND PRELIMINARY FOUNDATIONS")
+    draw_spaced_label(c, 20, 366, "Completed and preliminary foundations")
 
     col_x = (20, 181, 342)
     draw_simulation_schematic(c, col_x[0], 304)

@@ -20,18 +20,17 @@ SOFT_TEAL = HexColor("#EEF6F5")
 
 def draw_text(c, x, y, aim, title, subtitle):
     label = c.beginText(x, y + 38)
-    label.setFont("Helvetica-Bold", 7.5)
+    label.setFont("Times-Italic", 8.6)
     label.setFillColor(MUTED)
-    label.setCharSpace(0.7)
-    label.textLine(aim.upper())
+    label.textLine(aim)
     c.drawText(label)
 
     c.setFillColor(INK)
-    c.setFont("Helvetica-Bold", 12)
+    c.setFont("Times-Bold", 13.0)
     c.drawString(x, y + 19, title)
 
     c.setFillColor(MUTED)
-    c.setFont("Helvetica", 9)
+    c.setFont("Times-Roman", 9.7)
     c.drawString(x, y + 3, subtitle)
 
 
@@ -132,7 +131,8 @@ def draw_aim2_schematic(c, x, y):
 
 
 def build():
-    c = canvas.Canvas(str(OUTPUT), pagesize=(PAGE_W, PAGE_H), pageCompression=1)
+    c = canvas.Canvas(str(OUTPUT), pagesize=(PAGE_W, PAGE_H), pageCompression=1,
+                       initialFontName="Times-Roman")
     c.setTitle("Specific Aims overview")
     c.setAuthor("Zhihui Tian")
     c.setFillColor(white)

@@ -720,16 +720,26 @@ Prediction alone does not establish physical understanding. The neighborhood stu
 
 Three simulation-domain analyses establish the feasibility of stable model interpretation: one input-side probe that asks which spatial scales supply useful information, and two output-side probes that ask how the model converts that information into a transition, through confidence conditioned on a local curvature proxy and through the action field and full Jacobian. None of them satisfies the experimental reliability gates or completes Aim 2. Their role is to validate the probes and expose numerical failure modes before the same analyses are transferred to experiment-trained operators.
 
-The input-side feasibility study compares multiscale 3D-PRIMME models with observation windows \(7^3\), \(9^3\), and \(11^3\) against matched single-scale models across ten training seeds (Figure~\ref{fig:aim2-input-prelim}, top). The multiscale model produced the lowest error in the simulated mean-squared grain-radius trajectory (\(11.76\pm1.93\), compared with \(13.39\)--\(22.19\) for the single-scale models) while matching the best voxel-level accuracy (\(0.842\pm0.015\)). Relative \(L_1\) norms of the learned scale-mixing blocks were examined in two wider configurations, spanning five and eight observation windows (Figure~\ref{fig:aim2-input-prelim}, bottom); both assigned greater weight to smaller windows, with diminishing contributions from larger and closely spaced ones. Increasing the prediction gap from one to four frames shifted weight slightly toward larger windows, but the change was less than three percentage points; that comparison is not among the configurations plotted here. These results support the feasibility of scale attribution while also showing that raw mixer weights must be paired with functional ablations before they are interpreted physically.
+The input-side feasibility study compares multiscale 3D-PRIMME models with observation windows \(7^3\), \(9^3\), and \(11^3\) against matched single-scale models across ten training seeds (Figure~\ref{fig:aim2-input-prelim}). The multiscale model produced the lowest error in the simulated mean-squared grain-radius trajectory (\(11.76\pm1.93\), compared with \(13.39\)--\(22.19\) for the single-scale models) while matching the best voxel-level accuracy (\(0.842\pm0.015\)). Relative \(L_1\) norms of the learned scale-mixing blocks were examined in a wider configuration spanning five observation windows (Table~\ref{tab:scale-mixer-weights}), which assigned greater weight to smaller windows, with diminishing contributions from larger and closely spaced ones. Increasing the prediction gap from one to four frames shifted weight slightly toward larger windows, but the change was less than three percentage points; that comparison is not among the configurations reported here. These results support the feasibility of scale attribution while also showing that raw mixer weights must be paired with functional ablations before they are interpreted physically.
+
+\begin{table}[htbp]
+\centering
+\caption{Relative \(L_1\) weight carried by each observation scale in the scale-mixing layer of a five-scale multiscale model, after 78 training epochs. The shares sum to 100\%. They are parameter-magnitude indicators, not functional importance, until scale removal or masking supports them.}
+\label{tab:scale-mixer-weights}
+\small
+\begin{tabular}{@{}lccccc@{}}
+\toprule
+\textbf{Observation window} & \(5^3\) & \(7^3\) & \(9^3\) & \(11^3\) & \(13^3\) \\
+\midrule
+Relative \(L_1\) weight (\%) & 25.0 & 20.9 & 18.6 & 17.8 & 17.7 \\
+\bottomrule
+\end{tabular}
+\end{table}
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[alt={Mean squared radius trajectories for reference, single-scale, and multiscale model ensembles},width=0.96\textwidth]{figures/aim3_multiscale_r2_vs_step.png}
-
-\smallskip
-
-\includegraphics[alt={Relative scale-mixer weights across spatial observation windows},width=0.96\textwidth]{figures/aim3_scale_mixer_weights.png}
-\caption{Existing simulation-domain results used directly for input-side interpretability. Top: \(\langle r^2\rangle\) trajectories over 100 rollout steps for the MF reference and the single- and multiscale model ensembles; bands summarize variation across ten seeds. Bottom: relative \(L_1\) scale-mixer weights for two wider configurations, one spanning five observation windows and one spanning eight. Multiscale prediction improves trajectory fidelity, while the learned mixer places greater parameter weight on smaller observation windows. Mixer norms remain attribution indicators, not physical causal effects, until functional ablation supports them.}
+\includegraphics[alt={Mean squared radius trajectories for reference, single-scale, and multiscale model ensembles},width=\textwidth]{figures/aim3_multiscale_r2_vs_step.png}
+\caption{Existing simulation-domain results used directly for input-side interpretability: \(\langle r^2\rangle\) trajectories over 100 rollout steps for the MF reference and the single- and multiscale model ensembles, with bands summarizing variation across ten seeds. Multiscale prediction improves trajectory fidelity.}
 \label{fig:aim2-input-prelim}
 \end{figure}
 
